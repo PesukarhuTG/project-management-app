@@ -1,21 +1,22 @@
-import { Modal } from 'antd';
 import React, { FC } from 'react';
+import { Modal } from 'antd';
 import styled from 'styled-components';
 import { ModalProps } from '../types';
 
-const ConfirmModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel }) => {
+const StyledModal: FC<ModalProps> = ({ children, title, isVisible, onOk, onCancel }) => {
   return (
     <StyledAntModal
       title={title}
-      open={isVisible}
       onOk={onOk}
       onCancel={onCancel}
-      okText="Yes"
-      cancelText="No"
+      okText="Save"
+      open={isVisible}
       destroyOnClose
       centered
       width={600}
-    />
+    >
+      {children}
+    </StyledAntModal>
   );
 };
 
@@ -27,15 +28,15 @@ const StyledAntModal = styled(Modal)`
 
   .ant-modal-title {
     font-weight: 700;
-    font-size: 30px;
-    line-height: 41px;
+    font-size: 40px;
+    line-height: 54px;
     color: var(--primary);
-    margin-bottom: 30px;
+    margin-bottom: 16px;
   }
 
   .ant-modal-content {
     border-radius: 30px;
-    padding: 160px 40px;
+    padding: 50px 122px;
   }
 
   .ant-modal-header {
@@ -45,14 +46,18 @@ const StyledAntModal = styled(Modal)`
   }
 
   .ant-modal-body {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    font-weight: 700;
+    font-size: 18px;
   }
 
   .ant-modal-footer {
     display: flex;
     justify-content: center;
     gap: 20px;
-    padding: 0;
+    padding: 10px 0 0;
     border: 0;
   }
 
@@ -64,4 +69,16 @@ const StyledAntModal = styled(Modal)`
   }
 `;
 
-export default ConfirmModal;
+// const StyledInput = styled(Input)`
+//   align-self: center;
+//   margin-bottom: 20px;
+//   border: 1px solid var(--primary-dark);
+//   font-size: 30px;
+//   border-radius: 10px;
+// `;
+
+// const InputTitle = styled.p`
+//   padding: 0 20px 3px;
+// `;
+
+export default StyledModal;
