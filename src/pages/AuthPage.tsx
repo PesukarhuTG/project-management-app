@@ -1,7 +1,8 @@
 import React from 'react';
+import { BasePage } from '../components';
 
 const AuthPage: React.FC = () => {
-  return <div>auth page</div>;
+  return <BasePage>auth page</BasePage>;
 };
 
 export default AuthPage;

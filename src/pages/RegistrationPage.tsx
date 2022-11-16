@@ -1,7 +1,8 @@
 import React from 'react';
+import { BasePage } from '../components';
 
 const RegistrationPage: React.FC = () => {
-  return <div>registration page</div>;
+  return <BasePage>registration page</BasePage>;
 };
 
 export default RegistrationPage;
