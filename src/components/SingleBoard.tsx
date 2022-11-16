@@ -11,10 +11,10 @@ interface SingleBoardProps {
 const SingleBoard: FC<SingleBoardProps> = ({ boardTitle = 'Board title', boardDescription = 'Board description' }) => {
   return (
     <BoardBody>
-      <BoardContent>
+      <BoardHeader>
         <BoardTitle>{boardTitle}</BoardTitle>
         <BoardDescription>{boardDescription}</BoardDescription>
-      </BoardContent>
+      </BoardHeader>
       <BoardTools>
         <BoardLink href="/">Open board</BoardLink>
         <BoardEdit onClick={() => console.log('open modal window for edit')} />
@@ -34,7 +34,7 @@ const BoardBody = styled.div`
   border-radius: 30px;
 `;
 
-const BoardContent = styled.div`
+const BoardHeader = styled.div`
   padding: 20px;
   flex-grow: 1;
   background-color: var(--board-background);
