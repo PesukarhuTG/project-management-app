@@ -7,20 +7,18 @@ import StyledInput from './StyledInput';
 
 const TaskModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel, onChange, options = [] }) => {
   return (
-    <>
-      <StyledModal title={title} isVisible={isVisible} onOk={onOk} onCancel={onCancel}>
-        <StyledInput title="Task name" />
-        <StyledInput title="Task description" />
-        <StyledSelect
-          defaultValue="Responsible user"
-          style={{ width: 120 }}
-          onChange={onChange}
-          options={options}
-          bordered={false}
-          dropdownStyle={{ borderRadius: '10px' }}
-        />
-      </StyledModal>
-    </>
+    <StyledModal title={title} isVisible={isVisible} onOk={onOk} onCancel={onCancel}>
+      <StyledInput title="Task name" />
+      <StyledInput title="Task description" />
+      <StyledSelect
+        defaultValue="Responsible user"
+        style={{ width: 120 }}
+        onChange={onChange}
+        options={options}
+        bordered={false}
+        dropdownStyle={{ borderRadius: '10px' }}
+      />
+    </StyledModal>
   );
 };
 
