@@ -8,8 +8,8 @@ const LanguageRadio = () => {
       buttonStyle="solid"
       onChange={(event: RadioChangeEvent) => console.log(event.target.value)}
     >
-      <Radio.Button value="ru">EN</Radio.Button>
-      <Radio.Button value="en">RU</Radio.Button>
+      <Radio.Button value="en">EN</Radio.Button>
+      <Radio.Button value="ru">RU</Radio.Button>
     </Radio.Group>
   );
 };
