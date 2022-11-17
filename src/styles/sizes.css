@@ -2,4 +2,8 @@
   --page-gutter: 40px;
   --header-h: 128px;
   --footer-h: 128px;
+
+  --btn-gutter: 20px;
+  --btn-h: 48px;
+  --btn-br: 10px;
 }

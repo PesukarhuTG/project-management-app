@@ -22,13 +22,15 @@ const StyledButton = styled.button<{
   $type: ButtonType;
 }>`
   display: block;
-  padding: 13px 20px;
+  padding: 0 var(--btn-gutter);
+  line-height: var(--btn-h);
   font-size: 18px;
   font-weight: 700;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--btn-br);
   cursor: pointer;
   color: var(--light-font);
+  white-space: nowrap;
   transition: 0.3s;
 
   ${({ $type }) => {
