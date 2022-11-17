@@ -114,6 +114,7 @@ const HeroImage = styled.div`
   height: 470px;
   flex-shrink: 0;
   background: url(${heroTeamIco});
+  background-size: contain;
 
   @media (max-width: 1120px) {
     width: 350px;
@@ -139,6 +140,7 @@ const TeamSection = styled.section`
 
   @media (max-width: 1000px) {
     padding: 0;
+    gap: 40px;
   }
 `;
 
@@ -151,6 +153,7 @@ const TeamItem = styled.div`
     flex-direction: column;
     justify-content: center;
     text-align: center;
+    gap: 20px;
   }
 `;
 
@@ -172,7 +175,6 @@ const TeamItemAvatar = styled.div<{
   width: 200px;
   height: 200px;
   flex-shrink: 0;
-
   ${({ $name }) => {
     if ($name === 'tatiana')
       return css`
@@ -181,6 +183,7 @@ const TeamItemAvatar = styled.div<{
     if ($name === 'daria')
       return css`
         background: url(${avatar2});
+
         @media (max-width: 620px) {
           order: -1;
         }
@@ -190,5 +193,7 @@ const TeamItemAvatar = styled.div<{
         background: url(${avatar3});
       `;
   }}
+  background-size: contain;
 `;
+
 export default WelcomePage;
