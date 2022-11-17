@@ -1,45 +1,77 @@
-import React from 'react';
-import { BasePage } from '../components';
+import React, { useState } from 'react';
+import { BasePage, ConfirmModal } from '../components';
 import { Button, Form, Input, Upload } from 'antd';
 import styled from 'styled-components';
-import file from '../assets/ico/ico-edit.svg';
 
-const ProfilePage: React.FC = () => (
-  <BasePage>
-    <ProfileTitle>Profile editing fields</ProfileTitle>
-    <StyledForm
-      name="basic"
-      layout="vertical"
-      // labelCol={{ span: 4 }}
-      // wrapperCol={{ span: 4 }}
-      initialValues={{}}
-      onFinish={() => console.log('onFinish')}
-      onFinishFailed={() => console.log('onFinishFailed')}
-      autoComplete="off"
-    >
-      <Form.Item label="Username">
-        <StyledInput placeholder="UserName" />
-      </Form.Item>
-      <Form.Item label="Login">
-        <StyledInput placeholder="LoginName" />
-      </Form.Item>
-      <Form.Item label="Password">
-        <StyledInput placeholder="UserName" />
-      </Form.Item>
-      <Form.Item valuePropName="fileList">
-        <Upload action="/" listType="text" maxCount={1} accept=".png,.jpeg,.jpg.,svg">
-          <PrimaryButton>Change avatar</PrimaryButton>
-        </Upload>
-      </Form.Item>
-      <Form.Item>
-        <FormButtons>
-          <PrimaryButton>Update profile</PrimaryButton>
-          <SecondaryButton>Delete profile</SecondaryButton>
-        </FormButtons>
-      </Form.Item>
-    </StyledForm>
-  </BasePage>
-);
+const ProfilePage: React.FC = () => {
+  const [form] = Form.useForm();
+  const [confirmFormVisible, setConfirmFormVisible] = useState<boolean>(false);
+
+  return (
+    <BasePage>
+      <ProfileTitle>Profile editing fields</ProfileTitle>
+      <StyledForm
+        form={form}
+        layout="vertical"
+        initialValues={{ userName: '', login: '', password: '' }}
+        onFinish={(value) => {
+          console.log(value);
+          form.resetFields();
+        }}
+        onFinishFailed={() => console.log('onFinishFailed')}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="Username"
+          name="userName"
+          rules={[
+            { required: true, message: 'Please input your name!' },
+            { type: 'string', min: 2, message: 'Name must be at least 2 characters' },
+          ]}
+        >
+          <StyledInput placeholder="UserName" />
+        </Form.Item>
+        <Form.Item
+          label="Login"
+          name="login"
+          rules={[
+            { required: true, message: 'Please input your login!' },
+            { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
+          ]}
+        >
+          <StyledInput placeholder="LoginName" />
+        </Form.Item>
+        <Form.Item
+          label="Password"
+          name="password"
+          rules={[
+            { required: true, message: 'Please input your password!' },
+            { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
+          ]}
+        >
+          <StyledInput placeholder="Password" type="password" />
+        </Form.Item>
+        <Form.Item valuePropName="fileList">
+          <Upload action="/" listType="text" maxCount={1} accept=".png,.jpeg,.jpg.,svg">
+            <PrimaryButton>Change avatar</PrimaryButton>
+          </Upload>
+        </Form.Item>
+        <Form.Item>
+          <FormButtons>
+            <PrimaryButton htmlType="submit">Update profile</PrimaryButton>
+            <SecondaryButton onClick={() => setConfirmFormVisible(true)}>Delete profile</SecondaryButton>
+          </FormButtons>
+        </Form.Item>
+      </StyledForm>
+      <ConfirmModal
+        title="Do you want to delete your profile?"
+        isVisible={confirmFormVisible}
+        onOk={() => console.log('delete profile')}
+        onCancel={() => setConfirmFormVisible(false)}
+      />
+    </BasePage>
+  );
+};
 
 const ProfileTitle = styled.p`
   text-align: center;
@@ -70,6 +102,7 @@ const StyledForm = styled(Form)`
 
   .ant-form-item {
     margin: 0;
+    padding-top: 20px;
   }
 
   .ant-form-item-label {
@@ -106,14 +139,12 @@ const StyledForm = styled(Form)`
 
 const StyledInput = styled(Input)`
   padding: 10px 20px;
-  margin-bottom: 20px;
   font-size: 18px;
   line-height: 36px;
   border: 1px solid var(--primary-dark);
   border-radius: 10px;
 
   @media (max-width: 600px) {
-    margin-bottom: 15px;
     line-height: 26px;
   }
 `;
