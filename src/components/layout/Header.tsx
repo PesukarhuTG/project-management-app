@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button, LanguageRadio } from '..';
@@ -17,13 +17,9 @@ const Header: React.FC = () => {
     //TODO logout user
   };
 
-  return (
-    <StyledHeader>
-      <Title>
-        <HomeLink to="/">RSS Kanban</HomeLink>
-      </Title>
-
-      {user && (
+  const headerContent = useMemo(() => {
+    if (user) {
+      return (
         <>
           <Avatar>
             <img src={user.avatar ?? iconAvatar} alt="" />
@@ -46,15 +42,23 @@ const Header: React.FC = () => {
             </StyledNavLink>
           </NavPanel>
         </>
-      )}
+      );
+    }
 
-      {!user && (
-        <UnauthorizedPanel>
-          <Button label="Sign Up" onClick={() => navigate('/auth')} />
-          <Button label="Sign In" onClick={() => navigate('/registration')} />
-        </UnauthorizedPanel>
-      )}
+    return (
+      <UnauthorizedPanel>
+        <Button label="Sign Up" onClick={() => navigate('/auth')} />
+        <Button label="Sign In" onClick={() => navigate('/registration')} />
+      </UnauthorizedPanel>
+    );
+  }, [user, navigate]);
 
+  return (
+    <StyledHeader>
+      <Title>
+        <HomeLink to="/">RSS Kanban</HomeLink>
+      </Title>
+      {headerContent}
       <SettingPanel>
         {user && <Button label="Sign out" onClick={logout} />}
         <LanguageRadio />
@@ -95,7 +99,6 @@ const Panel = styled.div`
   }
 `;
 
-// logo
 const Title = styled.h1`
   margin: 0 auto 0 0;
   padding: 0;
@@ -117,7 +120,6 @@ const HomeLink = styled(Link)`
   }
 `;
 
-// avatar
 const Avatar = styled.div`
   height: 60px;
   width: 60px;
@@ -141,7 +143,6 @@ const Avatar = styled.div`
   }
 `;
 
-// navigation
 const NavPanel = styled(Panel)`
   align-items: center;
   order: 3;
@@ -201,7 +202,6 @@ const NavIcon = styled.img`
   margin-right: 6px;
 `;
 
-// sign up & sign in
 const UnauthorizedPanel = styled(Panel)`
   order: 3;
 
@@ -210,7 +210,6 @@ const UnauthorizedPanel = styled(Panel)`
   }
 `;
 
-// sign out & localization
 const SettingPanel = styled(Panel)`
   flex-shrink: 0;
   order: 3;
