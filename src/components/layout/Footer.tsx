@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import logoCourse from '../../assets/ico/icon-rsschool.svg';
 import logoGithub from '../../assets/ico/icon-github.svg';
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <StyledFooter>
       <CopyRight>2022 | React 2022Q3</CopyRight>

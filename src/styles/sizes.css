@@ -7,3 +7,9 @@
   --btn-h: 48px;
   --btn-br: 10px;
 }
+
+@media (max-width: 576px) {
+  :root {
+    --page-gutter: 10px;
+  }
+}

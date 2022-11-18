@@ -17,7 +17,7 @@ const LanguageRadio = () => {
 
 const StyledRadioGroup = styled(Radio.Group)`
   .ant-radio-button-wrapper {
-    padding: 0 12px;
+    padding: 0 15px;
     height: var(--btn-h);
     line-height: var(--btn-h);
     font-size: 18px;
