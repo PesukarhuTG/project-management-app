@@ -1,5 +1,5 @@
 import React from 'react';
-import { BasePage, FormInput } from '../components';
+import { BasePage, FormButton, FormInput } from '../components';
 import { Form, Button } from 'antd';
 import styled from 'styled-components';
 import AccessIco from '../assets/ico/icon-access.svg';
@@ -44,7 +44,7 @@ const AuthPage: React.FC = () => {
           name="login"
           rules={[
             { required: true, message: 'Please input your login!' },
-            { type: 'string', min: 2, message: 'Name must be at least 2 characters' },
+            { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
           ]}
         >
           <FormInput placeholder="Login *" type="text" />
@@ -120,21 +120,8 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const StyledButton = styled(Button)`
-  height: 47px;
+const StyledButton = styled(FormButton)`
   width: 100%;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 25px;
-  border-radius: 10px;
-  color: var(--primary-light);
-  transition: 0.3s;
-
-  &:hover,
-  &:focus,
-  &:active {
-    color: var(--primary-light);
-  }
 `;
 
 export default AuthPage;

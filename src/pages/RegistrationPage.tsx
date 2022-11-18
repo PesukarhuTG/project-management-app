@@ -1,7 +1,7 @@
 import { Button, Form } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
-import { BasePage, FormInput } from '../components';
+import { BasePage, FormButton, FormInput } from '../components';
 import AccessIco from '../assets/ico/icon-access.svg';
 import { Link } from 'react-router-dom';
 
@@ -126,21 +126,8 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const StyledButton = styled(Button)`
-  height: 47px;
+const StyledButton = styled(FormButton)`
   width: 100%;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 25px;
-  border-radius: 10px;
-  color: var(--primary-light);
-  transition: 0.3s;
-
-  &:hover,
-  &:focus,
-  &:active {
-    color: var(--primary-light);
-  }
 `;
 
 export default RegistrationPage;
