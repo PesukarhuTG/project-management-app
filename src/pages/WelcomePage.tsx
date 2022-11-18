@@ -18,7 +18,7 @@ const WelcomePage: React.FC = () => {
             and control the work of the team.
           </HeroDescription>
         </div>
-        <HeroImage></HeroImage>
+        <HeroImage />
       </HeroSection>
       <TeamSection>
         <SectionTitle>Project team</SectionTitle>
