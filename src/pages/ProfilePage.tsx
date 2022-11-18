@@ -3,9 +3,21 @@ import { BasePage, ConfirmModal } from '../components';
 import { Button, Form, Input, Upload } from 'antd';
 import styled from 'styled-components';
 
+interface FormValues {
+  userName: string;
+  login: string;
+  password: string;
+}
+
 const ProfilePage: React.FC = () => {
   const [form] = Form.useForm();
   const [confirmFormVisible, setConfirmFormVisible] = useState<boolean>(false);
+  const initialValues: FormValues = { userName: '', login: '', password: '' };
+
+  const onFinish = (value: FormValues | unknown) => {
+    console.log(value);
+    form.resetFields();
+  };
 
   return (
     <BasePage>
@@ -13,11 +25,8 @@ const ProfilePage: React.FC = () => {
       <StyledForm
         form={form}
         layout="vertical"
-        initialValues={{ userName: '', login: '', password: '' }}
-        onFinish={(value) => {
-          console.log(value);
-          form.resetFields();
-        }}
+        initialValues={initialValues}
+        onFinish={onFinish}
         onFinishFailed={() => console.log('onFinishFailed')}
         autoComplete="off"
       >
@@ -52,7 +61,7 @@ const ProfilePage: React.FC = () => {
           <StyledInput placeholder="Password" type="password" />
         </Form.Item>
         <Form.Item valuePropName="fileList">
-          <Upload action="/" listType="text" maxCount={1} accept=".png,.jpeg,.jpg.,svg">
+          <Upload action="/" listType="text" maxCount={1} accept=".png,.jpeg,.jpg">
             <PrimaryButton>Change avatar</PrimaryButton>
           </Upload>
         </Form.Item>
