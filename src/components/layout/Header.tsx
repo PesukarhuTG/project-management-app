@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
+import classNames from 'classnames';
 import styled from 'styled-components';
 import { Button, LanguageRadio } from '..';
 import iconAvatar from '../../assets/ico/icon-avatar.svg';
@@ -9,7 +10,11 @@ import iconBoards from '../../assets/ico/icon-boards.svg';
 
 type User = { avatar?: string } | null;
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  isSticky?: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   const navigate = useNavigate();
   const [user] = useState<User>({}); //TODO get data about authorized user from store
 
@@ -54,7 +59,7 @@ const Header: React.FC = () => {
   }, [user, navigate]);
 
   return (
-    <StyledHeader>
+    <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
       <Title>
         <HomeLink to="/">RSS Kanban</HomeLink>
       </Title>
@@ -76,6 +81,15 @@ const StyledHeader = styled.header`
   gap: 24px;
   color: var(--light-font);
   background-color: var(--nav-background);
+  transition: height 0.5s ease-in-out, margin-bottom 0.5s ease-in-out;
+
+  &.header-sticky {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    height: calc(var(--header-h) - var(--header-animate-offset));
+    margin-bottom: var(--header-animate-offset);
+  }
 
   @media (max-width: 768px) {
     gap: 16px;
@@ -93,9 +107,14 @@ const StyledHeader = styled.header`
 const Panel = styled.div`
   display: flex;
   gap: 8px 24px;
+  transition: gap 0.5s ease-in-out;
 
   @media (max-width: 768px) {
     gap: 8px 16px;
+
+    .header-sticky & {
+      gap: 4px 16px;
+    }
   }
 `;
 
@@ -152,6 +171,10 @@ const NavPanel = styled(Panel)`
     flex-direction: column;
     align-items: flex-start;
     order: 2;
+
+    .header-sticky & {
+      gap: 4px 16px;
+    }
   }
 `;
 

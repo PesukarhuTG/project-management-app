@@ -1,6 +1,7 @@
 :root {
   --page-gutter: 40px;
   --header-h: 128px;
+  --header-animate-offset: 20px;
   --footer-h: 128px;
 
   --btn-gutter: 20px;
