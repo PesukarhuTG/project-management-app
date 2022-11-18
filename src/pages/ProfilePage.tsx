@@ -9,10 +9,11 @@ interface FormValues {
   password: string;
 }
 
+const initialValues: FormValues = { userName: '', login: '', password: '' };
+
 const ProfilePage: React.FC = () => {
   const [form] = Form.useForm();
   const [confirmFormVisible, setConfirmFormVisible] = useState<boolean>(false);
-  const initialValues: FormValues = { userName: '', login: '', password: '' };
 
   const onFinish = (value: FormValues | unknown) => {
     console.log(value);
