@@ -1,4 +1,4 @@
-import { Button, Form } from 'antd';
+import { Form } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 import { BasePage, FormButton, FormInput } from '../components';
@@ -18,9 +18,9 @@ const initialValues: RegistrationValue = {
 };
 
 const RegistrationPage: React.FC = () => {
-  const [registrationForm] = Form.useForm();
+  const [registrationForm] = Form.useForm<RegistrationValue>();
 
-  const onFinish = (values: RegistrationValue | unknown) => {
+  const onFinish = (values: RegistrationValue) => {
     console.log('Success:', values);
     registrationForm.resetFields();
   };
@@ -38,7 +38,7 @@ const RegistrationPage: React.FC = () => {
         name="registration"
         layout="vertical"
         initialValues={initialValues}
-        onFinish={onFinish}
+        onFinish={(values) => onFinish(values as RegistrationValue)}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
@@ -73,9 +73,9 @@ const RegistrationPage: React.FC = () => {
         </Form.Item>
 
         <Form.Item>
-          <StyledButton type="primary" htmlType="submit" onClick={() => console.log()}>
+          <FormButton type="primary" htmlType="submit" onClick={() => console.log()}>
             Sign up
-          </StyledButton>
+          </FormButton>
         </Form.Item>
       </StyledForm>
     </BasePage>
@@ -124,10 +124,6 @@ const StyledLink = styled(Link)`
   &:hover {
     color: var(--btn-primary-hover);
   }
-`;
-
-const StyledButton = styled(FormButton)`
-  width: 100%;
 `;
 
 export default RegistrationPage;

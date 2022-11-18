@@ -8,6 +8,7 @@ const FormButton = (props: ButtonProps) => {
 
 const StyledButton = styled(Button)`
   height: 47px;
+  width: 100%;
   font-weight: 700;
   font-size: 18px;
   line-height: 25px;

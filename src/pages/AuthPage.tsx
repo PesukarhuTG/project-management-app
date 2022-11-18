@@ -1,6 +1,6 @@
 import React from 'react';
 import { BasePage, FormButton, FormInput } from '../components';
-import { Form, Button } from 'antd';
+import { Form } from 'antd';
 import styled from 'styled-components';
 import AccessIco from '../assets/ico/icon-access.svg';
 import { Link } from 'react-router-dom';
@@ -18,13 +18,13 @@ const initialValues: AuthValue = {
 const AuthPage: React.FC = () => {
   const [authForm] = Form.useForm();
 
-  const onFinish = (values: AuthValue | unknown) => {
+  const onFinish = (values: AuthValue) => {
     console.log('Success:', values);
     authForm.resetFields();
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+  const onFinishFailed = () => {
+    console.log('onFinishFailed');
   };
 
   return (
@@ -36,7 +36,7 @@ const AuthPage: React.FC = () => {
         name="auth"
         layout="vertical"
         initialValues={initialValues}
-        onFinish={onFinish}
+        onFinish={(values) => onFinish(values as AuthValue)}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
@@ -67,9 +67,9 @@ const AuthPage: React.FC = () => {
         </Form.Item>
 
         <Form.Item>
-          <StyledButton type="primary" htmlType="submit" onClick={() => console.log()}>
+          <FormButton type="primary" htmlType="submit" onClick={() => console.log()}>
             Sign in
-          </StyledButton>
+          </FormButton>
         </Form.Item>
       </StyledForm>
     </BasePage>
@@ -118,10 +118,6 @@ const StyledLink = styled(Link)`
   &:hover {
     color: var(--btn-primary-hover);
   }
-`;
-
-const StyledButton = styled(FormButton)`
-  width: 100%;
 `;
 
 export default AuthPage;
