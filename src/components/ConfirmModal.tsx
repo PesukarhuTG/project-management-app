@@ -14,7 +14,7 @@ const ConfirmModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel }) => {
       cancelText="No"
       destroyOnClose
       centered
-      width={600}
+      width={620}
     />
   );
 };
