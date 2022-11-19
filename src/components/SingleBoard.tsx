@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import boardEditIco from '../assets/ico/icon-edit.svg';
 import boardDeleteIco from '../assets/ico/icon-trush.svg';
 import { SingleBoardProps } from '../types';
+import BoardModal from './BoardModal';
 import ConfirmModal from './ConfirmModal';
 import { BoardTitle, BoardWrapper } from './styled-components';
 
@@ -14,20 +15,35 @@ const SingleBoard: FC<SingleBoardProps> = ({
   remove,
 }) => {
   const navigate = useNavigate();
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
+  const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
 
-  const openModal = (event: React.MouseEvent<HTMLDivElement>) => {
+  const openConfirmModal = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
-    setModalVisible(true);
+    setConfirmModalVisible(true);
   };
 
-  const closeModal = () => {
-    setModalVisible(false);
+  const closeConfirmModal = () => {
+    setConfirmModalVisible(false);
   };
 
   const handleDelete = () => {
     remove(id);
-    setModalVisible(false);
+    setConfirmModalVisible(false);
+  };
+
+  const openEditModal = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    setEditModalVisible(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalVisible(false);
+  };
+
+  const handleEdit = () => {
+    setEditModalVisible(false);
+    console.log('edit board info');
   };
 
   return (
@@ -38,16 +54,17 @@ const SingleBoard: FC<SingleBoardProps> = ({
           <BoardDescription>{boardDescription}</BoardDescription>
         </BoardHeader>
         <BoardTools>
-          <BoardEdit onClick={() => console.log('open modal window for edit')} />
-          <BoardDelete onClick={openModal} />
+          <BoardEdit onClick={openEditModal} />
+          <BoardDelete onClick={openConfirmModal} />
         </BoardTools>
       </BoardWrapper>
       <ConfirmModal
         title="Do you want to delete this board?"
-        isVisible={modalVisible}
+        isVisible={confirmModalVisible}
         onOk={handleDelete}
-        onCancel={closeModal}
+        onCancel={closeConfirmModal}
       />
+      <BoardModal title="Edit board info" isVisible={editModalVisible} onOk={handleEdit} onCancel={closeEditModal} />
     </>
   );
 };
