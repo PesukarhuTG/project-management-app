@@ -8,6 +8,7 @@ export const BoardWrapper = styled.div`
   color: var(--primary-dark);
   border: 2px solid var(--primary-dark);
   border-radius: 30px;
+  cursor: pointer;
 `;
 
 export const BoardTitle = styled.p`

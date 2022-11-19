@@ -14,7 +14,6 @@ const BoardBody = styled(BoardWrapper)`
   justify-content: center;
   align-items: center;
   background: var(--board-background);
-  cursor: pointer;
 `;
 
 export default EmptyBoard;

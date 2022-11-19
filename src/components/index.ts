@@ -8,3 +8,5 @@ export { default as TaskModal } from './TaskModal';
 export { default as StyledModal } from './StyledModal';
 export { default as StyledInput } from './StyledInput';
 export { default as SingleBoard } from './SingleBoard';
+export { default as BoardsList } from './BoardsList';
+export { default as EmptyBoard } from './EmptyBoard';
