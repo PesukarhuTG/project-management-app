@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const BoardWrapper = styled.div`
   max-width: 426px;
+  min-width: 300px;
   min-height: 290px;
   display: flex;
   flex-direction: column;

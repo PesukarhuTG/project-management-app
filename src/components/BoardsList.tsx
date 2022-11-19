@@ -19,7 +19,7 @@ const BoardsList: FC<BoardsListProps> = ({ boards, remove }) => {
   return (
     <BoardsContainer>
       {boards.map((board) => {
-        return <SingleBoard {...board} remove={remove} />;
+        return <SingleBoard {...board} remove={remove} key={board.id} />;
       })}
     </BoardsContainer>
   );
@@ -32,6 +32,18 @@ const BoardsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-content: center;
+
+  @media (max-width: 1100px) {
+    max-width: 892px;
+    margin: 0 auto 30px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  @media (max-width: 750px) {
+    max-width: 426px;
+    grid-template-columns: 1fr;
+  }
 `;
 
 export default BoardsList;

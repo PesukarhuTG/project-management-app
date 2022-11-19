@@ -31,6 +31,7 @@ const StyledAntModal = styled(Modal)`
     line-height: 41px;
     color: var(--primary);
     margin-bottom: 30px;
+    text-align: center;
   }
 
   .ant-modal-content {
