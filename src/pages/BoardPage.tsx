@@ -1,11 +1,56 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { BasePage, Button, ColumnModal } from '../components';
+import { BasePage, Button, Column, ColumnModal } from '../components';
+
+interface ColumnData {
+  _id: string;
+  title: string;
+  order: number;
+  boardId: string;
+}
+
+interface BoardData {
+  _id: string;
+  title: string;
+  owner: string;
+  users: string[];
+}
+
+const boardMock: BoardData = {
+  _id: '01',
+  title: 'Board title',
+  owner: '001',
+  users: ['002', '003'],
+};
+
+const columnsMock: ColumnData[] = [
+  {
+    _id: '01',
+    title: 'Column 1',
+    order: 3,
+    boardId: 'Id of boards',
+  },
+  {
+    _id: '02',
+    title: 'Column 2',
+    order: 1,
+    boardId: 'Id of boards',
+  },
+  {
+    _id: '03',
+    title: 'Column 3',
+    order: 2,
+    boardId: 'Id of boards',
+  },
+];
 
 const BoardPage: React.FC = () => {
   const navigate = useNavigate();
+  // const { id } = useParams();
   const [isShowColumnModal, setIsShowColumnModal] = useState<boolean>(false);
+  const [board] = useState<BoardData>(boardMock); //TODO get real board data
+  const [columns] = useState<ColumnData[]>(columnsMock); //TODO get real columns list (sorted by order)
 
   const addColumn = () => {
     /*TODO add column*/
@@ -21,13 +66,9 @@ const BoardPage: React.FC = () => {
           </HideXs>
           <Button label="+ Create new column" onClick={() => setIsShowColumnModal(true)} />
         </ControlPanel>
-        <Title>Board: titleBoard </Title>
+        <Title>Board: {board.title}</Title>
         <ColumnsPanel>
-          <div style={{ background: '#fff', border: '1px solid red' }}> Колонка 1 </div>
-          <div style={{ background: '#fff', border: '1px solid red' }}> Колонка 2 </div>
-          <div style={{ background: '#fff', border: '1px solid red' }}> Колонка 3 </div>
-          <div style={{ background: '#fff', border: '1px solid red' }}> Колонка 4 </div>
-          <div style={{ background: '#fff', border: '1px solid red' }}> Колонка 5 </div>
+          {columns.length && columns.map((column) => <Column {...column} key={column._id} />)}
         </ColumnsPanel>
       </Container>
 
