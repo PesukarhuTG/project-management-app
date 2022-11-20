@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ConfirmModal, IconButton, TaskModal } from './';
 import checkIcon from '../assets/ico/icon-check.svg';
 import cancelIcon from '../assets/ico/icon-cancel.svg';
+import Task from './Task';
 
 interface ColumnProps {
   _id: string;
@@ -11,8 +12,43 @@ interface ColumnProps {
   boardId: string;
 }
 
+interface TaskData {
+  _id: string;
+  title: string;
+  order: number;
+  boardId: string;
+  columnId: string;
+  description: string;
+  userId: string;
+  users: string[];
+}
+
+const TaskMock: TaskData[] = [
+  {
+    _id: '01',
+    title: 'Task 1',
+    order: 3,
+    boardId: 'Id of boards',
+    columnId: 'Id of boards',
+    description: 'Task description1 where you can write full information about task',
+    userId: '001',
+    users: [],
+  },
+  {
+    _id: '02',
+    title: 'Task 2',
+    order: 1,
+    boardId: 'Id of boards',
+    columnId: 'Id of boards',
+    description: 'Implement Select component from Antd and custom its design',
+    userId: '001',
+    users: [],
+  },
+];
+
 const Column: React.FC<ColumnProps> = ({ _id, title }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [tasks] = useState<TaskData[]>(TaskMock); //TODO get real task data
   const [isShowTaskModal, setIsShowTaskModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
 
@@ -48,7 +84,7 @@ const Column: React.FC<ColumnProps> = ({ _id, title }) => {
   return (
     <ColumnPanel>
       <Header>{titleContent}</Header>
-      <Body></Body>
+      <Body>{tasks.length && tasks.map((task) => <Task {...task} key={task._id} />)}</Body>
       <Footer>
         <AddButton onClick={() => setIsShowTaskModal(true)}>+ add new task</AddButton>
         <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
@@ -145,7 +181,7 @@ const CancelButton = styled(ChangeBtn)`
 `;
 
 const Body = styled.div`
-  padding: 0 20px 20px;
+  padding: 0 20px;
   overflow: auto;
 `;
 
