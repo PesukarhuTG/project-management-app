@@ -3,17 +3,17 @@ import styled from 'styled-components';
 import { ConfirmModal, IconButton, TaskModal } from './';
 
 interface TaskProps {
-  _id: string;
+  id: string;
   title: string;
   order: number;
-  boardId: string;
-  columnId: string;
   description: string;
-  userId: string;
-  users: string[];
+  boardId?: string;
+  columnId?: string;
+  userId?: string;
+  users?: string[];
 }
 
-const Task: React.FC<TaskProps> = ({ _id, title, description }) => {
+const Task: React.FC<TaskProps> = ({ id, title, description }) => {
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
 

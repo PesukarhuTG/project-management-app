@@ -6,7 +6,7 @@ import cancelIcon from '../assets/ico/icon-cancel.svg';
 import Task from './Task';
 
 interface ColumnProps {
-  _id: string;
+  id: string;
   title: string;
   order: number;
   boardId: string;
@@ -46,7 +46,7 @@ const TaskMock: TaskData[] = [
   },
 ];
 
-const Column: React.FC<ColumnProps> = ({ _id, title }) => {
+const Column: React.FC<ColumnProps> = ({ id, title }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [tasks] = useState<TaskData[]>(TaskMock); //TODO get real task data
   const [isShowTaskModal, setIsShowTaskModal] = useState<boolean>(false);
@@ -84,7 +84,12 @@ const Column: React.FC<ColumnProps> = ({ _id, title }) => {
   return (
     <ColumnPanel>
       <Header>{titleContent}</Header>
-      <Body>{tasks.length && tasks.map((task) => <Task {...task} key={task._id} />)}</Body>
+      <Body>
+        {tasks.length &&
+          tasks.map((task) => (
+            <Task id={task._id} title={task.title} description={task.description} order={task.order} key={task._id} />
+          ))}
+      </Body>
       <Footer>
         <AddButton onClick={() => setIsShowTaskModal(true)}>+ add new task</AddButton>
         <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />

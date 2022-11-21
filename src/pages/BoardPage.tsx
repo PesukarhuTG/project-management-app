@@ -47,7 +47,6 @@ const columnsMock: ColumnData[] = [
 
 const BoardPage: React.FC = () => {
   const navigate = useNavigate();
-  // const { id } = useParams();
   const [isShowColumnModal, setIsShowColumnModal] = useState<boolean>(false);
   const [board] = useState<BoardData>(boardMock); //TODO get real board data
   const [columns] = useState<ColumnData[]>(columnsMock); //TODO get real columns list (sorted by order)
@@ -68,7 +67,10 @@ const BoardPage: React.FC = () => {
         </ControlPanel>
         <Title>Board: {board.title}</Title>
         <ColumnsPanel>
-          {columns.length && columns.map((column) => <Column {...column} key={column._id} />)}
+          {columns.length &&
+            columns.map((col) => (
+              <Column id={col._id} title={col.title} order={col.order} boardId={col.boardId} key={col._id} />
+            ))}
         </ColumnsPanel>
       </Container>
 
