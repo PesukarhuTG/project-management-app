@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { BasePage, ConfirmModal } from '../components';
-import { Button, Form, Input, Upload } from 'antd';
+import { BasePage, ConfirmModal, FormButton, FormInput } from '../components';
+import { Button, Form, Upload } from 'antd';
 import styled from 'styled-components';
 
 interface FormValues {
@@ -39,7 +39,7 @@ const ProfilePage: React.FC = () => {
             { type: 'string', min: 2, message: 'Name must be at least 2 characters' },
           ]}
         >
-          <StyledInput placeholder="UserName" />
+          <FormInput placeholder="UserName" />
         </Form.Item>
         <Form.Item
           label="Login"
@@ -49,7 +49,7 @@ const ProfilePage: React.FC = () => {
             { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
           ]}
         >
-          <StyledInput placeholder="LoginName" />
+          <FormInput placeholder="LoginName" />
         </Form.Item>
         <Form.Item
           label="Password"
@@ -59,7 +59,7 @@ const ProfilePage: React.FC = () => {
             { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
           ]}
         >
-          <StyledInput placeholder="Password" type="password" />
+          <FormInput placeholder="Password" type="password" autoComplete="on" />
         </Form.Item>
         <Form.Item valuePropName="fileList">
           <Upload action="/" listType="text" maxCount={1} accept=".png,.jpeg,.jpg">
@@ -147,35 +147,7 @@ const StyledForm = styled(Form)`
   }
 `;
 
-const StyledInput = styled(Input)`
-  padding: 10px 20px;
-  font-size: 18px;
-  line-height: 36px;
-  border: 1px solid var(--primary-dark);
-  border-radius: 10px;
-
-  @media (max-width: 600px) {
-    line-height: 26px;
-  }
-`;
-
-const StyledButton = styled(Button)`
-  height: 47px;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 25px;
-  border-radius: 10px;
-  color: var(--primary-light);
-  transition: 0.3s;
-
-  &:hover,
-  &:focus,
-  &:active {
-    color: var(--primary-light);
-  }
-`;
-
-const PrimaryButton = styled(StyledButton)`
+const PrimaryButton = styled(FormButton)`
   background: var(--btn-primary);
   border: 1px solid var(--btn-primary);
 
@@ -204,7 +176,7 @@ const FormButtons = styled.div`
   }
 `;
 
-const SecondaryButton = styled(StyledButton)`
+const SecondaryButton = styled(FormButton)`
   background: var(--btn-second);
   border: 1px solid var(--btn-second);
 
