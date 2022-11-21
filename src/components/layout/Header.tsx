@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import styled from 'styled-components';
@@ -7,8 +7,8 @@ import iconAvatar from '../../assets/ico/icon-avatar.svg';
 import iconEditProfile from '../../assets/ico/icon-edit-profile.svg';
 import iconAddBoard from '../../assets/ico/icon-add-board.svg';
 import iconBoards from '../../assets/ico/icon-boards.svg';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store/Store';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/Store';
 
 type User = { avatar?: string } | null;
 
@@ -18,8 +18,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   const navigate = useNavigate();
-  //const [user] = useState<User>({}); //TODO get data about authorized user from store
-  const { isAuth } = useSelector((state: RootState) => state.user);
+  const { isAuth, login } = useSelector((state: RootState) => state.user);
 
   const logout = () => {
     //TODO logout user
@@ -29,9 +28,12 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
     if (isAuth) {
       return (
         <>
-          <Avatar>
-            <img src={iconAvatar} alt="user avatar" />
-          </Avatar>
+          <UserData>
+            <Avatar>
+              <img src={iconAvatar} alt="user avatar" />
+            </Avatar>
+            <Login>{login}</Login>
+          </UserData>
 
           <NavPanel>
             <StyledNavLink to="/profile">
@@ -59,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
         <Button label="Sign In" onClick={() => navigate('/auth')} />
       </UnauthorizedPanel>
     );
-  }, [isAuth, navigate]);
+  }, [isAuth, login, navigate]);
 
   return (
     <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
@@ -142,9 +144,16 @@ const HomeLink = styled(Link)`
   }
 `;
 
+const UserData = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  order: 3;
+`;
+
 const Avatar = styled.div`
-  height: 60px;
-  width: 60px;
+  height: 30px;
+  width: 30px;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -152,7 +161,6 @@ const Avatar = styled.div`
   background-color: var(--board-background);
   border-radius: 50%;
   overflow: hidden;
-  order: 3;
 
   & > img {
     height: 100%;
@@ -163,6 +171,10 @@ const Avatar = styled.div`
   @media (max-width: 992px) {
     display: none;
   }
+`;
+
+const Login = styled.span`
+  text-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
 `;
 
 const NavPanel = styled(Panel)`
