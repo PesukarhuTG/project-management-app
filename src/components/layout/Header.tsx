@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import styled from 'styled-components';
@@ -7,8 +7,9 @@ import iconAvatar from '../../assets/ico/icon-avatar.svg';
 import iconEditProfile from '../../assets/ico/icon-edit-profile.svg';
 import iconAddBoard from '../../assets/ico/icon-add-board.svg';
 import iconBoards from '../../assets/ico/icon-boards.svg';
-
-type User = { avatar?: string } | null;
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../store/Store';
+import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
 
 interface HeaderProps {
   isSticky?: boolean;
@@ -16,19 +17,31 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   const navigate = useNavigate();
-  const [user] = useState<User>({}); //TODO get data about authorized user from store
+  const { isAuth, login } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
 
   const logout = () => {
-    //TODO logout user
+    try {
+      dispatch(changeAuthStatus(false));
+      dispatch(removeUserData());
+      localStorage.clear();
+      console.log('выпонили signout');
+      navigate('/');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const headerContent = useMemo(() => {
-    if (user) {
+    if (isAuth) {
       return (
         <>
-          <Avatar>
-            <img src={user.avatar ?? iconAvatar} alt="" />
-          </Avatar>
+          <UserData>
+            <Avatar>
+              <img src={iconAvatar} alt="user avatar" />
+            </Avatar>
+            <Login>{login}</Login>
+          </UserData>
 
           <NavPanel>
             <StyledNavLink to="/profile">
@@ -52,11 +65,11 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 
     return (
       <UnauthorizedPanel>
-        <Button label="Sign Up" onClick={() => navigate('/auth')} />
-        <Button label="Sign In" onClick={() => navigate('/registration')} />
+        <StyledAuthButton to="/registration">Sign Up</StyledAuthButton>
+        <StyledAuthButton to="/auth">Sign In</StyledAuthButton>
       </UnauthorizedPanel>
     );
-  }, [user, navigate]);
+  }, [isAuth, login]);
 
   return (
     <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
@@ -65,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
       </Title>
       {headerContent}
       <SettingPanel>
-        {user && <Button label="Sign out" onClick={logout} />}
+        {isAuth && <Button label="Sign out" onClick={logout} />}
         <LanguageRadio />
       </SettingPanel>
     </StyledHeader>
@@ -139,9 +152,16 @@ const HomeLink = styled(Link)`
   }
 `;
 
+const UserData = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  order: 3;
+`;
+
 const Avatar = styled.div`
-  height: 60px;
-  width: 60px;
+  height: 30px;
+  width: 30px;
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -149,7 +169,6 @@ const Avatar = styled.div`
   background-color: var(--board-background);
   border-radius: 50%;
   overflow: hidden;
-  order: 3;
 
   & > img {
     height: 100%;
@@ -160,6 +179,10 @@ const Avatar = styled.div`
   @media (max-width: 992px) {
     display: none;
   }
+`;
+
+const Login = styled.span`
+  text-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
 `;
 
 const NavPanel = styled(Panel)`
@@ -239,6 +262,26 @@ const SettingPanel = styled(Panel)`
 
   @media (max-width: 768px) {
     flex-direction: column;
+  }
+`;
+
+const StyledAuthButton = styled(Link)`
+  display: block;
+  padding: 0 var(--btn-gutter);
+  line-height: var(--btn-h);
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--btn-br);
+  cursor: pointer;
+  color: var(--light-font);
+  white-space: nowrap;
+  transition: 0.3s;
+  background: var(--btn-primary);
+
+  &:hover {
+    background: var(--btn-primary-hover);
+    color: var(--light-font);
   }
 `;
 

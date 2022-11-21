@@ -3,24 +3,57 @@ import { BasePage, FormButton, FormInput } from '../components';
 import { Form } from 'antd';
 import styled from 'styled-components';
 import AccessIco from '../assets/ico/icon-access.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store/Store';
+import { changeUserLogin, changeUserPassword, changeUserId, changeAuthStatus } from '../store/UserSlice';
+import { loginUser } from '../services/APIrequests';
+import { decodeToken } from 'react-jwt';
 
 interface AuthValue {
-  login: string;
-  password: string;
+  userLogin: string;
+  userPassword: string;
 }
 
-const initialValues: AuthValue = {
-  login: '',
-  password: '',
-};
+interface DecodedTokenProps {
+  id: string;
+  login: string;
+  iat: number;
+  exp: number;
+}
 
 const AuthPage: React.FC = () => {
   const [authForm] = Form.useForm();
+  const { login, password } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
-  const onFinish = (values: AuthValue) => {
+  const onFinish = async (values: AuthValue) => {
     console.log('Success:', values);
-    authForm.resetFields();
+    const { userLogin, userPassword } = values;
+
+    try {
+      const { token } = await loginUser(userLogin, userPassword).then((res) => res.data);
+      const decodedToken: DecodedTokenProps | null = await decodeToken(token);
+
+      await dispatch(changeUserLogin(userLogin));
+      await dispatch(changeUserPassword(userPassword));
+      await dispatch(changeAuthStatus(true));
+
+      if (decodedToken !== null) {
+        localStorage.setItem('idUser', decodedToken.id);
+        await dispatch(changeUserId(decodedToken.id));
+      }
+
+      localStorage.setItem('tokenUser', token);
+      localStorage.setItem('loginUser', userLogin);
+
+      navigate('/boards');
+    } catch (e) {
+      console.log(e);
+    } finally {
+      authForm.resetFields();
+    }
   };
 
   const onFinishFailed = () => {
@@ -35,13 +68,13 @@ const AuthPage: React.FC = () => {
         form={authForm}
         name="auth"
         layout="vertical"
-        initialValues={initialValues}
+        initialValues={{ login, password }}
         onFinish={(values) => onFinish(values as AuthValue)}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
-          name="login"
+          name="userLogin"
           rules={[
             { required: true, message: 'Please input your login!' },
             { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
@@ -51,7 +84,7 @@ const AuthPage: React.FC = () => {
         </Form.Item>
 
         <Form.Item
-          name="password"
+          name="userPassword"
           rules={[
             { required: true, message: 'Please input your password!' },
             { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
@@ -67,7 +100,7 @@ const AuthPage: React.FC = () => {
         </Form.Item>
 
         <Form.Item>
-          <FormButton type="primary" htmlType="submit" onClick={() => console.log()}>
+          <FormButton type="primary" htmlType="submit">
             Sign in
           </FormButton>
         </Form.Item>
