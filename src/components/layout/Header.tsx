@@ -11,8 +11,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/Store';
 import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
 
-//type User = { avatar?: string } | null;
-
 interface HeaderProps {
   isSticky?: boolean;
 }
@@ -67,11 +65,11 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 
     return (
       <UnauthorizedPanel>
-        <Button label="Sign Up" onClick={() => navigate('/registration')} />
-        <Button label="Sign In" onClick={() => navigate('/auth')} />
+        <StyledAuthButton to="/registration">Sign Up</StyledAuthButton>
+        <StyledAuthButton to="/auth">Sign In</StyledAuthButton>
       </UnauthorizedPanel>
     );
-  }, [isAuth, login, navigate]);
+  }, [isAuth, login]);
 
   return (
     <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
@@ -264,6 +262,26 @@ const SettingPanel = styled(Panel)`
 
   @media (max-width: 768px) {
     flex-direction: column;
+  }
+`;
+
+const StyledAuthButton = styled(Link)`
+  display: block;
+  padding: 0 var(--btn-gutter);
+  line-height: var(--btn-h);
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--btn-br);
+  cursor: pointer;
+  color: var(--light-font);
+  white-space: nowrap;
+  transition: 0.3s;
+  background: var(--btn-primary);
+
+  &:hover {
+    background: var(--btn-primary-hover);
+    color: var(--light-font);
   }
 `;
 

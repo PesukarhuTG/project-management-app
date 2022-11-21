@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { DB_LINK } from '../types/constants';
+import { BACKEND_URL } from '../types/constants';
 
 const axiosApi = axios.create({
-  baseURL: DB_LINK,
+  baseURL: BACKEND_URL,
 });
 
 axiosApi.interceptors.request.use(

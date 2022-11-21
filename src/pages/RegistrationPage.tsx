@@ -44,7 +44,6 @@ const RegistrationPage: React.FC = () => {
       localStorage.setItem('idUser', _id);
       localStorage.setItem('tokenUser', token);
       localStorage.setItem('loginUser', login);
-      localStorage.setItem('passwordUser', userPassword);
 
       navigate('/boards');
     } catch (e) {

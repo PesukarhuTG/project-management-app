@@ -3,7 +3,7 @@ import { BasePage, FormButton, FormInput } from '../components';
 import { Form } from 'antd';
 import styled from 'styled-components';
 import AccessIco from '../assets/ico/icon-access.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/Store';
 import { changeUserLogin, changeUserPassword, changeUserId, changeAuthStatus } from '../store/UserSlice';
@@ -26,6 +26,7 @@ const AuthPage: React.FC = () => {
   const [authForm] = Form.useForm();
   const { login, password } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const onFinish = async (values: AuthValue) => {
     console.log('Success:', values);
@@ -46,7 +47,8 @@ const AuthPage: React.FC = () => {
 
       localStorage.setItem('tokenUser', token);
       localStorage.setItem('loginUser', userLogin);
-      localStorage.setItem('passwordUser', userPassword);
+
+      navigate('/boards');
     } catch (e) {
       console.log(e);
     } finally {
