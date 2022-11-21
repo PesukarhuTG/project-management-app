@@ -7,6 +7,8 @@ import iconAvatar from '../../assets/ico/icon-avatar.svg';
 import iconEditProfile from '../../assets/ico/icon-edit-profile.svg';
 import iconAddBoard from '../../assets/ico/icon-add-board.svg';
 import iconBoards from '../../assets/ico/icon-boards.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../store/Store';
 
 type User = { avatar?: string } | null;
 
@@ -16,18 +18,19 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   const navigate = useNavigate();
-  const [user] = useState<User>({}); //TODO get data about authorized user from store
+  //const [user] = useState<User>({}); //TODO get data about authorized user from store
+  const { isAuth } = useSelector((state: RootState) => state.user);
 
   const logout = () => {
     //TODO logout user
   };
 
   const headerContent = useMemo(() => {
-    if (user) {
+    if (isAuth) {
       return (
         <>
           <Avatar>
-            <img src={user.avatar ?? iconAvatar} alt="" />
+            <img src={iconAvatar} alt="user avatar" />
           </Avatar>
 
           <NavPanel>
@@ -52,11 +55,11 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 
     return (
       <UnauthorizedPanel>
-        <Button label="Sign Up" onClick={() => navigate('/auth')} />
-        <Button label="Sign In" onClick={() => navigate('/registration')} />
+        <Button label="Sign Up" onClick={() => navigate('/registration')} />
+        <Button label="Sign In" onClick={() => navigate('/auth')} />
       </UnauthorizedPanel>
     );
-  }, [user, navigate]);
+  }, [isAuth, navigate]);
 
   return (
     <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
@@ -65,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
       </Title>
       {headerContent}
       <SettingPanel>
-        {user && <Button label="Sign out" onClick={logout} />}
+        {isAuth && <Button label="Sign out" onClick={logout} />}
         <LanguageRadio />
       </SettingPanel>
     </StyledHeader>

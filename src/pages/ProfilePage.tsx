@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BasePage, ConfirmModal, FormButton, FormInput } from '../components';
-import { Button, Form, Upload } from 'antd';
+import { Form, Upload } from 'antd';
 import styled from 'styled-components';
 
 interface FormValues {

@@ -4,25 +4,51 @@ import styled from 'styled-components';
 import { BasePage, FormButton, FormInput } from '../components';
 import AccessIco from '../assets/ico/icon-access.svg';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store/Store';
+import {
+  changeUserName,
+  changeUserLogin,
+  changeUserPassword,
+  changeUserId,
+  changeAuthStatus,
+} from '../store/UserSlice';
+import { registrationUser, loginUser } from '../services/APIrequests';
 
 interface RegistrationValue {
-  name: string;
-  email: string;
-  password: string;
+  userName: string;
+  userLogin: string;
+  userPassword: string;
 }
-
-const initialValues: RegistrationValue = {
-  name: '',
-  email: '',
-  password: '',
-};
 
 const RegistrationPage: React.FC = () => {
   const [registrationForm] = Form.useForm<RegistrationValue>();
+  const { name, login, password } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const onFinish = (values: RegistrationValue) => {
+  const onFinish = async (values: RegistrationValue) => {
     console.log('Success:', values);
-    registrationForm.resetFields();
+    const { userName, userLogin, userPassword } = values;
+
+    try {
+      const { name, _id, login } = await registrationUser(userName, userLogin, userPassword).then((res) => res.data);
+      const { token } = await loginUser(userLogin, userPassword).then((res) => res.data);
+
+      await dispatch(changeUserName(name));
+      await dispatch(changeUserLogin(login));
+      await dispatch(changeUserPassword(userPassword));
+      await dispatch(changeUserId(_id));
+      await dispatch(changeAuthStatus(true));
+
+      localStorage.setItem('idUser', _id);
+      localStorage.setItem('tokenUser', token);
+      localStorage.setItem('loginUser', login);
+      localStorage.setItem('passwordUser', userPassword);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      registrationForm.resetFields();
+    }
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -37,13 +63,13 @@ const RegistrationPage: React.FC = () => {
         form={registrationForm}
         name="registration"
         layout="vertical"
-        initialValues={initialValues}
+        initialValues={{ name, login, password }}
         onFinish={(values) => onFinish(values as RegistrationValue)}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
-          name="Name"
+          name="userName"
           rules={[
             { required: true, message: 'Please input your name!' },
             { type: 'string', min: 2, message: 'Name must be at least 2 characters' },
@@ -52,12 +78,18 @@ const RegistrationPage: React.FC = () => {
           <FormInput placeholder="Name *" type="text" />
         </Form.Item>
 
-        <Form.Item name="Email" rules={[{ required: true, message: 'Please input your email!' }]}>
-          <FormInput placeholder="Email *" type="email" />
+        <Form.Item
+          name="userLogin"
+          rules={[
+            { required: true, message: 'Please input your login!' },
+            { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
+          ]}
+        >
+          <FormInput placeholder="Login *" type="text" />
         </Form.Item>
 
         <Form.Item
-          name="password"
+          name="userPassword"
           rules={[
             { required: true, message: 'Please input your password!' },
             { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
@@ -73,7 +105,7 @@ const RegistrationPage: React.FC = () => {
         </Form.Item>
 
         <Form.Item>
-          <FormButton type="primary" htmlType="submit" onClick={() => console.log()}>
+          <FormButton type="primary" htmlType="submit">
             Sign up
           </FormButton>
         </Form.Item>
