@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { BasePage, FormButton, FormInput } from '../components';
 import AccessIco from '../assets/ico/icon-access.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/Store';
 import {
@@ -25,6 +25,7 @@ const RegistrationPage: React.FC = () => {
   const [registrationForm] = Form.useForm<RegistrationValue>();
   const { name, login, password } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const onFinish = async (values: RegistrationValue) => {
     console.log('Success:', values);
@@ -44,6 +45,8 @@ const RegistrationPage: React.FC = () => {
       localStorage.setItem('tokenUser', token);
       localStorage.setItem('loginUser', login);
       localStorage.setItem('passwordUser', userPassword);
+
+      navigate('/boards');
     } catch (e) {
       console.log(e);
     } finally {

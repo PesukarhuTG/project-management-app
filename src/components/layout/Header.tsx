@@ -28,6 +28,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
       dispatch(removeUserData());
       localStorage.clear();
       console.log('выпонили signout');
+      navigate('/');
     } catch (e) {
       console.log(e);
     }
