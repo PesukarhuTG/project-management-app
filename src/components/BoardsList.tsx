@@ -18,9 +18,9 @@ const BoardsList: FC<BoardsListProps> = ({ boards, remove }) => {
     );
   return (
     <BoardsContainer>
-      {boards.map((board) => {
-        return <SingleBoard {...board} remove={remove} key={board.id} />;
-      })}
+      {boards.map((board) => (
+        <SingleBoard {...board} remove={remove} key={board.id} />
+      ))}
     </BoardsContainer>
   );
 };
