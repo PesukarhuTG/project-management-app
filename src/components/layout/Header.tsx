@@ -7,10 +7,11 @@ import iconAvatar from '../../assets/ico/icon-avatar.svg';
 import iconEditProfile from '../../assets/ico/icon-edit-profile.svg';
 import iconAddBoard from '../../assets/ico/icon-add-board.svg';
 import iconBoards from '../../assets/ico/icon-boards.svg';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/Store';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../store/Store';
+import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
 
-type User = { avatar?: string } | null;
+//type User = { avatar?: string } | null;
 
 interface HeaderProps {
   isSticky?: boolean;
@@ -19,9 +20,17 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   const navigate = useNavigate();
   const { isAuth, login } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch<AppDispatch>();
 
   const logout = () => {
-    //TODO logout user
+    try {
+      dispatch(changeAuthStatus(false));
+      dispatch(removeUserData());
+      localStorage.clear();
+      console.log('выпонили signout');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const headerContent = useMemo(() => {
