@@ -1,51 +1,79 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import boardEditIco from '../assets/ico/icon-edit.svg';
 import boardDeleteIco from '../assets/ico/icon-trush.svg';
+import { SingleBoardProps } from '../types';
+import BoardModal from './BoardModal';
+import ConfirmModal from './ConfirmModal';
+import { BoardTitle, BoardWrapper } from './styled-components';
 
-interface SingleBoardProps {
-  boardTitle?: string;
-  boardDescription?: string;
-}
+const SingleBoard: FC<SingleBoardProps> = ({
+  boardTitle = 'Board title',
+  boardDescription = 'Board description',
+  id,
+  remove,
+}) => {
+  const navigate = useNavigate();
+  const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
+  const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
 
-const SingleBoard: FC<SingleBoardProps> = ({ boardTitle = 'Board title', boardDescription = 'Board description' }) => {
+  const openConfirmModal = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    setConfirmModalVisible(true);
+  };
+
+  const closeConfirmModal = () => {
+    setConfirmModalVisible(false);
+  };
+
+  const handleDelete = () => {
+    remove(id);
+    setConfirmModalVisible(false);
+  };
+
+  const openEditModal = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    setEditModalVisible(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalVisible(false);
+  };
+
+  const handleEdit = () => {
+    setEditModalVisible(false);
+    console.log('edit board info');
+  };
+
   return (
-    <BoardBody>
-      <BoardHeader>
-        <BoardTitle>{boardTitle}</BoardTitle>
-        <BoardDescription>{boardDescription}</BoardDescription>
-      </BoardHeader>
-      <BoardTools>
-        <BoardLink href="/">Open board</BoardLink>
-        <BoardEdit onClick={() => console.log('open modal window for edit')} />
-        <BoardDelete onClick={() => console.log('open modal window for delete')} />
-      </BoardTools>
-    </BoardBody>
+    <>
+      <BoardWrapper onClick={() => navigate(`/board/${id}`)}>
+        <BoardHeader>
+          <BoardTitle>{boardTitle}</BoardTitle>
+          <BoardDescription>{boardDescription}</BoardDescription>
+        </BoardHeader>
+        <BoardTools>
+          <BoardEdit onClick={openEditModal} />
+          <BoardDelete onClick={openConfirmModal} />
+        </BoardTools>
+      </BoardWrapper>
+      <ConfirmModal
+        title="Do you want to delete this board?"
+        isVisible={confirmModalVisible}
+        onOk={handleDelete}
+        onCancel={closeConfirmModal}
+      />
+      <BoardModal title="Edit board info" isVisible={editModalVisible} onOk={handleEdit} onCancel={closeEditModal} />
+    </>
   );
 };
-
-const BoardBody = styled.div`
-  max-width: 426px;
-  min-height: 290px;
-  display: flex;
-  flex-direction: column;
-  color: var(--primary-dark);
-  border: 2px solid var(--primary-dark);
-  border-radius: 30px;
-`;
 
 const BoardHeader = styled.div`
   padding: 20px;
   flex-grow: 1;
   background-color: var(--board-background);
   border-radius: 30px 30px 0 0;
-`;
-
-const BoardTitle = styled.p`
-  margin-bottom: 5px;
-  font-weight: 700;
-  font-size: 26px;
-  line-height: 35px;
 `;
 
 const BoardDescription = styled.p`
@@ -62,20 +90,9 @@ const BoardTools = styled.div`
   border-radius: 0 0 30px 30px;
 `;
 
-const BoardLink = styled.a`
-  color: var(--primary-dark);
-  font-weight: 700;
-  line-height: 25px;
-
-  &:hover {
-    color: var(--btn-primary-hover);
-  }
-`;
-
 const BoardEdit = styled.div`
   width: 30px;
   height: 30px;
-  margin-left: auto;
   background: url(${boardEditIco});
   cursor: pointer;
 
