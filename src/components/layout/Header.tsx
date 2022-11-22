@@ -10,6 +10,7 @@ import iconBoards from '../../assets/ico/icon-boards.svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/Store';
 import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
+import { setCreateModalVisible } from '../../store/BoardsSlice';
 
 interface HeaderProps {
   isSticky?: boolean;
@@ -32,6 +33,11 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
     }
   };
 
+  const createBoard = () => {
+    dispatch(setCreateModalVisible(true));
+    navigate('/boards');
+  };
+
   const headerContent = useMemo(() => {
     if (isAuth) {
       return (
@@ -49,7 +55,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
               <span>Edit profile</span>
             </StyledNavLink>
 
-            <StyledNavButton>
+            <StyledNavButton onClick={createBoard}>
               <NavIcon src={iconAddBoard} alt="" />
               <span>Create new board</span>
             </StyledNavButton>
