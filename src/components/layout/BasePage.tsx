@@ -55,6 +55,7 @@ const Content = styled.main<{
   ${({ $noScroll }) => {
     if ($noScroll)
       return css`
+        padding: 32px 0 0 0;
         height: calc(100vh - var(--header-h) - var(--footer-h));
         overflow: hidden;
       `;
