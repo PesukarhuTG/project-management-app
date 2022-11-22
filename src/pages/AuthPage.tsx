@@ -6,8 +6,14 @@ import AccessIco from '../assets/ico/icon-access.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/Store';
-import { changeUserLogin, changeUserPassword, changeUserId, changeAuthStatus } from '../store/UserSlice';
-import { loginUser } from '../services/APIrequests';
+import {
+  changeUserLogin,
+  changeUserPassword,
+  changeUserId,
+  changeAuthStatus,
+  changeUserName,
+} from '../store/UserSlice';
+import { loginUser, getUserById } from '../services/APIrequests';
 import { decodeToken } from 'react-jwt';
 
 interface AuthValue {
@@ -49,6 +55,9 @@ const AuthPage: React.FC = () => {
       localStorage.setItem('loginUser', userLogin);
 
       navigate('/boards');
+
+      const { name } = await getUserById().then((res) => res.data);
+      dispatch(changeUserName(name));
     } catch (e) {
       console.log(e);
     } finally {

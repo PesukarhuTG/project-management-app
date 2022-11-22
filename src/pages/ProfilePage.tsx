@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { BasePage, ConfirmModal, FormButton, FormInput } from '../components';
 import { Form, Upload } from 'antd';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/Store';
 
 interface FormValues {
   userName: string;
@@ -9,11 +11,11 @@ interface FormValues {
   password: string;
 }
 
-const initialValues: FormValues = { userName: '', login: '', password: '' };
-
 const ProfilePage: React.FC = () => {
   const [form] = Form.useForm();
   const [confirmFormVisible, setConfirmFormVisible] = useState<boolean>(false);
+  const { name, login, password } = useSelector((state: RootState) => state.user);
+  console.log(name, login, password);
 
   const onFinish = (value: FormValues | unknown) => {
     console.log(value);
@@ -26,43 +28,43 @@ const ProfilePage: React.FC = () => {
       <StyledForm
         form={form}
         layout="vertical"
-        initialValues={initialValues}
+        initialValues={{ name, login, password }}
         onFinish={onFinish}
         onFinishFailed={() => console.log('onFinishFailed')}
         autoComplete="off"
       >
         <Form.Item
-          label="Username"
+          label="User name"
           name="userName"
           rules={[
             { required: true, message: 'Please input your name!' },
             { type: 'string', min: 2, message: 'Name must be at least 2 characters' },
           ]}
         >
-          <FormInput placeholder="UserName" />
+          <FormInput placeholder={name || 'User name'} />
         </Form.Item>
         <Form.Item
           label="Login"
-          name="login"
+          name="userLogin"
           rules={[
             { required: true, message: 'Please input your login!' },
             { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
           ]}
         >
-          <FormInput placeholder="LoginName" />
+          <FormInput placeholder={login || 'Login'} />
         </Form.Item>
         <Form.Item
           label="Password"
-          name="password"
+          name="userPassword"
           rules={[
             { required: true, message: 'Please input your password!' },
             { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
           ]}
         >
-          <FormInput placeholder="Password" type="password" autoComplete="on" />
+          <FormInput placeholder={password || 'Password'} type="password" autoComplete="on" />
         </Form.Item>
-        <Form.Item valuePropName="fileList">
-          <Upload action="/" listType="text" maxCount={1} accept=".png,.jpeg,.jpg">
+        <Form.Item valuePropName="userFile">
+          <Upload action="" listType="text" maxCount={1} accept=".png,.jpeg,.jpg">
             <PrimaryButton>Change avatar</PrimaryButton>
           </Upload>
         </Form.Item>
