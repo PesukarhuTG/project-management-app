@@ -35,11 +35,11 @@ const RegistrationPage: React.FC = () => {
       const { name, _id, login } = await registrationUser(userName, userLogin, userPassword).then((res) => res.data);
       const { token } = await loginUser(userLogin, userPassword).then((res) => res.data);
 
-      await dispatch(changeUserName(name));
-      await dispatch(changeUserLogin(login));
-      await dispatch(changeUserPassword(userPassword));
-      await dispatch(changeUserId(_id));
-      await dispatch(changeAuthStatus(true));
+      dispatch(changeUserName(name));
+      dispatch(changeUserLogin(login));
+      dispatch(changeUserPassword(userPassword));
+      dispatch(changeUserId(_id));
+      dispatch(changeAuthStatus(true));
 
       localStorage.setItem('idUser', _id);
       localStorage.setItem('tokenUser', token);

@@ -2,24 +2,50 @@ import React, { useState } from 'react';
 import { BasePage, ConfirmModal, FormButton, FormInput } from '../components';
 import { Form, Upload } from 'antd';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store/Store';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store/Store';
+import { editUserById, loginUser } from '../services/APIrequests';
+import {
+  changeUserName,
+  changeUserLogin,
+  changeUserPassword,
+  changeUserId,
+  changeAuthStatus,
+} from '../store/UserSlice';
 
-interface FormValues {
+interface EditFormValues {
   userName: string;
-  login: string;
-  password: string;
+  userLogin: string;
+  userPassword: string;
 }
 
 const ProfilePage: React.FC = () => {
   const [form] = Form.useForm();
   const [confirmFormVisible, setConfirmFormVisible] = useState<boolean>(false);
   const { name, login, password } = useSelector((state: RootState) => state.user);
-  console.log(name, login, password);
+  const dispatch = useDispatch<AppDispatch>();
 
-  const onFinish = (value: FormValues | unknown) => {
-    console.log(value);
-    form.resetFields();
+  const onFinish = async (values: EditFormValues) => {
+    console.log('Success:', values);
+    const { userName, userLogin, userPassword } = values;
+
+    try {
+      const { name, _id, login } = await editUserById(userName, userLogin, userPassword).then((res) => res.data);
+      const { token } = await loginUser(login, userPassword).then((res) => res.data);
+      dispatch(changeUserName(name));
+      dispatch(changeUserLogin(login));
+      dispatch(changeUserPassword(userPassword));
+      dispatch(changeUserId(_id));
+      dispatch(changeAuthStatus(true));
+
+      localStorage.setItem('idUser', _id);
+      localStorage.setItem('tokenUser', token);
+      localStorage.setItem('loginUser', login);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      form.resetFields();
+    }
   };
 
   return (
@@ -29,7 +55,7 @@ const ProfilePage: React.FC = () => {
         form={form}
         layout="vertical"
         initialValues={{ name, login, password }}
-        onFinish={onFinish}
+        onFinish={(values) => onFinish(values as EditFormValues)}
         onFinishFailed={() => console.log('onFinishFailed')}
         autoComplete="off"
       >
