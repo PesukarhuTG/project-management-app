@@ -6,13 +6,7 @@ import AccessIco from '../assets/ico/icon-access.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/Store';
-import {
-  changeUserName,
-  changeUserLogin,
-  changeUserPassword,
-  changeUserId,
-  changeAuthStatus,
-} from '../store/UserSlice';
+import { changeAuthStatus, changeUserData } from '../store/UserSlice';
 import { registrationUser, loginUser } from '../services/APIrequests';
 
 interface RegistrationValue {
@@ -34,11 +28,14 @@ const RegistrationPage: React.FC = () => {
     try {
       const { name, _id, login } = await registrationUser(userName, userLogin, userPassword).then((res) => res.data);
       const { token } = await loginUser(userLogin, userPassword).then((res) => res.data);
+      const userData = {
+        name,
+        login,
+        password: userPassword,
+        id: _id,
+      };
 
-      dispatch(changeUserName(name));
-      dispatch(changeUserLogin(login));
-      dispatch(changeUserPassword(userPassword));
-      dispatch(changeUserId(_id));
+      dispatch(changeUserData(userData));
       dispatch(changeAuthStatus(true));
 
       localStorage.setItem('idUser', _id);

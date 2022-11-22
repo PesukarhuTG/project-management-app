@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import { BasePage, ConfirmModal, FormButton, FormInput } from '../components';
-import { Form, Upload } from 'antd';
+import { Form, message } from 'antd';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/Store';
-import { editUserById, loginUser } from '../services/APIrequests';
-import {
-  changeUserName,
-  changeUserLogin,
-  changeUserPassword,
-  changeUserId,
-  changeAuthStatus,
-} from '../store/UserSlice';
+import { editUserById, loginUser, deleteUser } from '../services/APIrequests';
+import { useNavigate } from 'react-router-dom';
+import { changeUserData, changeAuthStatus, removeUserData } from '../store/UserSlice';
 
 interface EditFormValues {
   userName: string;
@@ -23,7 +18,23 @@ const ProfilePage: React.FC = () => {
   const [form] = Form.useForm();
   const [confirmFormVisible, setConfirmFormVisible] = useState<boolean>(false);
   const { name, login, password } = useSelector((state: RootState) => state.user);
+  const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  const showSuccessMessage = (text: string) => {
+    messageApi.open({
+      type: 'success',
+      content: text,
+    });
+  };
+
+  const showErrorMessage = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Something wrong... Please, try again',
+    });
+  };
 
   const onFinish = async (values: EditFormValues) => {
     console.log('Success:', values);
@@ -32,24 +43,43 @@ const ProfilePage: React.FC = () => {
     try {
       const { name, _id, login } = await editUserById(userName, userLogin, userPassword).then((res) => res.data);
       const { token } = await loginUser(login, userPassword).then((res) => res.data);
-      dispatch(changeUserName(name));
-      dispatch(changeUserLogin(login));
-      dispatch(changeUserPassword(userPassword));
-      dispatch(changeUserId(_id));
+      const userData = {
+        name,
+        login,
+        password: userPassword,
+        id: _id,
+      };
+
+      dispatch(changeUserData(userData));
       dispatch(changeAuthStatus(true));
+
+      showSuccessMessage('Your profile data was changed');
 
       localStorage.setItem('idUser', _id);
       localStorage.setItem('tokenUser', token);
       localStorage.setItem('loginUser', login);
-    } catch (e) {
-      console.log(e);
+    } catch {
+      showErrorMessage();
     } finally {
       form.resetFields();
     }
   };
 
+  const onDeleteUser = async () => {
+    try {
+      await deleteUser();
+      dispatch(changeAuthStatus(false));
+      dispatch(removeUserData());
+      localStorage.clear();
+      navigate('/');
+    } catch {
+      showErrorMessage();
+    }
+  };
+
   return (
     <BasePage>
+      {contextHolder}
       <ProfileTitle>Profile editing fields</ProfileTitle>
       <StyledForm
         form={form}
@@ -89,11 +119,6 @@ const ProfilePage: React.FC = () => {
         >
           <FormInput placeholder={password || 'Password'} type="password" autoComplete="on" />
         </Form.Item>
-        <Form.Item valuePropName="userFile">
-          <Upload action="" listType="text" maxCount={1} accept=".png,.jpeg,.jpg">
-            <PrimaryButton>Change avatar</PrimaryButton>
-          </Upload>
-        </Form.Item>
         <Form.Item>
           <FormButtons>
             <PrimaryButton htmlType="submit">Update profile</PrimaryButton>
@@ -104,7 +129,7 @@ const ProfilePage: React.FC = () => {
       <ConfirmModal
         title="Do you want to delete your profile?"
         isVisible={confirmFormVisible}
-        onOk={() => console.log('delete profile')}
+        onOk={onDeleteUser}
         onCancel={() => setConfirmFormVisible(false)}
       />
     </BasePage>
