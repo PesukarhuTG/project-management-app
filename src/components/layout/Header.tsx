@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import styled from 'styled-components';
-import { Button, LanguageRadio } from '..';
+import { LanguageRadio } from '..';
 import iconAvatar from '../../assets/ico/icon-avatar.svg';
 import iconEditProfile from '../../assets/ico/icon-edit-profile.svg';
 import iconAddBoard from '../../assets/ico/icon-add-board.svg';
@@ -11,6 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/Store';
 import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
 import { setCreateModalVisible } from '../../store/BoardsSlice';
+import { FormattedMessage } from 'react-intl';
 
 interface HeaderProps {
   isSticky?: boolean;
@@ -27,7 +28,6 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
       dispatch(removeUserData());
       localStorage.clear();
       console.log('выполнили signout');
-      navigate('/');
     } catch (e) {
       console.log(e);
     }
@@ -51,18 +51,18 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 
           <NavPanel>
             <StyledNavLink to="/profile">
-              <NavIcon src={iconEditProfile} alt="" />
-              <span>Edit profile</span>
+              <NavIcon src={iconEditProfile} alt="icon" />
+              <FormattedMessage id="editItemMenu" />
             </StyledNavLink>
 
             <StyledNavButton onClick={createBoard}>
-              <NavIcon src={iconAddBoard} alt="" />
-              <span>Create new board</span>
+              <NavIcon src={iconAddBoard} alt="icon" />
+              <FormattedMessage id="createItemMenu" />
             </StyledNavButton>
 
             <StyledNavLink to="/boards">
-              <NavIcon src={iconBoards} alt="" />
-              <span>Go to main page</span>
+              <NavIcon src={iconBoards} alt="icon" />
+              <FormattedMessage id="mainItemMenu" />
             </StyledNavLink>
           </NavPanel>
         </>
@@ -71,11 +71,15 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 
     return (
       <UnauthorizedPanel>
-        <StyledAuthButton to="/registration">Sign Up</StyledAuthButton>
-        <StyledAuthButton to="/auth">Sign In</StyledAuthButton>
+        <StyledAuthButton to="/registration">
+          <FormattedMessage id="btnSignUp" />
+        </StyledAuthButton>
+        <StyledAuthButton to="/auth">
+          <FormattedMessage id="btnSignIn" />
+        </StyledAuthButton>
       </UnauthorizedPanel>
     );
-  }, [isAuth, login]);
+  }, [isAuth, login]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
@@ -84,7 +88,11 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
       </Title>
       {headerContent}
       <SettingPanel>
-        {isAuth && <Button label="Sign out" onClick={logout} />}
+        {isAuth && (
+          <StyledAuthButton to="/" onClick={logout}>
+            <FormattedMessage id="btnSignOut" />
+          </StyledAuthButton>
+        )}
         <LanguageRadio />
       </SettingPanel>
     </StyledHeader>

@@ -12,6 +12,7 @@ const initialState: InitialUserState = {
   password: '',
   id: '',
   isAuth: false,
+  lang: 'en',
 };
 
 const userSlice = createSlice({
@@ -35,8 +36,11 @@ const userSlice = createSlice({
     changeAuthStatus(state, action: PayloadAction<boolean>) {
       state.isAuth = action.payload;
     },
+    changeLanguage(state, action: PayloadAction<string>) {
+      state.lang = action.payload;
+    },
   },
 });
 
-export const { changeUserData, removeUserData, changeAuthStatus } = userSlice.actions;
+export const { changeUserData, removeUserData, changeAuthStatus, changeLanguage } = userSlice.actions;
 export default userSlice.reducer;
