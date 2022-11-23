@@ -26,6 +26,22 @@ const en = {
       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum',
     personFourthDescription:
       'Our team mentor. The specialist in JS, React and other technologies. The person, who not only helped us solve problems, but also motivated and energized the entire team!',
+    profilePageTitle: 'Profile editing fields',
+    userNameLabel: 'User name',
+    userLoginLabel: 'Login',
+    userPasswordLabel: 'Password',
+    btnUpdateProfile: 'Update profile',
+    btnDeleteProfile: 'Delete profile',
+    successEditMessage: 'Your profile data was changed',
+    failedEditMessage: 'Something wrong... Please, try again',
+    nameInputValidation1: 'Please input your name!',
+    nameInputValidation2: 'Name must be at least 2 characters',
+    loginInputValidation1: 'Please input your login!',
+    loginInputValidation2: 'Login must be at least 2 characters',
+    passwordInputValidation1: 'Please input your password!',
+    passwordInputValidation2: 'Password must be at least 8 characters',
+    confirmYes: 'Yes',
+    confirmNo: 'No',
   },
 };
 

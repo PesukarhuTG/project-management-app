@@ -7,6 +7,7 @@ import { RootState, AppDispatch } from '../store/Store';
 import { editUserById, loginUser, deleteUser } from '../services/APIrequests';
 import { useNavigate } from 'react-router-dom';
 import { changeUserData, changeAuthStatus, removeUserData } from '../store/UserSlice';
+import { FormattedMessage } from 'react-intl';
 
 interface EditFormValues {
   userName: string;
@@ -14,25 +15,30 @@ interface EditFormValues {
   userPassword: string;
 }
 
+const userNameLabel = <FormattedMessage id="userNameLabel" />;
+const userLoginLabel = <FormattedMessage id="userLoginLabel" />;
+const userPasswordLabel = <FormattedMessage id="userPasswordLabel" />;
+
 const ProfilePage: React.FC = () => {
   const [form] = Form.useForm();
   const [confirmFormVisible, setConfirmFormVisible] = useState<boolean>(false);
-  const { name, login, password } = useSelector((state: RootState) => state.user);
+  const { name, login, password, lang } = useSelector((state: RootState) => state.user);
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const confirmTitle = lang === 'en' ? 'Do you want to delete your profile?' : 'Вы точно хотите удалить профиль?';
 
-  const showSuccessMessage = (text: string) => {
+  const showSuccessMessage = () => {
     messageApi.open({
       type: 'success',
-      content: text,
+      content: <FormattedMessage id="successEditMessage" />,
     });
   };
 
   const showErrorMessage = () => {
     messageApi.open({
       type: 'error',
-      content: 'Something wrong... Please, try again',
+      content: <FormattedMessage id="failedEditMessage" />,
     });
   };
 
@@ -53,7 +59,7 @@ const ProfilePage: React.FC = () => {
       dispatch(changeUserData(userData));
       dispatch(changeAuthStatus(true));
 
-      showSuccessMessage('Your profile data was changed');
+      showSuccessMessage();
 
       localStorage.setItem('idUser', _id);
       localStorage.setItem('tokenUser', token);
@@ -80,7 +86,9 @@ const ProfilePage: React.FC = () => {
   return (
     <BasePage>
       {contextHolder}
-      <ProfileTitle>Profile editing fields</ProfileTitle>
+      <ProfileTitle>
+        <FormattedMessage id="profilePageTitle" />
+      </ProfileTitle>
       <StyledForm
         form={form}
         layout="vertical"
@@ -90,44 +98,48 @@ const ProfilePage: React.FC = () => {
         autoComplete="off"
       >
         <Form.Item
-          label="User name"
+          label={userNameLabel}
           name="userName"
           rules={[
-            { required: true, message: 'Please input your name!' },
-            { type: 'string', min: 2, message: 'Name must be at least 2 characters' },
+            { required: true, message: <FormattedMessage id="nameInputValidation1" /> },
+            { type: 'string', min: 2, message: <FormattedMessage id="nameInputValidation2" /> },
           ]}
         >
           <FormInput placeholder={name || 'User name'} />
         </Form.Item>
         <Form.Item
-          label="Login"
+          label={userLoginLabel}
           name="userLogin"
           rules={[
-            { required: true, message: 'Please input your login!' },
-            { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
+            { required: true, message: <FormattedMessage id="loginInputValidation1" /> },
+            { type: 'string', min: 2, message: <FormattedMessage id="loginInputValidation2" /> },
           ]}
         >
           <FormInput placeholder={login || 'Login'} />
         </Form.Item>
         <Form.Item
-          label="Password"
+          label={userPasswordLabel}
           name="userPassword"
           rules={[
-            { required: true, message: 'Please input your password!' },
-            { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
+            { required: true, message: <FormattedMessage id="passwordInputValidation1" /> },
+            { type: 'string', min: 8, message: <FormattedMessage id="passwordInputValidation2" /> },
           ]}
         >
           <FormInput placeholder={password || 'Password'} type="password" autoComplete="on" />
         </Form.Item>
         <Form.Item>
           <FormButtons>
-            <PrimaryButton htmlType="submit">Update profile</PrimaryButton>
-            <SecondaryButton onClick={() => setConfirmFormVisible(true)}>Delete profile</SecondaryButton>
+            <PrimaryButton htmlType="submit">
+              <FormattedMessage id="btnUpdateProfile" />
+            </PrimaryButton>
+            <SecondaryButton onClick={() => setConfirmFormVisible(true)}>
+              <FormattedMessage id="btnDeleteProfile" />
+            </SecondaryButton>
           </FormButtons>
         </Form.Item>
       </StyledForm>
       <ConfirmModal
-        title="Do you want to delete your profile?"
+        title={confirmTitle}
         isVisible={confirmFormVisible}
         onOk={onDeleteUser}
         onCancel={() => setConfirmFormVisible(false)}

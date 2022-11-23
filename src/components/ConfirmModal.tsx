@@ -2,6 +2,7 @@ import { Modal } from 'antd';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { ModalProps } from '../types';
+import { FormattedMessage } from 'react-intl';
 
 const ConfirmModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel }) => {
   return (
@@ -10,8 +11,8 @@ const ConfirmModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel }) => {
       open={isVisible}
       onOk={onOk}
       onCancel={onCancel}
-      okText="Yes"
-      cancelText="No"
+      okText={<FormattedMessage id="confirmYes" />}
+      cancelText={<FormattedMessage id="confirmNo" />}
       destroyOnClose
       centered
       width={620}
