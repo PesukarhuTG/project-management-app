@@ -6,8 +6,8 @@ import AccessIco from '../assets/ico/icon-access.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/Store';
-import { changeUserLogin, changeUserPassword, changeUserId, changeAuthStatus } from '../store/UserSlice';
-import { loginUser } from '../services/APIrequests';
+import { changeAuthStatus, changeUserData } from '../store/UserSlice';
+import { loginUser, getUserById } from '../services/APIrequests';
 import { decodeToken } from 'react-jwt';
 
 interface AuthValue {
@@ -34,20 +34,23 @@ const AuthPage: React.FC = () => {
 
     try {
       const { token } = await loginUser(userLogin, userPassword).then((res) => res.data);
-      const decodedToken: DecodedTokenProps | null = await decodeToken(token);
+      const decodedToken = (await decodeToken(token)) as DecodedTokenProps;
 
-      await dispatch(changeUserLogin(userLogin));
-      await dispatch(changeUserPassword(userPassword));
-      await dispatch(changeAuthStatus(true));
-
-      if (decodedToken !== null) {
-        localStorage.setItem('idUser', decodedToken.id);
-        await dispatch(changeUserId(decodedToken.id));
-      }
-
+      localStorage.setItem('idUser', decodedToken.id);
       localStorage.setItem('tokenUser', token);
       localStorage.setItem('loginUser', userLogin);
 
+      const { name } = await getUserById().then((res) => res.data);
+
+      const userData = {
+        name,
+        login: userLogin,
+        password: userPassword,
+        id: decodedToken.id,
+      };
+
+      dispatch(changeUserData(userData));
+      dispatch(changeAuthStatus(true));
       navigate('/boards');
     } catch (e) {
       console.log(e);

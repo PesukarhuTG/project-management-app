@@ -2,6 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { InitialUserState } from '../types';
 
+interface userDataProps {
+  [key: string]: string;
+}
+
 const initialState: InitialUserState = {
   name: '',
   login: '',
@@ -14,17 +18,13 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    changeUserName(state, action: PayloadAction<string>) {
-      state.name = action.payload;
-    },
-    changeUserLogin(state, action: PayloadAction<string>) {
-      state.login = action.payload;
-    },
-    changeUserPassword(state, action: PayloadAction<string>) {
-      state.password = action.payload;
-    },
-    changeUserId(state, action: PayloadAction<string>) {
-      state.id = action.payload;
+    changeUserData(state, action: PayloadAction<userDataProps>) {
+      const { name, login, password, id } = action.payload;
+
+      state.name = name;
+      state.login = login;
+      state.password = password;
+      state.id = id;
     },
     removeUserData(state) {
       state.name = '';
@@ -38,6 +38,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { changeUserName, changeUserLogin, changeUserPassword, changeUserId, removeUserData, changeAuthStatus } =
-  userSlice.actions;
+export const { changeUserData, removeUserData, changeAuthStatus } = userSlice.actions;
 export default userSlice.reducer;
