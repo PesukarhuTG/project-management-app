@@ -5,43 +5,46 @@ import heroTeamIco from '../assets/ico/hero-img.svg';
 import avatar1 from '../assets/ico/avatar-tatiana.png';
 import avatar2 from '../assets/ico/avatar-daria.png';
 import avatar3 from '../assets/ico/avatar-sergey.png';
+import { FormattedMessage } from 'react-intl';
 
 const WelcomePage: React.FC = () => {
   return (
     <BasePage>
       <HeroSection>
         <div>
-          <SectionTitle>Task Manager</SectionTitle>
+          <SectionTitle>
+            <FormattedMessage id="mainTitle" />
+          </SectionTitle>
           <HeroDescription>
-            It is a project management software that allows you to centrally manage tasks and their timely completion.
-            Trackers are widely used in project management, because they allow you to easily monitor all work processes
-            and control the work of the team.
+            <FormattedMessage id="mainDescription" />
           </HeroDescription>
         </div>
         <HeroImage />
       </HeroSection>
       <TeamSection>
-        <SectionTitle>Project team</SectionTitle>
+        <SectionTitle>
+          <FormattedMessage id="sectionTeam" />
+        </SectionTitle>
 
         <TeamItem>
           <TeamItemAvatar $name="tatiana" />
           <div>
-            <TeamItemTitle>Tatiana | frontend-developer</TeamItemTitle>
+            <TeamItemTitle>
+              <FormattedMessage id="personOneTitle" />
+            </TeamItemTitle>
             <TeamItemDescription>
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
-              atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
-              sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+              <FormattedMessage id="personOneDescription" />
             </TeamItemDescription>
           </div>
         </TeamItem>
 
         <TeamItem>
           <div>
-            <TeamItemTitle>Daria | frontend-developer</TeamItemTitle>
+            <TeamItemTitle>
+              <FormattedMessage id="personSecondTitle" />
+            </TeamItemTitle>
             <TeamItemDescription>
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
-              atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
-              sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+              <FormattedMessage id="personSecondDescription" />
             </TeamItemDescription>
           </div>
           <TeamItemAvatar $name="daria" />
@@ -50,11 +53,11 @@ const WelcomePage: React.FC = () => {
         <TeamItem>
           <TeamItemAvatar $name="sergey" />
           <div>
-            <TeamItemTitle>Sergey | frontend-developer</TeamItemTitle>
+            <TeamItemTitle>
+              <FormattedMessage id="personThirdTitle" />
+            </TeamItemTitle>
             <TeamItemDescription>
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
-              atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
-              sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+              <FormattedMessage id="personThirdDescription" />
             </TeamItemDescription>
           </div>
         </TeamItem>
@@ -67,6 +70,7 @@ const HeroSection = styled.section`
   max-width: 1440px;
   display: flex;
   gap: 50px;
+  align-items: center;
   justify-content: space-between;
   margin: 0 auto 50px;
   padding: 0 110px;
@@ -81,6 +85,7 @@ const HeroSection = styled.section`
 `;
 
 const SectionTitle = styled.h2`
+  align-self: flex-start;
   font-weight: 700;
   font-size: 40px;
   line-height: 54px;
