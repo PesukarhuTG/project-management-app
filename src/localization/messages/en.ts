@@ -17,12 +17,15 @@ const en = {
     personOneTitle: 'Tatiana | frontend-developer',
     personSecondTitle: 'Daria | frontend-developer',
     personThirdTitle: 'Sergey | frontend-developer',
+    personFourthTitle: 'Denis | mentor',
     personOneDescription:
       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum',
     personSecondDescription:
       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum',
     personThirdDescription:
       'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum',
+    personFourthDescription:
+      'Our team mentor. The specialist in JS, React and other technologies. The person, who not only helped us solve problems, but also motivated and energized the entire team!',
   },
 };
 

@@ -5,6 +5,7 @@ import heroTeamIco from '../assets/ico/hero-img.svg';
 import avatar1 from '../assets/ico/avatar-tatiana.png';
 import avatar2 from '../assets/ico/avatar-daria.png';
 import avatar3 from '../assets/ico/avatar-sergey.png';
+import avatar4 from '../assets/ico/avatar-denis.png';
 import { FormattedMessage } from 'react-intl';
 
 const WelcomePage: React.FC = () => {
@@ -60,6 +61,18 @@ const WelcomePage: React.FC = () => {
               <FormattedMessage id="personThirdDescription" />
             </TeamItemDescription>
           </div>
+        </TeamItem>
+
+        <TeamItem>
+          <div>
+            <TeamItemTitle>
+              <FormattedMessage id="personFourthTitle" />
+            </TeamItemTitle>
+            <TeamItemDescription>
+              <FormattedMessage id="personFourthDescription" />
+            </TeamItemDescription>
+          </div>
+          <TeamItemAvatar $name="denis" />
         </TeamItem>
       </TeamSection>
     </BasePage>
@@ -140,6 +153,7 @@ const TeamSection = styled.section`
   flex-direction: column;
   gap: 20px;
   justify-content: space-between;
+  align-items: center;
   margin: 0 auto 50px;
   padding: 0 110px;
 
@@ -150,9 +164,12 @@ const TeamSection = styled.section`
 `;
 
 const TeamItem = styled.div`
+  max-width: 1020px;
+  width: 100%;
   display: flex;
   gap: 40px;
   align-items: center;
+  justify-content: space-between;
 
   @media (max-width: 620px) {
     flex-direction: column;
@@ -171,6 +188,8 @@ const TeamItemTitle = styled.p`
 `;
 
 const TeamItemDescription = styled.p`
+  max-width: 900px;
+  width: 100%;
   line-height: 29px;
 `;
 
@@ -196,6 +215,14 @@ const TeamItemAvatar = styled.div<{
     if ($name === 'sergey')
       return css`
         background: url(${avatar3});
+      `;
+    if ($name === 'denis')
+      return css`
+        background: url(${avatar4});
+
+        @media (max-width: 620px) {
+          order: -1;
+        }
       `;
   }}
   background-size: contain;
