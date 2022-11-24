@@ -11,7 +11,7 @@ const App: React.FC = () => {
   const { lang } = useSelector((state: RootState) => state.user);
 
   return (
-    <IntlProvider locale={lang} messages={messages[lang]} defaultLocale="en">
+    <IntlProvider locale={lang} messages={messages[lang]}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<WelcomePage />} />

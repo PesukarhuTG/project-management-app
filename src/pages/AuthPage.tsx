@@ -9,6 +9,7 @@ import { RootState, AppDispatch } from '../store/Store';
 import { changeAuthStatus, changeUserData } from '../store/UserSlice';
 import { loginUser, getUserById } from '../services/APIrequests';
 import { decodeToken } from 'react-jwt';
+import { useIntl } from 'react-intl';
 
 interface AuthValue {
   userLogin: string;
@@ -27,6 +28,7 @@ const AuthPage: React.FC = () => {
   const { login, password } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const intl = useIntl();
 
   const onFinish = async (values: AuthValue) => {
     console.log('Success:', values);
@@ -66,7 +68,7 @@ const AuthPage: React.FC = () => {
   return (
     <BasePage>
       <PageIcon />
-      <PageTitle>Sign In</PageTitle>
+      <PageTitle>{intl.formatMessage({ id: 'authPageTitle' })}</PageTitle>
       <StyledForm
         form={authForm}
         name="auth"
@@ -79,32 +81,37 @@ const AuthPage: React.FC = () => {
         <Form.Item
           name="userLogin"
           rules={[
-            { required: true, message: 'Please input your login!' },
-            { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
+            { required: true, message: intl.formatMessage({ id: 'loginInputValidation1' }) },
+            { type: 'string', min: 2, message: intl.formatMessage({ id: 'loginInputValidation2' }) },
           ]}
         >
-          <FormInput placeholder="Login *" type="text" />
+          <FormInput placeholder={intl.formatMessage({ id: 'loginPlaceholder' })} type="text" />
         </Form.Item>
 
         <Form.Item
           name="userPassword"
           rules={[
-            { required: true, message: 'Please input your password!' },
-            { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
+            { required: true, message: intl.formatMessage({ id: 'passwordInputValidation1' }) },
+            { type: 'string', min: 8, message: intl.formatMessage({ id: 'passwordInputValidation2' }) },
           ]}
         >
-          <FormInput placeholder="Password *" type="password" autoComplete="on" />
+          <FormInput
+            placeholder={intl.formatMessage({ id: 'passwordPlaceholder' })}
+            type="password"
+            autoComplete="on"
+          />
         </Form.Item>
 
         <Form.Item>
           <FormText>
-            Don’t have an account? <StyledLink to="/registration">Sign up</StyledLink>
+            {intl.formatMessage({ id: 'textLinkToRegistration' })}
+            <StyledLink to="/registration">{intl.formatMessage({ id: 'btnSignUp' })}</StyledLink>
           </FormText>
         </Form.Item>
 
         <Form.Item>
           <FormButton type="primary" htmlType="submit">
-            Sign in
+            {intl.formatMessage({ id: 'btnSignIn' })}
           </FormButton>
         </Form.Item>
       </StyledForm>

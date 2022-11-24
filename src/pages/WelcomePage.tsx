@@ -6,47 +6,35 @@ import avatar1 from '../assets/ico/avatar-tatiana.png';
 import avatar2 from '../assets/ico/avatar-daria.png';
 import avatar3 from '../assets/ico/avatar-sergey.png';
 import avatar4 from '../assets/ico/avatar-denis.png';
-import { FormattedMessage } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 const WelcomePage: React.FC = () => {
+  const intl = useIntl();
+
   return (
     <BasePage>
       <HeroSection>
         <div>
-          <SectionTitle>
-            <FormattedMessage id="mainTitle" />
-          </SectionTitle>
-          <HeroDescription>
-            <FormattedMessage id="mainDescription" />
-          </HeroDescription>
+          <SectionTitle>{intl.formatMessage({ id: 'mainTitle' })}</SectionTitle>
+          <HeroDescription>{intl.formatMessage({ id: 'mainDescription' })}</HeroDescription>
         </div>
         <HeroImage />
       </HeroSection>
       <TeamSection>
-        <SectionTitle>
-          <FormattedMessage id="sectionTeam" />
-        </SectionTitle>
+        <SectionTitle>{intl.formatMessage({ id: 'sectionTeam' })}</SectionTitle>
 
         <TeamItem>
           <TeamItemAvatar $name="tatiana" />
           <div>
-            <TeamItemTitle>
-              <FormattedMessage id="personOneTitle" />
-            </TeamItemTitle>
-            <TeamItemDescription>
-              <FormattedMessage id="personOneDescription" />
-            </TeamItemDescription>
+            <TeamItemTitle>{intl.formatMessage({ id: 'personOneTitle' })}</TeamItemTitle>
+            <TeamItemDescription>{intl.formatMessage({ id: 'personOneDescription' })}</TeamItemDescription>
           </div>
         </TeamItem>
 
         <TeamItem>
           <div>
-            <TeamItemTitle>
-              <FormattedMessage id="personSecondTitle" />
-            </TeamItemTitle>
-            <TeamItemDescription>
-              <FormattedMessage id="personSecondDescription" />
-            </TeamItemDescription>
+            <TeamItemTitle>{intl.formatMessage({ id: 'personSecondTitle' })}</TeamItemTitle>
+            <TeamItemDescription>{intl.formatMessage({ id: 'personSecondDescription' })}</TeamItemDescription>
           </div>
           <TeamItemAvatar $name="daria" />
         </TeamItem>
@@ -54,23 +42,15 @@ const WelcomePage: React.FC = () => {
         <TeamItem>
           <TeamItemAvatar $name="sergey" />
           <div>
-            <TeamItemTitle>
-              <FormattedMessage id="personThirdTitle" />
-            </TeamItemTitle>
-            <TeamItemDescription>
-              <FormattedMessage id="personThirdDescription" />
-            </TeamItemDescription>
+            <TeamItemTitle>{intl.formatMessage({ id: 'personThirdTitle' })}</TeamItemTitle>
+            <TeamItemDescription>{intl.formatMessage({ id: 'personThirdDescription' })}</TeamItemDescription>
           </div>
         </TeamItem>
 
         <TeamItem>
           <div>
-            <TeamItemTitle>
-              <FormattedMessage id="personFourthTitle" />
-            </TeamItemTitle>
-            <TeamItemDescription>
-              <FormattedMessage id="personFourthDescription" />
-            </TeamItemDescription>
+            <TeamItemTitle>{intl.formatMessage({ id: 'personFourthTitle' })}</TeamItemTitle>
+            <TeamItemDescription>{intl.formatMessage({ id: 'personFourthDescription' })}</TeamItemDescription>
           </div>
           <TeamItemAvatar $name="denis" />
         </TeamItem>

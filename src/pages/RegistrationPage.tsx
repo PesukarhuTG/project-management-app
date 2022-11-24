@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/Store';
 import { changeAuthStatus, changeUserData } from '../store/UserSlice';
 import { registrationUser, loginUser } from '../services/APIrequests';
+import { useIntl } from 'react-intl';
 
 interface RegistrationValue {
   userName: string;
@@ -20,6 +21,7 @@ const RegistrationPage: React.FC = () => {
   const { name, login, password } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const intl = useIntl();
 
   const onFinish = async (values: RegistrationValue) => {
     console.log('Success:', values);
@@ -57,7 +59,7 @@ const RegistrationPage: React.FC = () => {
   return (
     <BasePage>
       <PageIcon />
-      <PageTitle>Sign Up</PageTitle>
+      <PageTitle>{intl.formatMessage({ id: 'registrationPageTitle' })}</PageTitle>
       <StyledForm
         form={registrationForm}
         name="registration"
@@ -70,42 +72,47 @@ const RegistrationPage: React.FC = () => {
         <Form.Item
           name="userName"
           rules={[
-            { required: true, message: 'Please input your name!' },
-            { type: 'string', min: 2, message: 'Name must be at least 2 characters' },
+            { required: true, message: intl.formatMessage({ id: 'nameInputValidation1' }) },
+            { type: 'string', min: 2, message: intl.formatMessage({ id: 'nameInputValidation2' }) },
           ]}
         >
-          <FormInput placeholder="Name *" type="text" />
+          <FormInput placeholder={intl.formatMessage({ id: 'namePlaceholder' })} type="text" />
         </Form.Item>
 
         <Form.Item
           name="userLogin"
           rules={[
-            { required: true, message: 'Please input your login!' },
-            { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
+            { required: true, message: intl.formatMessage({ id: 'loginInputValidation1' }) },
+            { type: 'string', min: 2, message: intl.formatMessage({ id: 'loginInputValidation2' }) },
           ]}
         >
-          <FormInput placeholder="Login *" type="text" />
+          <FormInput placeholder={intl.formatMessage({ id: 'loginPlaceholder' })} type="text" />
         </Form.Item>
 
         <Form.Item
           name="userPassword"
           rules={[
-            { required: true, message: 'Please input your password!' },
-            { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
+            { required: true, message: intl.formatMessage({ id: 'passwordInputValidation1' }) },
+            { type: 'string', min: 8, message: intl.formatMessage({ id: 'passwordInputValidation2' }) },
           ]}
         >
-          <FormInput placeholder="Password *" type="password" autoComplete="on" />
+          <FormInput
+            placeholder={intl.formatMessage({ id: 'passwordPlaceholder' })}
+            type="password"
+            autoComplete="on"
+          />
         </Form.Item>
 
         <Form.Item>
           <FormText>
-            Have an account? <StyledLink to="/auth">Sign in</StyledLink>
+            {intl.formatMessage({ id: 'textLinkToAuthorization' })}
+            <StyledLink to="/auth">{intl.formatMessage({ id: 'btnSignIn' })}</StyledLink>
           </FormText>
         </Form.Item>
 
         <Form.Item>
           <FormButton type="primary" htmlType="submit">
-            Sign up
+            {intl.formatMessage({ id: 'btnSignUp' })}
           </FormButton>
         </Form.Item>
       </StyledForm>
