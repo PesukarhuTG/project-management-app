@@ -1,4 +1,7 @@
+import { LOCALES } from '../locales';
 import en from './en';
 import ru from './ru';
 
-export const messages = { ...ru, ...en };
+const messages = { [LOCALES.RUSSIAN]: ru, [LOCALES.ENGLISH]: en };
+
+export default messages;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { BasePage, Button, Column, ColumnModal } from '../components';
-import { useIntl } from 'react-intl';
+import { useLocaleMessage } from '../hooks';
 
 interface ColumnData {
   _id: string;
@@ -51,7 +51,7 @@ const BoardPage: React.FC = () => {
   const [isShowColumnModal, setIsShowColumnModal] = useState<boolean>(false);
   const [board] = useState<BoardData>(boardMock); //TODO get real board data
   const [columns] = useState<ColumnData[]>(columnsMock); //TODO get real columns list (sorted by order)
-  const intl = useIntl();
+  const message = useLocaleMessage();
 
   const addColumn = () => {
     /*TODO add column*/
@@ -63,12 +63,12 @@ const BoardPage: React.FC = () => {
       <Container>
         <ControlPanel>
           <HideXs>
-            <Button label={intl.formatMessage({ id: 'btnBack' })} onClick={() => navigate('/boards')} />
+            <Button label={message('btnBack')} onClick={() => navigate('/boards')} />
           </HideXs>
-          <Button label={intl.formatMessage({ id: 'btnCreateNewColumn' })} onClick={() => setIsShowColumnModal(true)} />
+          <Button label={message('btnCreateNewColumn')} onClick={() => setIsShowColumnModal(true)} />
         </ControlPanel>
         <Title>
-          {intl.formatMessage({ id: 'board' })}: {board.title}
+          {message('board')}: {board.title}
         </Title>
         <ColumnsPanel>
           {columns.length &&
@@ -79,7 +79,7 @@ const BoardPage: React.FC = () => {
       </Container>
 
       <ColumnModal
-        title={intl.formatMessage({ id: 'addColumnModalTitle' })}
+        title={message('addColumnModalTitle')}
         isVisible={isShowColumnModal}
         onOk={addColumn}
         onCancel={() => setIsShowColumnModal(false)}

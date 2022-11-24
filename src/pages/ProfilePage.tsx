@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { BasePage, ConfirmModal, FormButton, FormInput } from '../components';
-import { Form, message } from 'antd';
+import { Form, message as messageAntd } from 'antd';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/Store';
 import { editUserById, loginUser, deleteUser } from '../services/APIrequests';
 import { useNavigate } from 'react-router-dom';
 import { changeUserData, changeAuthStatus, removeUserData } from '../store/UserSlice';
-import { useIntl } from 'react-intl';
+import { useLocaleMessage } from '../hooks';
 
 interface EditFormValues {
   userName: string;
@@ -19,22 +19,22 @@ const ProfilePage: React.FC = () => {
   const [form] = Form.useForm();
   const [confirmFormVisible, setConfirmFormVisible] = useState<boolean>(false);
   const { name, login, password } = useSelector((state: RootState) => state.user);
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = messageAntd.useMessage();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const intl = useIntl();
+  const message = useLocaleMessage();
 
   const showSuccessMessage = () => {
     messageApi.open({
       type: 'success',
-      content: intl.formatMessage({ id: 'successEditMessage' }),
+      content: message('successEditMessage'),
     });
   };
 
   const showErrorMessage = () => {
     messageApi.open({
       type: 'error',
-      content: intl.formatMessage({ id: 'failedEditMessage' }),
+      content: message('failedEditMessage'),
     });
   };
 
@@ -82,7 +82,7 @@ const ProfilePage: React.FC = () => {
   return (
     <BasePage>
       {contextHolder}
-      <ProfileTitle>{intl.formatMessage({ id: 'profilePageTitle' })}</ProfileTitle>
+      <ProfileTitle>{message('profilePageTitle')}</ProfileTitle>
       <StyledForm
         form={form}
         layout="vertical"
@@ -92,50 +92,44 @@ const ProfilePage: React.FC = () => {
         autoComplete="off"
       >
         <Form.Item
-          label={intl.formatMessage({ id: 'userNameLabel' })}
+          label={message('userNameLabel')}
           name="userName"
           rules={[
-            { required: true, message: intl.formatMessage({ id: 'nameInputValidation1' }) },
-            { type: 'string', min: 2, message: intl.formatMessage({ id: 'nameInputValidation2' }) },
+            { required: true, message: message('nameInputValidation1') },
+            { type: 'string', min: 2, message: message('nameInputValidation2') },
           ]}
         >
-          <FormInput placeholder={name || intl.formatMessage({ id: 'namePlaceholder' })} />
+          <FormInput placeholder={name || message('namePlaceholder')} />
         </Form.Item>
         <Form.Item
-          label={intl.formatMessage({ id: 'userLoginLabel' })}
+          label={message('userLoginLabel')}
           name="userLogin"
           rules={[
-            { required: true, message: intl.formatMessage({ id: 'loginInputValidation1' }) },
-            { type: 'string', min: 2, message: intl.formatMessage({ id: 'loginInputValidation2' }) },
+            { required: true, message: message('loginInputValidation1') },
+            { type: 'string', min: 2, message: message('loginInputValidation2') },
           ]}
         >
-          <FormInput placeholder={login || intl.formatMessage({ id: 'loginPlaceholder' })} />
+          <FormInput placeholder={login || message('loginPlaceholder')} />
         </Form.Item>
         <Form.Item
-          label={intl.formatMessage({ id: 'userPasswordLabel' })}
+          label={message('userPasswordLabel')}
           name="userPassword"
           rules={[
-            { required: true, message: intl.formatMessage({ id: 'passwordInputValidation1' }) },
-            { type: 'string', min: 8, message: intl.formatMessage({ id: 'passwordInputValidation2' }) },
+            { required: true, message: message('passwordInputValidation1') },
+            { type: 'string', min: 8, message: message('passwordInputValidation2') },
           ]}
         >
-          <FormInput
-            placeholder={password || intl.formatMessage({ id: 'passwordPlaceholder' })}
-            type="password"
-            autoComplete="on"
-          />
+          <FormInput placeholder={password || message('passwordPlaceholder')} type="password" autoComplete="on" />
         </Form.Item>
         <Form.Item>
           <FormButtons>
-            <PrimaryButton htmlType="submit">{intl.formatMessage({ id: 'btnUpdateProfile' })}</PrimaryButton>
-            <SecondaryButton onClick={() => setConfirmFormVisible(true)}>
-              {intl.formatMessage({ id: 'btnDeleteProfile' })}
-            </SecondaryButton>
+            <PrimaryButton htmlType="submit">{message('btnUpdateProfile')}</PrimaryButton>
+            <SecondaryButton onClick={() => setConfirmFormVisible(true)}>{message('btnDeleteProfile')}</SecondaryButton>
           </FormButtons>
         </Form.Item>
       </StyledForm>
       <ConfirmModal
-        title={intl.formatMessage({ id: 'confirmDeleteProfile' })}
+        title={message('confirmDeleteProfile')}
         isVisible={confirmFormVisible}
         onOk={onDeleteUser}
         onCancel={() => setConfirmFormVisible(false)}

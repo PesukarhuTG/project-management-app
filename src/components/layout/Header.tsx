@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/Store';
 import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
 import { setCreateModalVisible } from '../../store/BoardsSlice';
-import { useIntl } from 'react-intl';
+import { useLocaleMessage } from '../../hooks';
 
 interface HeaderProps {
   isSticky?: boolean;
@@ -19,7 +19,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   const navigate = useNavigate();
-  const intl = useIntl();
+  const message = useLocaleMessage();
   const { isAuth, login, lang } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -53,17 +53,17 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
           <NavPanel>
             <StyledNavLink to="/profile">
               <NavIcon src={iconEditProfile} alt="icon" />
-              {intl.formatMessage({ id: 'editItemMenu' })}
+              {message('editItemMenu')}
             </StyledNavLink>
 
             <StyledNavButton onClick={createBoard}>
               <NavIcon src={iconAddBoard} alt="icon" />
-              {intl.formatMessage({ id: 'createItemMenu' })}
+              {message('createItemMenu')}
             </StyledNavButton>
 
             <StyledNavLink to="/boards">
               <NavIcon src={iconBoards} alt="icon" />
-              {intl.formatMessage({ id: 'mainItemMenu' })}
+              {message('mainItemMenu')}
             </StyledNavLink>
           </NavPanel>
         </>
@@ -72,8 +72,8 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 
     return (
       <UnauthorizedPanel>
-        <StyledAuthButton to="/registration">{intl.formatMessage({ id: 'btnSignUp' })}</StyledAuthButton>
-        <StyledAuthButton to="/auth">{intl.formatMessage({ id: 'btnSignIn' })}</StyledAuthButton>
+        <StyledAuthButton to="/registration">{message('btnSignUp')}</StyledAuthButton>
+        <StyledAuthButton to="/auth">{message('btnSignIn')}</StyledAuthButton>
       </UnauthorizedPanel>
     );
   }, [isAuth, login, lang]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -87,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
       <SettingPanel>
         {isAuth && (
           <StyledAuthButton to="/" onClick={logout}>
-            {intl.formatMessage({ id: 'btnSignOut' })}
+            {message('btnSignOut')}
           </StyledAuthButton>
         )}
         <LanguageRadio />

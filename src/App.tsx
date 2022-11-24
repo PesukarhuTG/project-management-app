@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthPage, BoardPage, BoardsPage, NotFoundPage, ProfilePage, RegistrationPage, WelcomePage } from './pages';
 
 import { IntlProvider } from 'react-intl';
-import { messages } from './localization/messages';
+import messages from './localization/messages';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/Store';
 

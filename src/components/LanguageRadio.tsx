@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import { changeLanguage } from '../store/UserSlice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store/Store';
-import { useIntl } from 'react-intl';
+import { useLocaleMessage } from '../hooks';
 
 const LanguageRadio = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const intl = useIntl();
+  const message = useLocaleMessage();
 
   return (
     <StyledRadioGroup
@@ -16,8 +16,8 @@ const LanguageRadio = () => {
       buttonStyle="solid"
       onChange={(event: RadioChangeEvent) => dispatch(changeLanguage(event.target.value))}
     >
-      <Radio.Button value="en">{intl.formatMessage({ id: 'btnEng' })}</Radio.Button>
-      <Radio.Button value="ru">{intl.formatMessage({ id: 'btnRus' })}</Radio.Button>
+      <Radio.Button value="en">{message('btnEng')}</Radio.Button>
+      <Radio.Button value="ru">{message('btnRus')}</Radio.Button>
     </StyledRadioGroup>
   );
 };

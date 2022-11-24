@@ -2,18 +2,18 @@ import React, { FC } from 'react';
 import { Modal } from 'antd';
 import styled from 'styled-components';
 import { ModalProps } from '../types';
-import { useIntl } from 'react-intl';
+import { useLocaleMessage } from '../hooks';
 
 const StyledModal: FC<ModalProps> = ({ children, title, isVisible, onOk, onCancel }) => {
-  const intl = useIntl();
+  const message = useLocaleMessage();
 
   return (
     <StyledAntModal
       title={title}
       onOk={onOk}
       onCancel={onCancel}
-      okText={intl.formatMessage({ id: 'saveModal' })}
-      cancelText={intl.formatMessage({ id: 'cancelModal' })}
+      okText={message('saveModal')}
+      cancelText={message('cancelModal')}
       open={isVisible}
       destroyOnClose
       centered

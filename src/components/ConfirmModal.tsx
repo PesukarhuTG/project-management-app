@@ -2,10 +2,10 @@ import { Modal } from 'antd';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { ModalProps } from '../types';
-import { useIntl } from 'react-intl';
+import { useLocaleMessage } from '../hooks';
 
 const ConfirmModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel }) => {
-  const intl = useIntl();
+  const message = useLocaleMessage();
 
   return (
     <StyledAntModal
@@ -13,8 +13,8 @@ const ConfirmModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel }) => {
       open={isVisible}
       onOk={onOk}
       onCancel={onCancel}
-      okText={intl.formatMessage({ id: 'confirmYes' })}
-      cancelText={intl.formatMessage({ id: 'confirmNo' })}
+      okText={message('confirmYes')}
+      cancelText={message('confirmNo')}
       destroyOnClose
       centered
       width={620}

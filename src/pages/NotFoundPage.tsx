@@ -3,18 +3,18 @@ import { BasePage } from '../components';
 import { Result } from 'antd';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useIntl } from 'react-intl';
+import { useLocaleMessage } from '../hooks';
 
 const NotFoundPage: React.FC = () => {
-  const intl = useIntl();
+  const message = useLocaleMessage();
 
   return (
     <BasePage>
       <Result
         status="404"
         title="404"
-        subTitle={intl.formatMessage({ id: 'page404Subtitle' })}
-        extra={<StyledLink to="/">{intl.formatMessage({ id: 'btnPage404' })}</StyledLink>}
+        subTitle={message('page404Subtitle')}
+        extra={<StyledLink to="/">{message('btnPage404')}</StyledLink>}
       />
     </BasePage>
   );

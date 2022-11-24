@@ -6,35 +6,35 @@ import avatar1 from '../assets/ico/avatar-tatiana.png';
 import avatar2 from '../assets/ico/avatar-daria.png';
 import avatar3 from '../assets/ico/avatar-sergey.png';
 import avatar4 from '../assets/ico/avatar-denis.png';
-import { useIntl } from 'react-intl';
+import { useLocaleMessage } from '../hooks';
 
 const WelcomePage: React.FC = () => {
-  const intl = useIntl();
+  const message = useLocaleMessage();
 
   return (
     <BasePage>
       <HeroSection>
         <div>
-          <SectionTitle>{intl.formatMessage({ id: 'mainTitle' })}</SectionTitle>
-          <HeroDescription>{intl.formatMessage({ id: 'mainDescription' })}</HeroDescription>
+          <SectionTitle>{message('mainTitle')}</SectionTitle>
+          <HeroDescription>{message('mainDescription')}</HeroDescription>
         </div>
         <HeroImage />
       </HeroSection>
       <TeamSection>
-        <SectionTitle>{intl.formatMessage({ id: 'sectionTeam' })}</SectionTitle>
+        <SectionTitle>{message('sectionTeam')}</SectionTitle>
 
         <TeamItem>
           <TeamItemAvatar $name="tatiana" />
           <div>
-            <TeamItemTitle>{intl.formatMessage({ id: 'personOneTitle' })}</TeamItemTitle>
-            <TeamItemDescription>{intl.formatMessage({ id: 'personOneDescription' })}</TeamItemDescription>
+            <TeamItemTitle>{message('personOneTitle')}</TeamItemTitle>
+            <TeamItemDescription>{message('personOneDescription')}</TeamItemDescription>
           </div>
         </TeamItem>
 
         <TeamItem>
           <div>
-            <TeamItemTitle>{intl.formatMessage({ id: 'personSecondTitle' })}</TeamItemTitle>
-            <TeamItemDescription>{intl.formatMessage({ id: 'personSecondDescription' })}</TeamItemDescription>
+            <TeamItemTitle>{message('personSecondTitle')}</TeamItemTitle>
+            <TeamItemDescription>{message('personSecondDescription')}</TeamItemDescription>
           </div>
           <TeamItemAvatar $name="daria" />
         </TeamItem>
@@ -42,15 +42,15 @@ const WelcomePage: React.FC = () => {
         <TeamItem>
           <TeamItemAvatar $name="sergey" />
           <div>
-            <TeamItemTitle>{intl.formatMessage({ id: 'personThirdTitle' })}</TeamItemTitle>
-            <TeamItemDescription>{intl.formatMessage({ id: 'personThirdDescription' })}</TeamItemDescription>
+            <TeamItemTitle>{message('personThirdTitle')}</TeamItemTitle>
+            <TeamItemDescription>{message('personThirdDescription')}</TeamItemDescription>
           </div>
         </TeamItem>
 
         <TeamItem>
           <div>
-            <TeamItemTitle>{intl.formatMessage({ id: 'personFourthTitle' })}</TeamItemTitle>
-            <TeamItemDescription>{intl.formatMessage({ id: 'personFourthDescription' })}</TeamItemDescription>
+            <TeamItemTitle>{message('personFourthTitle')}</TeamItemTitle>
+            <TeamItemDescription>{message('personFourthDescription')}</TeamItemDescription>
           </div>
           <TeamItemAvatar $name="denis" />
         </TeamItem>

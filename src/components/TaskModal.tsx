@@ -4,17 +4,17 @@ import styled from 'styled-components';
 import { ModalProps } from '../types';
 import StyledModal from './StyledModal';
 import StyledInput from './StyledInput';
-import { useIntl } from 'react-intl';
+import { useLocaleMessage } from '../hooks';
 
 const TaskModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel, onChange, options = [] }) => {
-  const intl = useIntl();
+  const message = useLocaleMessage();
 
   return (
     <StyledModal title={title} isVisible={isVisible} onOk={onOk} onCancel={onCancel}>
-      <StyledInput title={intl.formatMessage({ id: 'addNameTaskModal' })} />
-      <StyledInput title={intl.formatMessage({ id: 'addDescriptionTaskModal' })} />
+      <StyledInput title={message('addNameTaskModal')} />
+      <StyledInput title={message('addDescriptionTaskModal')} />
       <StyledSelect
-        defaultValue={intl.formatMessage({ id: 'defaultUser' })}
+        defaultValue={message('defaultUser')}
         style={{ width: 120 }}
         onChange={onChange}
         options={options}
