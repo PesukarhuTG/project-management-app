@@ -9,7 +9,7 @@ import ConfirmModal from './ConfirmModal';
 import { BoardTitle, BoardWrapper } from './styled-components';
 
 const SingleBoard: FC<SingleBoardProps> = ({
-  boardTitle = 'Board title',
+  boardName = 'Board title',
   boardDescription = 'Board description',
   id,
   remove,
@@ -50,7 +50,7 @@ const SingleBoard: FC<SingleBoardProps> = ({
     <>
       <BoardWrapper onClick={() => navigate(`/board/${id}`)}>
         <BoardHeader>
-          <BoardTitle>{boardTitle}</BoardTitle>
+          <BoardTitle>{boardName}</BoardTitle>
           <BoardDescription>{boardDescription}</BoardDescription>
         </BoardHeader>
         <BoardTools>
