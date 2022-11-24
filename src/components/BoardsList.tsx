@@ -6,7 +6,7 @@ import SingleBoard from './SingleBoard';
 
 interface BoardsListProps {
   boards: BoardProps[];
-  remove: (id: number) => void;
+  remove: (id: string) => void;
 }
 
 const BoardsList: FC<BoardsListProps> = ({ boards, remove }) => {

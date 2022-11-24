@@ -1,66 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BasePage, BoardModal, BoardsList } from '../components';
-import { setCreateModalVisible } from '../store/BoardsSlice';
+import fetchBoardsData from '../http/fetchBoardsData';
+import { createBoard, deleteBoard, fetchUsers } from '../services/APIrequests';
+import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/BoardsSlice';
 import { AppDispatch, RootState } from '../store/Store';
-import { BoardProps } from '../types/SingleBoardProps';
 
 const BoardsPage: React.FC = () => {
-  const { createModalVisible } = useSelector((state: RootState) => state.boards);
+  const { createModalVisible, boardTitle, fetchLoading, boards } = useSelector((state: RootState) => state.boards);
+  const { id } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
-  const [boards, setBoards] = useState<BoardProps[]>([
-    {
-      boardTitle: 'boardTitle_1',
-      boardDescription: 'boardDescription_1',
-      id: 1,
-    },
-    {
-      boardTitle: 'boardTitle_2',
-      boardDescription: 'boardDescription_2',
-      id: 2,
-    },
-    {
-      boardTitle: 'boardTitle_3',
-      boardDescription: 'boardDescription_3',
-      id: 3,
-    },
-    {
-      boardTitle: 'boardTitle_4',
-      boardDescription: 'boardDescription_4',
-      id: 4,
-    },
-    {
-      boardTitle: 'boardTitle_5',
-      boardDescription: 'boardDescription_5',
-      id: 5,
-    },
-    {
-      boardTitle: 'boardTitle_6',
-      boardDescription: 'boardDescription_6',
-      id: 6,
-    },
-    {
-      boardTitle: 'boardTitle_7',
-      boardDescription: 'boardDescription_7',
-      id: 7,
-    },
-  ]);
+  useEffect(() => {
+    dispatch(fetchBoardsData());
+  }, []);
 
-  const deleteBoard = (id: number) => {
-    setBoards(boards.filter((item) => item.id !== id));
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    dispatch(setFetchLoading(true));
     dispatch(setCreateModalVisible(false));
-    console.log('create new board');
+    dispatch(setBoardName(''));
+    dispatch(setBoardDescription(''));
+    try {
+      const usersList = await fetchUsers().then((res) => res.data);
+      const usersId = usersList.map((user) => user._id);
+      createBoard(JSON.stringify(boardTitle), id, usersId).then((res) => res.data);
+      dispatch(fetchBoardsData());
+    } catch {
+      console.log('error');
+    }
   };
+
+  const boardsPageContent = useMemo(() => {
+    if (fetchLoading) {
+      return <h1>Loading...</h1>;
+    }
+    return <BoardsList boards={boards} remove={deleteBoard} />;
+  }, [fetchLoading, boards]);
 
   return (
     <>
-      <BasePage>
-        <BoardsList boards={boards} remove={deleteBoard} />
-      </BasePage>
+      <BasePage>{boardsPageContent}</BasePage>
       <BoardModal
         title="Create new board"
         isVisible={createModalVisible}
