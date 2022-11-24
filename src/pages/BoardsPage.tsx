@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BasePage, BoardModal, BoardsList } from '../components';
@@ -8,8 +9,17 @@ import { AppDispatch, RootState } from '../store/Store';
 
 const BoardsPage: React.FC = () => {
   const { createModalVisible, boardTitle, fetchLoading, boards } = useSelector((state: RootState) => state.boards);
-  const { id } = useSelector((state: RootState) => state.user);
+  const { id: userId } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const showErrorMessage = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Something wrong... Please, try again',
+    });
+  };
 
   useEffect(() => {
     dispatch(fetchBoardsData());
@@ -23,23 +33,41 @@ const BoardsPage: React.FC = () => {
     try {
       const usersList = await fetchUsers().then((res) => res.data);
       const usersId = usersList.map((user) => user._id);
-      createBoard(JSON.stringify(boardTitle), id, usersId).then((res) => res.data);
+      await createBoard(JSON.stringify(boardTitle), userId, usersId).then((res) => res.data);
       dispatch(fetchBoardsData());
     } catch {
-      console.log('error');
+      showErrorMessage();
     }
+  };
+
+  const removeBoard = (id: string) => {
+    dispatch(setFetchLoading(true));
+    const boardsId = boards.map((board) => board.id);
+    boardsId.forEach(async (el) => {
+      if (el === id) {
+        try {
+          await deleteBoard(el);
+          dispatch(fetchBoardsData());
+        } catch {
+          showErrorMessage();
+        }
+      }
+    });
   };
 
   const boardsPageContent = useMemo(() => {
     if (fetchLoading) {
       return <h1>Loading...</h1>;
     }
-    return <BoardsList boards={boards} remove={deleteBoard} />;
+    return <BoardsList boards={boards} remove={removeBoard} />;
   }, [fetchLoading, boards]);
 
   return (
     <>
-      <BasePage>{boardsPageContent}</BasePage>
+      <BasePage>
+        {contextHolder}
+        {boardsPageContent}
+      </BasePage>
       <BoardModal
         title="Create new board"
         isVisible={createModalVisible}

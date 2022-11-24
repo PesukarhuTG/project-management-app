@@ -10,17 +10,12 @@ interface BoardsListProps {
 }
 
 const BoardsList: FC<BoardsListProps> = ({ boards, remove }) => {
-  if (!boards.length)
-    return (
-      <BoardsContainer>
-        <EmptyBoard />
-      </BoardsContainer>
-    );
   return (
     <BoardsContainer>
       {boards.map((board) => (
         <SingleBoard {...board} remove={remove} key={board.id} />
       ))}
+      <EmptyBoard />
     </BoardsContainer>
   );
 };

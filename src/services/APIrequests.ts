@@ -54,7 +54,7 @@ export const createBoard = async (
 };
 
 export const fetchBoards = async (): Promise<AxiosResponse<BoardResponse[]>> => {
-  console.log('запрос на создание board');
+  console.log('запрос на получение board');
   return await axiosApi.get('/boards');
 };
 
