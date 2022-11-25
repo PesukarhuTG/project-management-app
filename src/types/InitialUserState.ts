@@ -4,6 +4,7 @@ interface InitialUserState {
   password: string;
   id: string;
   isAuth: boolean;
+  lang: string;
 }
 
 export default InitialUserState;

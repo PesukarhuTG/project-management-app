@@ -4,14 +4,17 @@ import styled from 'styled-components';
 import { ModalProps } from '../types';
 import StyledModal from './StyledModal';
 import StyledInput from './StyledInput';
+import { useLocaleMessage } from '../hooks';
 
 const TaskModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel, onChange, options = [] }) => {
+  const message = useLocaleMessage();
+
   return (
     <StyledModal title={title} isVisible={isVisible} onOk={onOk} onCancel={onCancel}>
-      <StyledInput title="Task name" />
-      <StyledInput title="Task description" />
+      <StyledInput title={message('addNameTaskModal')} />
+      <StyledInput title={message('addDescriptionTaskModal')} />
       <StyledSelect
-        defaultValue="Responsible user"
+        defaultValue={message('defaultUser')}
         style={{ width: 120 }}
         onChange={onChange}
         options={options}

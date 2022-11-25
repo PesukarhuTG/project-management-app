@@ -7,6 +7,7 @@ import { SingleBoardProps } from '../types';
 import BoardModal from './BoardModal';
 import ConfirmModal from './ConfirmModal';
 import { BoardTitle, BoardWrapper } from './styled-components';
+import { useLocaleMessage } from '../hooks';
 
 const SingleBoard: FC<SingleBoardProps> = ({
   boardTitle = 'Board title',
@@ -17,6 +18,7 @@ const SingleBoard: FC<SingleBoardProps> = ({
   const navigate = useNavigate();
   const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+  const message = useLocaleMessage();
 
   const openConfirmModal = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -59,12 +61,17 @@ const SingleBoard: FC<SingleBoardProps> = ({
         </BoardTools>
       </BoardWrapper>
       <ConfirmModal
-        title="Do you want to delete this board?"
+        title={message('confirmDeleteBoard')}
         isVisible={confirmModalVisible}
         onOk={handleDelete}
         onCancel={closeConfirmModal}
       />
-      <BoardModal title="Edit board info" isVisible={editModalVisible} onOk={handleEdit} onCancel={closeEditModal} />
+      <BoardModal
+        title={message('editBoardModalTitle')}
+        isVisible={editModalVisible}
+        onOk={handleEdit}
+        onCancel={closeEditModal}
+      />
     </>
   );
 };

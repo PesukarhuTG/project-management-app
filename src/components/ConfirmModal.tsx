@@ -2,16 +2,19 @@ import { Modal } from 'antd';
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { ModalProps } from '../types';
+import { useLocaleMessage } from '../hooks';
 
 const ConfirmModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel }) => {
+  const message = useLocaleMessage();
+
   return (
     <StyledAntModal
       title={title}
       open={isVisible}
       onOk={onOk}
       onCancel={onCancel}
-      okText="Yes"
-      cancelText="No"
+      okText={message('confirmYes')}
+      cancelText={message('confirmNo')}
       destroyOnClose
       centered
       width={620}

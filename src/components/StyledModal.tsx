@@ -2,14 +2,18 @@ import React, { FC } from 'react';
 import { Modal } from 'antd';
 import styled from 'styled-components';
 import { ModalProps } from '../types';
+import { useLocaleMessage } from '../hooks';
 
 const StyledModal: FC<ModalProps> = ({ children, title, isVisible, onOk, onCancel }) => {
+  const message = useLocaleMessage();
+
   return (
     <StyledAntModal
       title={title}
       onOk={onOk}
       onCancel={onCancel}
-      okText="Save"
+      okText={message('saveModal')}
+      cancelText={message('cancelModal')}
       open={isVisible}
       destroyOnClose
       centered

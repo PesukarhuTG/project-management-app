@@ -4,12 +4,13 @@ import styled from 'styled-components';
 import { setCreateModalVisible } from '../store/BoardsSlice';
 import { AppDispatch, RootState } from '../store/Store';
 import BoardModal from './BoardModal';
-
 import { BoardWrapper, BoardTitle } from './styled-components';
+import { useLocaleMessage } from '../hooks';
 
 const EmptyBoard = () => {
   const { createModalVisible } = useSelector((state: RootState) => state.boards);
   const dispatch = useDispatch<AppDispatch>();
+  const message = useLocaleMessage();
 
   const handleSubmit = () => {
     dispatch(setCreateModalVisible(false));
@@ -19,10 +20,10 @@ const EmptyBoard = () => {
   return (
     <>
       <BoardBody onClick={() => dispatch(setCreateModalVisible(true))}>
-        <BoardTitle> + Create new board</BoardTitle>
+        <BoardTitle> + {message('boardModalTitle')}</BoardTitle>
       </BoardBody>
       <BoardModal
-        title="Create new board"
+        title={message('boardModalTitle')}
         isVisible={createModalVisible}
         onOk={handleSubmit}
         onCancel={() => dispatch(setCreateModalVisible(false))}

@@ -4,10 +4,12 @@ import { BasePage, BoardModal, BoardsList } from '../components';
 import { setCreateModalVisible } from '../store/BoardsSlice';
 import { AppDispatch, RootState } from '../store/Store';
 import { BoardProps } from '../types/SingleBoardProps';
+import { useLocaleMessage } from '../hooks';
 
 const BoardsPage: React.FC = () => {
   const { createModalVisible } = useSelector((state: RootState) => state.boards);
   const dispatch = useDispatch<AppDispatch>();
+  const message = useLocaleMessage();
 
   const [boards, setBoards] = useState<BoardProps[]>([
     {
@@ -62,7 +64,7 @@ const BoardsPage: React.FC = () => {
         <BoardsList boards={boards} remove={deleteBoard} />
       </BasePage>
       <BoardModal
-        title="Create new board"
+        title={message('boardModalTitle')}
         isVisible={createModalVisible}
         onOk={handleSubmit}
         onCancel={() => dispatch(setCreateModalVisible(false))}

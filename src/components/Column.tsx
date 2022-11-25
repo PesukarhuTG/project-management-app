@@ -4,6 +4,7 @@ import { ConfirmModal, IconButton, TaskModal } from './';
 import checkIcon from '../assets/ico/icon-check.svg';
 import cancelIcon from '../assets/ico/icon-cancel.svg';
 import Task from './Task';
+import { useLocaleMessage } from '../hooks';
 
 interface ColumnProps {
   id: string;
@@ -51,6 +52,7 @@ const Column: React.FC<ColumnProps> = ({ id, title }) => {
   const [tasks] = useState<TaskData[]>(TaskMock); //TODO get real task data
   const [isShowTaskModal, setIsShowTaskModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+  const message = useLocaleMessage();
 
   const updateTitle = () => {
     /*TODO update title*/
@@ -91,19 +93,19 @@ const Column: React.FC<ColumnProps> = ({ id, title }) => {
           ))}
       </Body>
       <Footer>
-        <AddButton onClick={() => setIsShowTaskModal(true)}>+ add new task</AddButton>
+        <AddButton onClick={() => setIsShowTaskModal(true)}>{message('btnAddNewTask')}</AddButton>
         <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
       </Footer>
 
       <TaskModal
-        title="Add new task"
+        title={message('addTaskModalTitle')}
         isVisible={isShowTaskModal}
         onOk={addTask}
         onCancel={() => setIsShowTaskModal(false)}
       />
 
       <ConfirmModal
-        title="Do you want to delete this column?"
+        title={message('confirmDeleteColumn')}
         isVisible={isShowDeleteModal}
         onOk={deleteColumn}
         onCancel={() => setIsShowDeleteModal(false)}

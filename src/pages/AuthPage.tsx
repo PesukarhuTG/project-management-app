@@ -9,6 +9,7 @@ import { RootState, AppDispatch } from '../store/Store';
 import { changeAuthStatus, changeUserData } from '../store/UserSlice';
 import { loginUser, getUserById } from '../services/APIrequests';
 import { decodeToken } from 'react-jwt';
+import { useLocaleMessage } from '../hooks';
 
 interface AuthValue {
   userLogin: string;
@@ -27,6 +28,7 @@ const AuthPage: React.FC = () => {
   const { login, password } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const message = useLocaleMessage();
 
   const onFinish = async (values: AuthValue) => {
     console.log('Success:', values);
@@ -66,7 +68,7 @@ const AuthPage: React.FC = () => {
   return (
     <BasePage>
       <PageIcon />
-      <PageTitle>Sign In</PageTitle>
+      <PageTitle>{message('authPageTitle')}</PageTitle>
       <StyledForm
         form={authForm}
         name="auth"
@@ -79,32 +81,33 @@ const AuthPage: React.FC = () => {
         <Form.Item
           name="userLogin"
           rules={[
-            { required: true, message: 'Please input your login!' },
-            { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
+            { required: true, message: message('loginInputValidation1') },
+            { type: 'string', min: 2, message: message('loginInputValidation2') },
           ]}
         >
-          <FormInput placeholder="Login *" type="text" />
+          <FormInput placeholder={message('loginPlaceholder')} type="text" />
         </Form.Item>
 
         <Form.Item
           name="userPassword"
           rules={[
-            { required: true, message: 'Please input your password!' },
-            { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
+            { required: true, message: message('passwordInputValidation1') },
+            { type: 'string', min: 8, message: message('passwordInputValidation2') },
           ]}
         >
-          <FormInput placeholder="Password *" type="password" autoComplete="on" />
+          <FormInput placeholder={message('passwordPlaceholder')} type="password" autoComplete="on" />
         </Form.Item>
 
         <Form.Item>
           <FormText>
-            Don’t have an account? <StyledLink to="/registration">Sign up</StyledLink>
+            {message('textLinkToRegistration')}
+            <StyledLink to="/registration">{message('btnSignUp')}</StyledLink>
           </FormText>
         </Form.Item>
 
         <Form.Item>
           <FormButton type="primary" htmlType="submit">
-            Sign in
+            {message('btnSignIn')}
           </FormButton>
         </Form.Item>
       </StyledForm>
