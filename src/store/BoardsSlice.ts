@@ -5,10 +5,8 @@ import { BoardProps } from '../types/SingleBoardProps';
 
 const initialState: InitialBoardsState = {
   createModalVisible: false,
-  boardTitle: {
-    boardName: '',
-    boardDescription: '',
-  },
+  title: '',
+  description: '',
   fetchLoading: false,
   boards: [],
 };
@@ -21,10 +19,10 @@ const boardsSlice = createSlice({
       state.createModalVisible = action.payload;
     },
     setBoardName(state, action: PayloadAction<string>) {
-      state.boardTitle.boardName = action.payload;
+      state.title = action.payload;
     },
     setBoardDescription(state, action: PayloadAction<string>) {
-      state.boardTitle.boardDescription = action.payload;
+      state.description = action.payload;
     },
     setFetchLoading(state, action: PayloadAction<boolean>) {
       state.fetchLoading = action.payload;

@@ -9,8 +9,8 @@ import ConfirmModal from './ConfirmModal';
 import { BoardTitle, BoardWrapper } from './styled-components';
 
 const SingleBoard: FC<SingleBoardProps> = ({
-  boardName = 'Board title',
-  boardDescription = 'Board description',
+  title = 'Board title',
+  description = 'Board description',
   id,
   remove,
 }) => {
@@ -50,8 +50,8 @@ const SingleBoard: FC<SingleBoardProps> = ({
     <>
       <BoardWrapper onClick={() => navigate(`/board/${id}`)}>
         <BoardHeader>
-          <BoardTitle>{boardName}</BoardTitle>
-          <BoardDescription>{boardDescription}</BoardDescription>
+          <BoardTitle>{title}</BoardTitle>
+          <BoardDescription>{description}</BoardDescription>
         </BoardHeader>
         <BoardTools>
           <BoardEdit onClick={openEditModal} />
@@ -64,7 +64,12 @@ const SingleBoard: FC<SingleBoardProps> = ({
         onOk={handleDelete}
         onCancel={closeConfirmModal}
       />
-      <BoardModal title="Edit board info" isVisible={editModalVisible} onOk={handleEdit} onCancel={closeEditModal} />
+      <BoardModal
+        modalTitle="Edit board info"
+        isVisible={editModalVisible}
+        onOk={handleEdit}
+        onCancel={closeEditModal}
+      />
     </>
   );
 };

@@ -1,6 +1,6 @@
 interface SingleBoardProps {
-  boardName: string;
-  boardDescription: string;
+  title: string;
+  description: string;
   id: string;
   remove: (id: string) => void;
 }

@@ -2,7 +2,8 @@ import { BoardProps, BoardTitle } from './SingleBoardProps';
 
 interface InitialBoardsState {
   createModalVisible: boolean;
-  boardTitle: BoardTitle;
+  title: string;
+  description: string;
   fetchLoading: boolean;
   boards: BoardProps[];
 }

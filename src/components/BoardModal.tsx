@@ -6,21 +6,24 @@ import { ModalProps } from '../types';
 import StyledInput from './StyledInput';
 import StyledModal from './StyledModal';
 
-const BoardModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel }) => {
-  const { boardName, boardDescription } = useSelector((state: RootState) => state.boards.boardTitle);
+interface BoardModalProps {
+  modalTitle: string;
+  isVisible: boolean;
+  onOk: () => void;
+  onCancel: () => void;
+}
+
+const BoardModal: FC<BoardModalProps> = ({ modalTitle, isVisible, onOk, onCancel }) => {
+  const { title, description } = useSelector((state: RootState) => state.boards);
   const dispatch = useDispatch<AppDispatch>();
 
   return (
-    <StyledModal title={title} isVisible={isVisible} onOk={onOk} onCancel={onCancel}>
-      <StyledInput
-        title="Board name"
-        onChange={(event) => dispatch(setBoardName(event.target.value))}
-        value={boardName}
-      />
+    <StyledModal title={modalTitle} isVisible={isVisible} onOk={onOk} onCancel={onCancel}>
+      <StyledInput title="Board name" onChange={(event) => dispatch(setBoardName(event.target.value))} value={title} />
       <StyledInput
         title="Board description"
         onChange={(event) => dispatch(setBoardDescription(event.target.value))}
-        value={boardDescription}
+        value={description}
       />
     </StyledModal>
   );

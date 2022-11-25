@@ -2,13 +2,15 @@ import { message } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BasePage, BoardModal, BoardsList } from '../components';
-import fetchBoardsData from '../http/fetchBoardsData';
+import fetchBoardsData from '../services/dashboard.service';
 import { createBoard, deleteBoard, fetchUsers } from '../services/APIrequests';
 import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/BoardsSlice';
 import { AppDispatch, RootState } from '../store/Store';
 
 const BoardsPage: React.FC = () => {
-  const { createModalVisible, boardTitle, fetchLoading, boards } = useSelector((state: RootState) => state.boards);
+  const { createModalVisible, title, description, fetchLoading, boards } = useSelector(
+    (state: RootState) => state.boards
+  );
   const { id: userId } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -33,9 +35,11 @@ const BoardsPage: React.FC = () => {
     try {
       const usersList = await fetchUsers().then((res) => res.data);
       const usersId = usersList.map((user) => user._id);
+      const boardTitle = { title, description };
       await createBoard(JSON.stringify(boardTitle), userId, usersId).then((res) => res.data);
       dispatch(fetchBoardsData());
     } catch {
+      dispatch(setFetchLoading(false));
       showErrorMessage();
     }
   };
@@ -49,6 +53,7 @@ const BoardsPage: React.FC = () => {
           await deleteBoard(el);
           dispatch(fetchBoardsData());
         } catch {
+          dispatch(setFetchLoading(false));
           showErrorMessage();
         }
       }
@@ -69,7 +74,7 @@ const BoardsPage: React.FC = () => {
         {boardsPageContent}
       </BasePage>
       <BoardModal
-        title="Create new board"
+        modalTitle="Create new board"
         isVisible={createModalVisible}
         onOk={handleSubmit}
         onCancel={() => dispatch(setCreateModalVisible(false))}
