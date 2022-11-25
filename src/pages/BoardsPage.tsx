@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { message as errorMessage } from 'antd';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BasePage, BoardModal, BoardsList } from '../components';
@@ -6,6 +6,7 @@ import fetchBoardsData from '../services/dashboard.service';
 import { createBoard, deleteBoard, fetchUsers } from '../services/APIrequests';
 import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/BoardsSlice';
 import { AppDispatch, RootState } from '../store/Store';
+import { useLocaleMessage } from '../hooks';
 
 const BoardsPage: React.FC = () => {
   const { createModalVisible, title, description, fetchLoading, boards } = useSelector(
@@ -13,8 +14,9 @@ const BoardsPage: React.FC = () => {
   );
   const { id: userId } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
+  const message = useLocaleMessage();
 
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi, contextHolder] = errorMessage.useMessage();
 
   const showErrorMessage = () => {
     messageApi.open({
@@ -74,7 +76,7 @@ const BoardsPage: React.FC = () => {
         {boardsPageContent}
       </BasePage>
       <BoardModal
-        modalTitle="Create new board"
+        modalTitle={message('boardModalTitle')}
         isVisible={createModalVisible}
         onOk={handleSubmit}
         onCancel={() => dispatch(setCreateModalVisible(false))}

@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/Store';
 import { changeAuthStatus, changeUserData } from '../store/UserSlice';
 import { registrationUser, loginUser } from '../services/APIrequests';
+import { useLocaleMessage } from '../hooks';
 
 interface RegistrationValue {
   userName: string;
@@ -20,6 +21,7 @@ const RegistrationPage: React.FC = () => {
   const { name, login, password } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+  const message = useLocaleMessage();
 
   const onFinish = async (values: RegistrationValue) => {
     console.log('Success:', values);
@@ -57,7 +59,7 @@ const RegistrationPage: React.FC = () => {
   return (
     <BasePage>
       <PageIcon />
-      <PageTitle>Sign Up</PageTitle>
+      <PageTitle>{message('registrationPageTitle')}</PageTitle>
       <StyledForm
         form={registrationForm}
         name="registration"
@@ -70,42 +72,43 @@ const RegistrationPage: React.FC = () => {
         <Form.Item
           name="userName"
           rules={[
-            { required: true, message: 'Please input your name!' },
-            { type: 'string', min: 2, message: 'Name must be at least 2 characters' },
+            { required: true, message: message('nameInputValidation1') },
+            { type: 'string', min: 2, message: message('nameInputValidation2') },
           ]}
         >
-          <FormInput placeholder="Name *" type="text" />
+          <FormInput placeholder={message('namePlaceholder')} type="text" />
         </Form.Item>
 
         <Form.Item
           name="userLogin"
           rules={[
-            { required: true, message: 'Please input your login!' },
-            { type: 'string', min: 2, message: 'Login must be at least 2 characters' },
+            { required: true, message: message('loginInputValidation1') },
+            { type: 'string', min: 2, message: message('loginInputValidation2') },
           ]}
         >
-          <FormInput placeholder="Login *" type="text" />
+          <FormInput placeholder={message('loginPlaceholder')} type="text" />
         </Form.Item>
 
         <Form.Item
           name="userPassword"
           rules={[
-            { required: true, message: 'Please input your password!' },
-            { type: 'string', min: 8, message: 'Password must be at least 8 characters' },
+            { required: true, message: message('passwordInputValidation1') },
+            { type: 'string', min: 8, message: message('passwordInputValidation2') },
           ]}
         >
-          <FormInput placeholder="Password *" type="password" autoComplete="on" />
+          <FormInput placeholder={message('passwordPlaceholder')} type="password" autoComplete="on" />
         </Form.Item>
 
         <Form.Item>
           <FormText>
-            Have an account? <StyledLink to="/auth">Sign in</StyledLink>
+            {message('textLinkToAuthorization')}
+            <StyledLink to="/auth">{message('btnSignIn')}</StyledLink>
           </FormText>
         </Form.Item>
 
         <Form.Item>
           <FormButton type="primary" htmlType="submit">
-            Sign up
+            {message('btnSignUp')}
           </FormButton>
         </Form.Item>
       </StyledForm>

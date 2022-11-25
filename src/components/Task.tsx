@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ConfirmModal, IconButton, TaskModal } from './';
+import { useLocaleMessage } from '../hooks';
 
 interface TaskProps {
   id: string;
@@ -16,7 +17,7 @@ interface TaskProps {
 const Task: React.FC<TaskProps> = ({ id, title, description }) => {
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
-
+  const message = useLocaleMessage();
   const userName = 'userName'; //TODO получить имя пользователя
 
   const editTask = () => {
@@ -34,7 +35,7 @@ const Task: React.FC<TaskProps> = ({ id, title, description }) => {
       <Title>{title}</Title>
       <div>{description}</div>
       <div>
-        <b>Author: </b>
+        <b>{message('taskAuthor')}: </b>
         {userName}
       </div>
       <Footer>
@@ -43,14 +44,14 @@ const Task: React.FC<TaskProps> = ({ id, title, description }) => {
       </Footer>
 
       <TaskModal
-        title="Edit task"
+        title={message('taskModalTitle')}
         isVisible={isShowEditModal}
         onOk={editTask}
         onCancel={() => setIsShowEditModal(false)}
       />
 
       <ConfirmModal
-        title="Do you want to delete this task?"
+        title={message('confirmDeleteTask')}
         isVisible={isShowDeleteModal}
         onOk={deleteTask}
         onCancel={() => setIsShowDeleteModal(false)}

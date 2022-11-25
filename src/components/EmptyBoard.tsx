@@ -4,18 +4,18 @@ import styled from 'styled-components';
 import { setCreateModalVisible } from '../store/BoardsSlice';
 import { AppDispatch } from '../store/Store';
 import { BoardWrapper, BoardTitle } from './styled-components';
+import { useLocaleMessage } from '../hooks';
 
 const EmptyBoard = () => {
   const dispatch = useDispatch<AppDispatch>();
-
-  const openCreateBoardModal = () => {
-    dispatch(setCreateModalVisible(true));
-  };
+  const message = useLocaleMessage();
 
   return (
-    <BoardBody onClick={openCreateBoardModal}>
-      <BoardTitle> + Create new board</BoardTitle>
-    </BoardBody>
+    <>
+      <BoardBody onClick={() => dispatch(setCreateModalVisible(true))}>
+        <BoardTitle> + {message('boardModalTitle')}</BoardTitle>
+      </BoardBody>
+    </>
   );
 };
 

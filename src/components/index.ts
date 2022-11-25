@@ -13,3 +13,4 @@ export { default as SingleBoard } from './SingleBoard';
 export { default as FormInput } from './FormInput';
 export { default as FormButton } from './FormButton';
 export { default as BoardsList } from './BoardsList';
+export { default as Spinner } from './Spinner';

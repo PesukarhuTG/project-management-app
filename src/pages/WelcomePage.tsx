@@ -5,44 +5,36 @@ import heroTeamIco from '../assets/ico/hero-img.svg';
 import avatar1 from '../assets/ico/avatar-tatiana.png';
 import avatar2 from '../assets/ico/avatar-daria.png';
 import avatar3 from '../assets/ico/avatar-sergey.png';
+import avatar4 from '../assets/ico/avatar-denis.png';
+import { useLocaleMessage } from '../hooks';
 
 const WelcomePage: React.FC = () => {
+  const message = useLocaleMessage();
+
   return (
     <BasePage>
       <HeroSection>
         <div>
-          <SectionTitle>Task Manager</SectionTitle>
-          <HeroDescription>
-            It is a project management software that allows you to centrally manage tasks and their timely completion.
-            Trackers are widely used in project management, because they allow you to easily monitor all work processes
-            and control the work of the team.
-          </HeroDescription>
+          <SectionTitle>{message('mainTitle')}</SectionTitle>
+          <HeroDescription>{message('mainDescription')}</HeroDescription>
         </div>
         <HeroImage />
       </HeroSection>
       <TeamSection>
-        <SectionTitle>Project team</SectionTitle>
+        <SectionTitle>{message('sectionTeam')}</SectionTitle>
 
         <TeamItem>
           <TeamItemAvatar $name="tatiana" />
           <div>
-            <TeamItemTitle>Tatiana | frontend-developer</TeamItemTitle>
-            <TeamItemDescription>
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
-              atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
-              sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-            </TeamItemDescription>
+            <TeamItemTitle>{message('personOneTitle')}</TeamItemTitle>
+            <TeamItemDescription>{message('personOneDescription')}</TeamItemDescription>
           </div>
         </TeamItem>
 
         <TeamItem>
           <div>
-            <TeamItemTitle>Daria | frontend-developer</TeamItemTitle>
-            <TeamItemDescription>
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
-              atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
-              sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-            </TeamItemDescription>
+            <TeamItemTitle>{message('personSecondTitle')}</TeamItemTitle>
+            <TeamItemDescription>{message('personSecondDescription')}</TeamItemDescription>
           </div>
           <TeamItemAvatar $name="daria" />
         </TeamItem>
@@ -50,13 +42,17 @@ const WelcomePage: React.FC = () => {
         <TeamItem>
           <TeamItemAvatar $name="sergey" />
           <div>
-            <TeamItemTitle>Sergey | frontend-developer</TeamItemTitle>
-            <TeamItemDescription>
-              At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti
-              atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique
-              sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
-            </TeamItemDescription>
+            <TeamItemTitle>{message('personThirdTitle')}</TeamItemTitle>
+            <TeamItemDescription>{message('personThirdDescription')}</TeamItemDescription>
           </div>
+        </TeamItem>
+
+        <TeamItem>
+          <div>
+            <TeamItemTitle>{message('personFourthTitle')}</TeamItemTitle>
+            <TeamItemDescription>{message('personFourthDescription')}</TeamItemDescription>
+          </div>
+          <TeamItemAvatar $name="denis" />
         </TeamItem>
       </TeamSection>
     </BasePage>
@@ -67,6 +63,7 @@ const HeroSection = styled.section`
   max-width: 1440px;
   display: flex;
   gap: 50px;
+  align-items: center;
   justify-content: space-between;
   margin: 0 auto 50px;
   padding: 0 110px;
@@ -81,6 +78,7 @@ const HeroSection = styled.section`
 `;
 
 const SectionTitle = styled.h2`
+  align-self: flex-start;
   font-weight: 700;
   font-size: 40px;
   line-height: 54px;
@@ -135,6 +133,7 @@ const TeamSection = styled.section`
   flex-direction: column;
   gap: 20px;
   justify-content: space-between;
+  align-items: center;
   margin: 0 auto 50px;
   padding: 0 110px;
 
@@ -145,9 +144,12 @@ const TeamSection = styled.section`
 `;
 
 const TeamItem = styled.div`
+  max-width: 1020px;
+  width: 100%;
   display: flex;
   gap: 40px;
   align-items: center;
+  justify-content: space-between;
 
   @media (max-width: 620px) {
     flex-direction: column;
@@ -166,6 +168,8 @@ const TeamItemTitle = styled.p`
 `;
 
 const TeamItemDescription = styled.p`
+  max-width: 900px;
+  width: 100%;
   line-height: 29px;
 `;
 
@@ -191,6 +195,14 @@ const TeamItemAvatar = styled.div<{
     if ($name === 'sergey')
       return css`
         background: url(${avatar3});
+      `;
+    if ($name === 'denis')
+      return css`
+        background: url(${avatar4});
+
+        @media (max-width: 620px) {
+          order: -1;
+        }
       `;
   }}
   background-size: contain;
