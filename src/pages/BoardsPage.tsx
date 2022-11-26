@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BasePage, BoardModal, BoardsList, Spinner } from '../components';
 import fetchBoardsData from '../services/dashboard.service';
-import { createBoard, deleteBoard, fetchUsers } from '../services/APIrequests';
+import { createBoard, deleteBoard, editBoard, getUserIds } from '../services/APIrequests';
 import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/BoardsSlice';
 import { AppDispatch, RootState } from '../store/Store';
 import { useLocaleMessage } from '../hooks';
@@ -35,10 +35,9 @@ const BoardsPage: React.FC = () => {
     dispatch(setBoardName(''));
     dispatch(setBoardDescription(''));
     try {
-      const usersList = await fetchUsers().then((res) => res.data);
-      const usersId = usersList.map((user) => user._id);
+      const userIds = await getUserIds();
       const boardTitle = { title, description };
-      await createBoard(JSON.stringify(boardTitle), userId, usersId).then((res) => res.data);
+      await createBoard(JSON.stringify(boardTitle), userId, userIds).then((res) => res.data);
       dispatch(fetchBoardsData());
     } catch {
       dispatch(setFetchLoading(false));
@@ -50,10 +49,10 @@ const BoardsPage: React.FC = () => {
     (id: string) => {
       dispatch(setFetchLoading(true));
       const boardsId = boards.map((board) => board.id);
-      boardsId.forEach(async (el) => {
-        if (el === id) {
+      boardsId.forEach(async (boardId) => {
+        if (boardId === id) {
           try {
-            await deleteBoard(el);
+            await deleteBoard(boardId);
             dispatch(fetchBoardsData());
           } catch {
             dispatch(setFetchLoading(false));
@@ -65,12 +64,35 @@ const BoardsPage: React.FC = () => {
     [boards, dispatch, showErrorMessage]
   );
 
+  const handleEdit = useCallback(
+    (id: string) => {
+      dispatch(setBoardName(''));
+      dispatch(setBoardDescription(''));
+      dispatch(setFetchLoading(true));
+      const boardsId = boards.map((board) => board.id);
+      boardsId.forEach(async (boardId) => {
+        if (boardId === id) {
+          try {
+            const userIds = await getUserIds();
+            const boardTitle = { title, description };
+            await editBoard(boardId, JSON.stringify(boardTitle), userId, userIds).then((res) => res.data);
+            dispatch(fetchBoardsData());
+          } catch {
+            dispatch(setFetchLoading(false));
+            showErrorMessage();
+          }
+        }
+      });
+    },
+    [showErrorMessage, dispatch, boards, description, title, userId]
+  );
+
   const boardsPageContent = useMemo(() => {
     if (fetchLoading) {
       return <Spinner />;
     }
-    return <BoardsList boards={boards} remove={removeBoard} />;
-  }, [fetchLoading, boards, removeBoard]);
+    return <BoardsList boards={boards} remove={removeBoard} edit={handleEdit} />;
+  }, [fetchLoading, boards, removeBoard, handleEdit]);
 
   return (
     <>
