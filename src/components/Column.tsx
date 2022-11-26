@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { ConfirmModal, IconButton, TaskModal } from './';
 import checkIcon from '../assets/ico/icon-check.svg';
@@ -26,9 +27,9 @@ interface TaskData {
 
 const TaskMock: TaskData[] = [
   {
-    _id: '01',
+    _id: '001',
     title: 'Task 1',
-    order: 3,
+    order: 1,
     boardId: 'Id of boards',
     columnId: 'Id of boards',
     description: 'Task description1 where you can write full information about task',
@@ -36,9 +37,9 @@ const TaskMock: TaskData[] = [
     users: [],
   },
   {
-    _id: '02',
+    _id: '002',
     title: 'Task 2',
-    order: 1,
+    order: 2,
     boardId: 'Id of boards',
     columnId: 'Id of boards',
     description: 'Implement Select component from Antd and custom its design',
@@ -47,7 +48,7 @@ const TaskMock: TaskData[] = [
   },
 ];
 
-const Column: React.FC<ColumnProps> = ({ id, title }) => {
+const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [tasks] = useState<TaskData[]>(TaskMock); //TODO get real task data
   const [isShowTaskModal, setIsShowTaskModal] = useState<boolean>(false);
@@ -84,37 +85,55 @@ const Column: React.FC<ColumnProps> = ({ id, title }) => {
   }, [isEdit, title]);
 
   return (
-    <ColumnPanel>
-      <Header>{titleContent}</Header>
-      <Body>
-        {tasks.length &&
-          tasks.map((task) => (
-            <Task id={task._id} title={task.title} description={task.description} order={task.order} key={task._id} />
-          ))}
-      </Body>
-      <Footer>
-        <AddButton onClick={() => setIsShowTaskModal(true)}>{message('btnAddNewTask')}</AddButton>
-        <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
-      </Footer>
+    <Draggable draggableId={id} index={order}>
+      {(provided) => (
+        <ColumnPanel ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+          <Header>{titleContent}</Header>
+          {!!tasks.length && (
+            <Droppable droppableId={id} type="task">
+              {(providedInner) => (
+                <Body ref={providedInner.innerRef} {...providedInner.droppableProps}>
+                  {tasks.map((task) => (
+                    <Task
+                      id={`${id}-${task._id}`}
+                      title={task.title}
+                      description={task.description}
+                      order={task.order}
+                      key={task._id}
+                    />
+                  ))}
+                  {providedInner.placeholder}
+                </Body>
+              )}
+            </Droppable>
+          )}
 
-      <TaskModal
-        title={message('addTaskModalTitle')}
-        isVisible={isShowTaskModal}
-        onOk={addTask}
-        onCancel={() => setIsShowTaskModal(false)}
-      />
+          <Footer>
+            <AddButton onClick={() => setIsShowTaskModal(true)}>{message('btnAddNewTask')}</AddButton>
+            <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
+          </Footer>
 
-      <ConfirmModal
-        title={message('confirmDeleteColumn')}
-        isVisible={isShowDeleteModal}
-        onOk={deleteColumn}
-        onCancel={() => setIsShowDeleteModal(false)}
-      />
-    </ColumnPanel>
+          <TaskModal
+            title={message('addTaskModalTitle')}
+            isVisible={isShowTaskModal}
+            onOk={addTask}
+            onCancel={() => setIsShowTaskModal(false)}
+          />
+
+          <ConfirmModal
+            title={message('confirmDeleteColumn')}
+            isVisible={isShowDeleteModal}
+            onOk={deleteColumn}
+            onCancel={() => setIsShowDeleteModal(false)}
+          />
+        </ColumnPanel>
+      )}
+    </Draggable>
   );
 };
 
 const ColumnPanel = styled.section`
+  margin-left: var(--page-gutter);
   max-height: calc(100% - 24px);
   display: flex;
   flex-direction: column;

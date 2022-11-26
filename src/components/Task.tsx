@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ConfirmModal, IconButton, TaskModal } from './';
 import { useLocaleMessage } from '../hooks';
+import { Draggable } from 'react-beautiful-dnd';
 
 interface TaskProps {
   id: string;
@@ -14,7 +15,7 @@ interface TaskProps {
   users?: string[];
 }
 
-const Task: React.FC<TaskProps> = ({ id, title, description }) => {
+const Task: React.FC<TaskProps> = ({ id, title, description, order }) => {
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const message = useLocaleMessage();
@@ -31,32 +32,36 @@ const Task: React.FC<TaskProps> = ({ id, title, description }) => {
   };
 
   return (
-    <TaskPanel>
-      <Title>{title}</Title>
-      <div>{description}</div>
-      <div>
-        <b>{message('taskAuthor')}: </b>
-        {userName}
-      </div>
-      <Footer>
-        <IconButton icon="edit" onClick={() => setIsShowEditModal(true)} />
-        <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
-      </Footer>
+    <Draggable draggableId={id} index={order}>
+      {(provided) => (
+        <TaskPanel ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+          <Title>{title}</Title>
+          <div>{description}</div>
+          <div>
+            <b>{message('taskAuthor')}: </b>
+            {userName}
+          </div>
+          <Footer>
+            <IconButton icon="edit" onClick={() => setIsShowEditModal(true)} />
+            <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
+          </Footer>
 
-      <TaskModal
-        title={message('taskModalTitle')}
-        isVisible={isShowEditModal}
-        onOk={editTask}
-        onCancel={() => setIsShowEditModal(false)}
-      />
+          <TaskModal
+            title={message('taskModalTitle')}
+            isVisible={isShowEditModal}
+            onOk={editTask}
+            onCancel={() => setIsShowEditModal(false)}
+          />
 
-      <ConfirmModal
-        title={message('confirmDeleteTask')}
-        isVisible={isShowDeleteModal}
-        onOk={deleteTask}
-        onCancel={() => setIsShowDeleteModal(false)}
-      />
-    </TaskPanel>
+          <ConfirmModal
+            title={message('confirmDeleteTask')}
+            isVisible={isShowDeleteModal}
+            onOk={deleteTask}
+            onCancel={() => setIsShowDeleteModal(false)}
+          />
+        </TaskPanel>
+      )}
+    </Draggable>
   );
 };
 
