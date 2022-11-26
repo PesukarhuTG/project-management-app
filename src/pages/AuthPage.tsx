@@ -10,17 +10,11 @@ import { changeAuthStatus, changeUserData } from '../store/UserSlice';
 import { loginUser, getUserById } from '../services/APIrequests';
 import { decodeToken } from 'react-jwt';
 import { useLocaleMessage } from '../hooks';
+import { DecodedTokenProps } from '../types';
 
 interface AuthValue {
   userLogin: string;
   userPassword: string;
-}
-
-interface DecodedTokenProps {
-  id: string;
-  login: string;
-  iat: number;
-  exp: number;
 }
 
 const AuthPage: React.FC = () => {
@@ -31,16 +25,16 @@ const AuthPage: React.FC = () => {
   const message = useLocaleMessage();
 
   const onFinish = async (values: AuthValue) => {
-    console.log('Success:', values);
     const { userLogin, userPassword } = values;
 
     try {
       const { token } = await loginUser(userLogin, userPassword).then((res) => res.data);
-      const decodedToken = (await decodeToken(token)) as DecodedTokenProps;
+      const { id, exp } = (await decodeToken(token)) as DecodedTokenProps;
 
-      localStorage.setItem('idUser', decodedToken.id);
+      localStorage.setItem('idUser', id);
       localStorage.setItem('tokenUser', token);
       localStorage.setItem('loginUser', userLogin);
+      localStorage.setItem('expToken', String(exp));
 
       const { name } = await getUserById().then((res) => res.data);
 
@@ -48,7 +42,7 @@ const AuthPage: React.FC = () => {
         name,
         login: userLogin,
         password: userPassword,
-        id: decodedToken.id,
+        id,
       };
 
       dispatch(changeUserData(userData));

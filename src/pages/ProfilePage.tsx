@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BasePage, ConfirmModal, FormButton, FormInput } from '../components';
 import { Form, message as messageAntd } from 'antd';
 import styled from 'styled-components';
@@ -8,6 +8,9 @@ import { editUserById, loginUser, deleteUser } from '../services/APIrequests';
 import { useNavigate } from 'react-router-dom';
 import { changeUserData, changeAuthStatus, removeUserData } from '../store/UserSlice';
 import { useLocaleMessage } from '../hooks';
+import checkTokenExpired from '../services/checkTokenExpired';
+import { decodeToken } from 'react-jwt';
+import { DecodedTokenProps } from '../types';
 
 interface EditFormValues {
   userName: string;
@@ -24,6 +27,13 @@ const ProfilePage: React.FC = () => {
   const navigate = useNavigate();
   const message = useLocaleMessage();
 
+  const logout = () => {
+    dispatch(changeAuthStatus(false));
+    dispatch(removeUserData());
+    localStorage.clear();
+    navigate('/');
+  };
+
   const showSuccessMessage = () => {
     messageApi.open({
       type: 'success',
@@ -39,45 +49,62 @@ const ProfilePage: React.FC = () => {
   };
 
   const onFinish = async (values: EditFormValues) => {
-    console.log('Success:', values);
     const { userName, userLogin, userPassword } = values;
+    const authStatus = checkTokenExpired();
 
-    try {
-      const { name, _id, login } = await editUserById(userName, userLogin, userPassword).then((res) => res.data);
-      const { token } = await loginUser(login, userPassword).then((res) => res.data);
-      const userData = {
-        name,
-        login,
-        password: userPassword,
-        id: _id,
-      };
+    if (authStatus) {
+      try {
+        const { name, login } = await editUserById(userName, userLogin, userPassword).then((res) => res.data);
+        const { token } = await loginUser(login, userPassword).then((res) => res.data);
+        const { id, exp } = (await decodeToken(token)) as DecodedTokenProps;
 
-      dispatch(changeUserData(userData));
-      dispatch(changeAuthStatus(true));
+        const userData = {
+          name,
+          login,
+          password: userPassword,
+          id,
+        };
 
-      showSuccessMessage();
+        dispatch(changeUserData(userData));
+        dispatch(changeAuthStatus(true));
 
-      localStorage.setItem('idUser', _id);
-      localStorage.setItem('tokenUser', token);
-      localStorage.setItem('loginUser', login);
-    } catch {
-      showErrorMessage();
-    } finally {
-      form.resetFields();
+        showSuccessMessage();
+
+        localStorage.setItem('idUser', id);
+        localStorage.setItem('tokenUser', token);
+        localStorage.setItem('loginUser', login);
+        localStorage.setItem('expToken', String(exp));
+      } catch {
+        showErrorMessage();
+      } finally {
+        form.resetFields();
+      }
+    } else {
+      logout();
     }
   };
 
   const onDeleteUser = async () => {
-    try {
-      await deleteUser();
-      dispatch(changeAuthStatus(false));
-      dispatch(removeUserData());
-      localStorage.clear();
-      navigate('/');
-    } catch {
-      showErrorMessage();
+    const authStatus = checkTokenExpired();
+
+    if (authStatus) {
+      try {
+        await deleteUser();
+        logout();
+      } catch {
+        showErrorMessage();
+      }
+    } else {
+      logout();
     }
   };
+
+  useEffect(() => {
+    const authStatus = checkTokenExpired();
+    if (!authStatus) {
+      logout();
+    }
+  }, []); // eslint-disable-line
 
   return (
     <BasePage>
