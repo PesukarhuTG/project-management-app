@@ -5,8 +5,8 @@ import { BasePage, FormButton, FormInput } from '../components';
 import AccessIco from '../assets/ico/icon-access.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../store/store';
-import { changeAuthStatus, changeUserData } from '../store/userSlice';
+import { RootState, AppDispatch } from '../store/Store';
+import { changeAuthStatus, changeUserData } from '../store/UserSlice';
 import { registrationUser, loginUser } from '../services/APIrequests';
 import { useLocaleMessage } from '../hooks';
 

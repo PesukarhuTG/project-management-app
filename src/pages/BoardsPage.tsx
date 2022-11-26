@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BasePage, BoardModal, BoardsList } from '../components';
 import fetchBoardsData from '../services/dashboard.service';
 import { createBoard, deleteBoard, fetchUsers } from '../services/APIrequests';
-import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/boardsSlice';
-import { AppDispatch, RootState } from '../store/store';
+import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/BoardsSlice';
+import { AppDispatch, RootState } from '../store/Store';
 import { useLocaleMessage } from '../hooks';
 
 const BoardsPage: React.FC = () => {

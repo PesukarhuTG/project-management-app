@@ -1,6 +1,6 @@
 import { fetchBoards } from './APIrequests';
-import { setBoards, setFetchLoading } from '../store/boardsSlice';
-import { AppDispatch } from '../store/store';
+import { setBoards, setFetchLoading } from '../store/BoardsSlice';
+import { AppDispatch } from '../store/Store';
 import { BoardProps, BoardTitle } from '../types/SingleBoardProps';
 
 const fetchBoardsData = () => async (dispatch: AppDispatch) => {

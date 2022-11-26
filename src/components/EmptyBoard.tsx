@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { setCreateModalVisible } from '../store/boardsSlice';
-import { AppDispatch } from '../store/store';
+import { setCreateModalVisible } from '../store/BoardsSlice';
+import { AppDispatch } from '../store/Store';
 import { BoardWrapper, BoardTitle } from './styled-components';
 import { useLocaleMessage } from '../hooks';
 

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setBoardName, setBoardDescription } from '../store/boardsSlice';
-import { AppDispatch, RootState } from '../store/store';
+import { setBoardName, setBoardDescription } from '../store/BoardsSlice';
+import { AppDispatch, RootState } from '../store/Store';
 import StyledInput from './StyledInput';
 import StyledModal from './StyledModal';
 import { useLocaleMessage } from '../hooks';

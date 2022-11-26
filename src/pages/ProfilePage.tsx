@@ -3,10 +3,10 @@ import { BasePage, ConfirmModal, FormButton, FormInput } from '../components';
 import { Form, message as messageAntd } from 'antd';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../store/store';
+import { RootState, AppDispatch } from '../store/Store';
 import { editUserById, loginUser, deleteUser } from '../services/APIrequests';
 import { useNavigate } from 'react-router-dom';
-import { changeUserData, changeAuthStatus, removeUserData } from '../store/userSlice';
+import { changeUserData, changeAuthStatus, removeUserData } from '../store/UserSlice';
 import { useLocaleMessage } from '../hooks';
 
 interface EditFormValues {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Radio, RadioChangeEvent } from 'antd';
 import styled from 'styled-components';
-import { changeLanguage } from '../store/userSlice';
+import { changeLanguage } from '../store/UserSlice';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store/store';
+import { AppDispatch } from '../store/Store';
 import { useLocaleMessage } from '../hooks';
 
 const LanguageRadio = () => {
