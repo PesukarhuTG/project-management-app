@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BasePage, BoardModal, BoardsList } from '../components';
 import fetchBoardsData from '../services/dashboard.service';
 import { createBoard, deleteBoard, fetchUsers } from '../services/APIrequests';
-import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/BoardsSlice';
-import { AppDispatch, RootState } from '../store/Store';
+import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/boardsSlice';
+import { AppDispatch, RootState } from '../store/store';
 import { useLocaleMessage } from '../hooks';
 
 const BoardsPage: React.FC = () => {
@@ -21,7 +21,7 @@ const BoardsPage: React.FC = () => {
   const showErrorMessage = () => {
     messageApi.open({
       type: 'error',
-      content: 'Something wrong... Please, try again',
+      content: message('failedEditMessage'),
     });
   };
 

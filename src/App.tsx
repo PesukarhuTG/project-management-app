@@ -5,7 +5,7 @@ import { AuthPage, BoardPage, BoardsPage, NotFoundPage, ProfilePage, Registratio
 import { IntlProvider } from 'react-intl';
 import messages from './localization/messages';
 import { useSelector } from 'react-redux';
-import { RootState } from './store/Store';
+import { RootState } from './store/store';
 
 const App: React.FC = () => {
   const { lang } = useSelector((state: RootState) => state.user);

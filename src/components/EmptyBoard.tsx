@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { setCreateModalVisible } from '../store/BoardsSlice';
-import { AppDispatch } from '../store/Store';
+import { setCreateModalVisible } from '../store/boardsSlice';
+import { AppDispatch } from '../store/store';
 import { BoardWrapper, BoardTitle } from './styled-components';
 import { useLocaleMessage } from '../hooks';
 
@@ -11,11 +11,9 @@ const EmptyBoard = () => {
   const message = useLocaleMessage();
 
   return (
-    <>
-      <BoardBody onClick={() => dispatch(setCreateModalVisible(true))}>
-        <BoardTitle> + {message('boardModalTitle')}</BoardTitle>
-      </BoardBody>
-    </>
+    <BoardBody onClick={() => dispatch(setCreateModalVisible(true))}>
+      <BoardTitle> + {message('boardModalTitle')}</BoardTitle>
+    </BoardBody>
   );
 };
 

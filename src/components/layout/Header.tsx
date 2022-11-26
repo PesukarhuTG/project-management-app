@@ -8,9 +8,9 @@ import iconEditProfile from '../../assets/ico/icon-edit-profile.svg';
 import iconAddBoard from '../../assets/ico/icon-add-board.svg';
 import iconBoards from '../../assets/ico/icon-boards.svg';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../../store/Store';
-import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
-import { setCreateModalVisible } from '../../store/BoardsSlice';
+import { RootState, AppDispatch } from '../../store/store';
+import { removeUserData, changeAuthStatus } from '../../store/userSlice';
+import { setCreateModalVisible } from '../../store/boardsSlice';
 import { useLocaleMessage } from '../../hooks';
 
 interface HeaderProps {

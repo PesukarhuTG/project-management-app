@@ -10,10 +10,10 @@ interface StyledInputProps {
 
 const StyledInput: FC<StyledInputProps> = ({ title, onChange, value }) => {
   return (
-    <>
+    <div>
       <InputTitle>{title}</InputTitle>
       <StyledAntInput onChange={onChange} value={value} />
-    </>
+    </div>
   );
 };
 
