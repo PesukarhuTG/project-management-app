@@ -1,6 +1,6 @@
 import axiosApi from '../http';
 import { AxiosResponse } from 'axios';
-import { LoginResponse, RegistrationResponse } from '../types';
+import { BoardResponse, LoginResponse, RegistrationResponse } from '../types';
 
 export const registrationUser = async (
   name: string,
@@ -42,4 +42,23 @@ export const editUserById = async (
     login,
     password,
   });
+};
+
+export const createBoard = async (
+  title: string,
+  owner: string,
+  users: string[]
+): Promise<AxiosResponse<BoardResponse>> => {
+  console.log('запрос на создание board');
+  return axiosApi.post('/boards', { title, owner, users });
+};
+
+export const fetchBoards = async (): Promise<AxiosResponse<BoardResponse[]>> => {
+  console.log('запрос на получение board');
+  return await axiosApi.get('/boards');
+};
+
+export const deleteBoard = async (id: string) => {
+  console.log('запрос удаление board');
+  return axiosApi.delete(`/boards/${id}`);
 };

@@ -1,70 +1,82 @@
-import React, { useState } from 'react';
+import { message as errorMessage } from 'antd';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BasePage, BoardModal, BoardsList } from '../components';
-import { setCreateModalVisible } from '../store/BoardsSlice';
+import fetchBoardsData from '../services/dashboard.service';
+import { createBoard, deleteBoard, fetchUsers } from '../services/APIrequests';
+import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/BoardsSlice';
 import { AppDispatch, RootState } from '../store/Store';
-import { BoardProps } from '../types/SingleBoardProps';
 import { useLocaleMessage } from '../hooks';
 
 const BoardsPage: React.FC = () => {
-  const { createModalVisible } = useSelector((state: RootState) => state.boards);
+  const { createModalVisible, title, description, fetchLoading, boards } = useSelector(
+    (state: RootState) => state.boards
+  );
+  const { id: userId } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const message = useLocaleMessage();
 
-  const [boards, setBoards] = useState<BoardProps[]>([
-    {
-      boardTitle: 'boardTitle_1',
-      boardDescription: 'boardDescription_1',
-      id: 1,
-    },
-    {
-      boardTitle: 'boardTitle_2',
-      boardDescription: 'boardDescription_2',
-      id: 2,
-    },
-    {
-      boardTitle: 'boardTitle_3',
-      boardDescription: 'boardDescription_3',
-      id: 3,
-    },
-    {
-      boardTitle: 'boardTitle_4',
-      boardDescription: 'boardDescription_4',
-      id: 4,
-    },
-    {
-      boardTitle: 'boardTitle_5',
-      boardDescription: 'boardDescription_5',
-      id: 5,
-    },
-    {
-      boardTitle: 'boardTitle_6',
-      boardDescription: 'boardDescription_6',
-      id: 6,
-    },
-    {
-      boardTitle: 'boardTitle_7',
-      boardDescription: 'boardDescription_7',
-      id: 7,
-    },
-  ]);
+  const [messageApi, contextHolder] = errorMessage.useMessage();
 
-  const deleteBoard = (id: number) => {
-    setBoards(boards.filter((item) => item.id !== id));
+  const showErrorMessage = () => {
+    messageApi.open({
+      type: 'error',
+      content: message('failedEditMessage'),
+    });
   };
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    dispatch(fetchBoardsData());
+  }, []);
+
+  const handleSubmit = async () => {
+    dispatch(setFetchLoading(true));
     dispatch(setCreateModalVisible(false));
-    console.log('create new board');
+    dispatch(setBoardName(''));
+    dispatch(setBoardDescription(''));
+    try {
+      const usersList = await fetchUsers().then((res) => res.data);
+      const usersId = usersList.map((user) => user._id);
+      const boardTitle = { title, description };
+      await createBoard(JSON.stringify(boardTitle), userId, usersId).then((res) => res.data);
+      dispatch(fetchBoardsData());
+    } catch {
+      dispatch(setFetchLoading(false));
+      showErrorMessage();
+    }
   };
+
+  const removeBoard = (id: string) => {
+    dispatch(setFetchLoading(true));
+    const boardsId = boards.map((board) => board.id);
+    boardsId.forEach(async (el) => {
+      if (el === id) {
+        try {
+          await deleteBoard(el);
+          dispatch(fetchBoardsData());
+        } catch {
+          dispatch(setFetchLoading(false));
+          showErrorMessage();
+        }
+      }
+    });
+  };
+
+  const boardsPageContent = useMemo(() => {
+    if (fetchLoading) {
+      return <h1>Loading...</h1>;
+    }
+    return <BoardsList boards={boards} remove={removeBoard} />;
+  }, [fetchLoading, boards]);
 
   return (
     <>
       <BasePage>
-        <BoardsList boards={boards} remove={deleteBoard} />
+        {contextHolder}
+        {boardsPageContent}
       </BasePage>
       <BoardModal
-        title={message('boardModalTitle')}
+        modalTitle={message('boardModalTitle')}
         isVisible={createModalVisible}
         onOk={handleSubmit}
         onCancel={() => dispatch(setCreateModalVisible(false))}

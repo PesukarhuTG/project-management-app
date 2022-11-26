@@ -10,8 +10,8 @@ import { BoardTitle, BoardWrapper } from './styled-components';
 import { useLocaleMessage } from '../hooks';
 
 const SingleBoard: FC<SingleBoardProps> = ({
-  boardTitle = 'Board title',
-  boardDescription = 'Board description',
+  title = 'Board title',
+  description = 'Board description',
   id,
   remove,
 }) => {
@@ -52,8 +52,8 @@ const SingleBoard: FC<SingleBoardProps> = ({
     <>
       <BoardWrapper onClick={() => navigate(`/board/${id}`)}>
         <BoardHeader>
-          <BoardTitle>{boardTitle}</BoardTitle>
-          <BoardDescription>{boardDescription}</BoardDescription>
+          <BoardTitle>{title}</BoardTitle>
+          <BoardDescription>{description}</BoardDescription>
         </BoardHeader>
         <BoardTools>
           <BoardEdit onClick={openEditModal} />
@@ -67,7 +67,7 @@ const SingleBoard: FC<SingleBoardProps> = ({
         onCancel={closeConfirmModal}
       />
       <BoardModal
-        title={message('editBoardModalTitle')}
+        modalTitle={message('editBoardModalTitle')}
         isVisible={editModalVisible}
         onOk={handleEdit}
         onCancel={closeEditModal}
