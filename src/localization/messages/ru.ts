@@ -71,6 +71,7 @@ const ru: LocaleMessages = {
   confirmDeleteColumn: 'Вы действительно хотите удалить колонку?',
   defaultUser: 'Ответственное лицо',
   page404Subtitle: 'Что-то пошло не так...',
+  spinnerTip: 'Загрузка...',
 };
 
 export default ru;

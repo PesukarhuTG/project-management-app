@@ -1,9 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Spin } from 'antd';
+import { useLocaleMessage } from '../hooks';
 
 const Spinner = () => {
-  return <StyledSpin tip="Loading..." size="large" />;
+  const message = useLocaleMessage();
+
+  return <StyledSpin tip={message('spinnerTip')} size="large" />;
 };
 
 const StyledSpin = styled(Spin)`
