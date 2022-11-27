@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { BasePage } from '../components';
 import heroTeamIco from '../assets/ico/hero-img.svg';
@@ -7,9 +7,24 @@ import avatar2 from '../assets/ico/avatar-daria.png';
 import avatar3 from '../assets/ico/avatar-sergey.png';
 import avatar4 from '../assets/ico/avatar-denis.png';
 import { useLocaleMessage } from '../hooks';
+import checkTokenExpired from '../services/checkTokenExpired';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../store/Store';
+import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 
 const WelcomePage: React.FC = () => {
   const message = useLocaleMessage();
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    const authStatus = checkTokenExpired();
+
+    if (!authStatus) {
+      dispatch(changeAuthStatus(false));
+      dispatch(removeUserData());
+      localStorage.clear();
+    }
+  }, [dispatch]);
 
   return (
     <BasePage>
