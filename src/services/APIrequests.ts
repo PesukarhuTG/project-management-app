@@ -62,3 +62,7 @@ export const deleteBoard = async (id: string) => {
   console.log('запрос удаление board');
   return axiosApi.delete(`/boards/${id}`);
 };
+
+export const getBoardById = async (id: string): Promise<AxiosResponse<BoardResponse>> => {
+  return axiosApi.get<BoardResponse>(`/boards/${id}`);
+};

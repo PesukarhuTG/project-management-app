@@ -70,7 +70,7 @@ const ru: LocaleMessages = {
   confirmDeleteProfile: 'Вы действительно хотите удалить профиль?',
   confirmDeleteColumn: 'Вы действительно хотите удалить колонку?',
   defaultUser: 'Ответственное лицо',
-  page404Subtitle: 'Что-то пошло не так...',
+  errorTitle: 'Что-то пошло не так...',
 };
 
 export default ru;

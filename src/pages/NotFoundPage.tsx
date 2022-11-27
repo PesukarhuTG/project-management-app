@@ -13,7 +13,7 @@ const NotFoundPage: React.FC = () => {
       <Result
         status="404"
         title="404"
-        subTitle={message('page404Subtitle')}
+        subTitle={message('errorTitle')}
         extra={<StyledLink to="/">{message('btnPage404')}</StyledLink>}
       />
     </BasePage>

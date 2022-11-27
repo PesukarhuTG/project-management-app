@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { BasePage, Button, Column, ColumnModal } from '../components';
+
+import { showNotification } from '../services/notification.service';
 import { useLocaleMessage } from '../hooks';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/Store';
+import { setBoardInfo } from '../store/BoardSlice';
+import { getBoardById } from '../services/APIrequests';
 
 interface ColumnData {
   _id: string;
@@ -11,20 +18,6 @@ interface ColumnData {
   order: number;
   boardId: string;
 }
-
-interface BoardData {
-  _id: string;
-  title: string;
-  owner: string;
-  users: string[];
-}
-
-const boardMock: BoardData = {
-  _id: '01',
-  title: 'Board title',
-  owner: '001',
-  users: ['002', '003'],
-};
 
 const columnsMock: ColumnData[] = [
   {
@@ -48,11 +41,36 @@ const columnsMock: ColumnData[] = [
 ];
 
 const BoardPage: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { title } = useSelector((state: RootState) => state.board);
+
   const navigate = useNavigate();
   const [isShowColumnModal, setIsShowColumnModal] = useState<boolean>(false);
-  const [board] = useState<BoardData>(boardMock); //TODO get real board data
   const [columns] = useState<ColumnData[]>(columnsMock); //TODO get real columns list (sorted by order)
   const message = useLocaleMessage();
+  const { id: idParam } = useParams();
+
+  const getBoardInfo = useCallback(
+    async (id: string) => {
+      try {
+        const board = await getBoardById(id).then((res) => res.data);
+        const boardInfo = {
+          id: board._id,
+          title: board.title,
+        };
+        dispatch(setBoardInfo(boardInfo));
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+    },
+    [message, dispatch]
+  );
+
+  useEffect(() => {
+    if (idParam) {
+      getBoardInfo(idParam);
+    }
+  }, [idParam, getBoardInfo]);
 
   const addColumn = () => {
     /*TODO add column*/
@@ -75,7 +93,7 @@ const BoardPage: React.FC = () => {
           <Button label={message('btnCreateNewColumn')} onClick={() => setIsShowColumnModal(true)} />
         </ControlPanel>
         <Title>
-          {message('board')}: {board.title}
+          {message('board')}: {title}
         </Title>
         {!!columns.length && (
           <DragDropContext onDragEnd={onDragEnd}>

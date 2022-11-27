@@ -73,7 +73,7 @@ const en: LocaleMessages = {
   confirmDeleteProfile: 'Do you want to delete your profile?',
   confirmDeleteColumn: 'Do you want to delete this column?',
   defaultUser: 'Responsible user',
-  page404Subtitle: 'Something went wrong...',
+  errorTitle: 'Something went wrong...',
 };
 
 export default en;
