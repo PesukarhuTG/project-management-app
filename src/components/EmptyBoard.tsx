@@ -20,7 +20,7 @@ const EmptyBoard = () => {
 const BoardBody = styled(BoardWrapper)`
   justify-content: center;
   align-items: center;
-  background: var(--board-background);
+  background: var(--primary-light);
 `;
 
 export default EmptyBoard;

@@ -173,8 +173,6 @@ const BoardsPage: React.FC = () => {
 const SearchInput = styled(FormInput)`
   min-width: 300px;
   max-width: 1358px;
-  margin-left: 50%;
-  transform: translateX(-50%);
   line-height: 24px;
 
   @media (max-width: 1100px) {
