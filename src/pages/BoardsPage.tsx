@@ -37,7 +37,7 @@ const BoardsPage: React.FC = () => {
     try {
       const userIds = await getUserIds();
       const boardTitle = { title, description };
-      await createBoard(JSON.stringify(boardTitle), userId, userIds).then((res) => res.data);
+      await createBoard(JSON.stringify(boardTitle), userId, userIds);
       dispatch(fetchBoardsData());
     } catch {
       dispatch(setFetchLoading(false));
@@ -75,7 +75,7 @@ const BoardsPage: React.FC = () => {
           try {
             const userIds = await getUserIds();
             const boardTitle = { title, description };
-            await editBoard(boardId, JSON.stringify(boardTitle), userId, userIds).then((res) => res.data);
+            await editBoard(boardId, JSON.stringify(boardTitle), userId, userIds);
             dispatch(fetchBoardsData());
           } catch {
             dispatch(setFetchLoading(false));
