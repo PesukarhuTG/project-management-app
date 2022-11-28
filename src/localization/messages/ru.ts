@@ -72,6 +72,8 @@ const ru: LocaleMessages = {
   defaultUser: 'Ответственное лицо',
   page404Subtitle: 'Что-то пошло не так...',
   spinnerTip: 'Загрузка...',
+  searchPlaceholder: 'Поиск...',
+  nothingFound: 'Ничего не найдено',
 };
 
 export default ru;

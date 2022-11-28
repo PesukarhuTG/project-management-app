@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { useLocaleMessage } from '../hooks';
 import { RootState } from '../store/Store';
 import { BoardProps } from '../types/SingleBoardProps';
 import EmptyBoard from './EmptyBoard';
@@ -14,8 +15,9 @@ interface BoardsListProps {
 
 const BoardsList: FC<BoardsListProps> = ({ boards, remove, edit }) => {
   const { search } = useSelector((state: RootState) => state.boards);
+  const message = useLocaleMessage();
 
-  if (!boards.length) return <NothingFound>Nothing found</NothingFound>;
+  if (!boards.length) return <NothingFound>{message('nothingFound')}</NothingFound>;
 
   return (
     <BoardsContainer>

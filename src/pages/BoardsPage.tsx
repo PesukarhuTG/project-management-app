@@ -147,7 +147,7 @@ const BoardsPage: React.FC = () => {
           <SearchInput
             onChange={(event) => dispatch(setSearch(event.target.value))}
             value={search}
-            placeholder="Search..."
+            placeholder={message('searchPlaceholder')}
           />
           <BoardsList boards={filteredBoards} remove={removeBoard} edit={handleEdit} />
         </>
@@ -159,12 +159,12 @@ const BoardsPage: React.FC = () => {
           <SearchInput
             onChange={(event) => dispatch(setSearch(event.target.value))}
             value={search}
-            placeholder="Search..."
+            placeholder={message('searchPlaceholder')}
           />
           <BoardsList boards={boards} remove={removeBoard} edit={handleEdit} />
         </>
       );
-  }, [fetchLoading, boards, removeBoard, handleEdit, search, filteredBoards, dispatch]);
+  }, [fetchLoading, boards, removeBoard, handleEdit, search, filteredBoards, dispatch, message]);
 
   return (
     <>
