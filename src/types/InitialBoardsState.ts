@@ -1,4 +1,4 @@
-import { BoardProps, BoardTitle } from './SingleBoardProps';
+import { BoardInfo, BoardProps } from './SingleBoardProps';
 
 interface InitialBoardsState {
   createModalVisible: boolean;
@@ -8,6 +8,7 @@ interface InitialBoardsState {
   boards: BoardProps[];
   search: string;
   filteredBoards: BoardProps[];
+  currentBoard: BoardInfo | null;
 }
 
 export default InitialBoardsState;

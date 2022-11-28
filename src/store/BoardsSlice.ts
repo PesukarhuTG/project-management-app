@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { InitialBoardsState } from '../types';
-import { BoardProps } from '../types/SingleBoardProps';
+import { BoardInfo, BoardProps } from '../types/SingleBoardProps';
 
 const initialState: InitialBoardsState = {
   createModalVisible: false,
@@ -11,6 +11,7 @@ const initialState: InitialBoardsState = {
   boards: [],
   search: '',
   filteredBoards: [],
+  currentBoard: null,
 };
 
 const boardsSlice = createSlice({
@@ -38,6 +39,9 @@ const boardsSlice = createSlice({
     setFilteredBoards(state, action: PayloadAction<BoardProps[]>) {
       state.filteredBoards = action.payload;
     },
+    setCurrentBoard(state, action: PayloadAction<BoardInfo | null>) {
+      state.currentBoard = action.payload;
+    },
   },
 });
 
@@ -49,5 +53,6 @@ export const {
   setBoards,
   setSearch,
   setFilteredBoards,
+  setCurrentBoard,
 } = boardsSlice.actions;
 export default boardsSlice.reducer;

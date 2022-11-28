@@ -9,7 +9,7 @@ import { useLocaleMessage } from '../hooks';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
-import { setBoardInfo } from '../store/BoardSlice';
+import { setCurrentBoard } from '../store/BoardsSlice';
 import { getBoardById } from '../services/APIrequests';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 import checkTokenExpired from '../services/checkTokenExpired';
@@ -44,7 +44,7 @@ const columnsMock: ColumnData[] = [
 
 const BoardPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { title } = useSelector((state: RootState) => state.board);
+  const title = useSelector((state: RootState) => state.boards.currentBoard?.title) ?? '';
 
   const navigate = useNavigate();
   const [isShowColumnModal, setIsShowColumnModal] = useState<boolean>(false);
@@ -60,7 +60,7 @@ const BoardPage: React.FC = () => {
           id: board._id,
           title: JSON.parse(board.title).title,
         };
-        dispatch(setBoardInfo(boardInfo));
+        dispatch(setCurrentBoard(boardInfo));
       } catch (e) {
         showNotification('error', message('errorTitle'), (e as Error).message);
       }
