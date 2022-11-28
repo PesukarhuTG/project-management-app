@@ -82,3 +82,7 @@ export const getUserIds = async (): Promise<string[]> => {
   const usersId = usersList.map((user) => user._id);
   return usersId;
 };
+
+export const getBoardById = async (id: string): Promise<AxiosResponse<BoardResponse>> => {
+  return axiosApi.get<BoardResponse>(`/boards/${id}`);
+};
