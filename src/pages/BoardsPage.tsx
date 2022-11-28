@@ -137,33 +137,21 @@ const BoardsPage: React.FC = () => {
   }, [search, searchedItem]);
 
   const boardsPageContent = useMemo(() => {
+    if (!search) dispatch(setFilteredBoards(boards));
+
     if (fetchLoading) {
       return <Spinner />;
     }
-
-    if (search)
-      return (
-        <>
-          <SearchInput
-            onChange={(event) => dispatch(setSearch(event.target.value))}
-            value={search}
-            placeholder={message('searchPlaceholder')}
-          />
-          <BoardsList boards={filteredBoards} remove={removeBoard} edit={handleEdit} />
-        </>
-      );
-
-    if (!search)
-      return (
-        <>
-          <SearchInput
-            onChange={(event) => dispatch(setSearch(event.target.value))}
-            value={search}
-            placeholder={message('searchPlaceholder')}
-          />
-          <BoardsList boards={boards} remove={removeBoard} edit={handleEdit} />
-        </>
-      );
+    return (
+      <>
+        <SearchInput
+          onChange={(event) => dispatch(setSearch(event.target.value))}
+          value={search}
+          placeholder={message('searchPlaceholder')}
+        />
+        <BoardsList boards={filteredBoards} remove={removeBoard} edit={handleEdit} />
+      </>
+    );
   }, [fetchLoading, boards, removeBoard, handleEdit, search, filteredBoards, dispatch, message]);
 
   return (
