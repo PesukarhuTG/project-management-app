@@ -37,12 +37,16 @@ const BoardsPage: React.FC = () => {
   }, [message, messageApi]);
 
   useEffect(() => {
-    const authStatus = checkTokenExpired();
-
-    if (authStatus) {
-      dispatch(fetchBoardsData());
+    if (!localStorage.getItem('tokenUser')) {
+      navigate('/');
     } else {
-      logout();
+      const authStatus = checkTokenExpired();
+
+      if (authStatus) {
+        dispatch(fetchBoardsData());
+      } else {
+        logout();
+      }
     }
   }, []); // eslint-disable-line
 

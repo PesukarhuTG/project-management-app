@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { BasePage, Button, Column, ColumnModal } from '../components';
 import { useLocaleMessage } from '../hooks';
+import checkTokenExpired from '../services/checkTokenExpired';
+import { AppDispatch } from '../store/Store';
+import { useDispatch } from 'react-redux';
+import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 
 interface ColumnData {
   _id: string;
@@ -53,6 +57,7 @@ const BoardPage: React.FC = () => {
   const [board] = useState<BoardData>(boardMock); //TODO get real board data
   const [columns] = useState<ColumnData[]>(columnsMock); //TODO get real columns list (sorted by order)
   const message = useLocaleMessage();
+  const dispatch = useDispatch<AppDispatch>();
 
   const addColumn = () => {
     /*TODO add column*/
@@ -64,6 +69,25 @@ const BoardPage: React.FC = () => {
     console.log('Drag end');
     console.log(res);
   };
+
+  const logout = () => {
+    dispatch(changeAuthStatus(false));
+    dispatch(removeUserData());
+    localStorage.clear();
+    navigate('/');
+  };
+
+  useEffect(() => {
+    if (!localStorage.getItem('tokenUser')) {
+      navigate('/');
+    } else {
+      const authStatus = checkTokenExpired();
+
+      if (!authStatus) {
+        logout();
+      }
+    }
+  }, []); //eslint-disable-line
 
   return (
     <BasePage noScroll>

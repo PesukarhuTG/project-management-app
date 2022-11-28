@@ -20,7 +20,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   const navigate = useNavigate();
   const message = useLocaleMessage();
-  const { isAuth, login, lang } = useSelector((state: RootState) => state.user);
+  const { login, lang } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
   const logout = () => {
@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   };
 
   const headerContent = useMemo(() => {
-    if (isAuth) {
+    if (localStorage.getItem('tokenUser')) {
       return (
         <>
           <UserData>
@@ -76,7 +76,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
         <StyledAuthButton to="/auth">{message('btnSignIn')}</StyledAuthButton>
       </UnauthorizedPanel>
     );
-  }, [isAuth, login, lang]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [login, lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
@@ -85,7 +85,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
       </Title>
       {headerContent}
       <SettingPanel>
-        {isAuth && (
+        {localStorage.getItem('tokenUser') && (
           <StyledAuthButton to="/" onClick={logout}>
             {message('btnSignOut')}
           </StyledAuthButton>
