@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BasePage, FormButton, FormInput } from '../components';
 import { Form } from 'antd';
 import styled from 'styled-components';
@@ -58,6 +58,12 @@ const AuthPage: React.FC = () => {
   const onFinishFailed = () => {
     console.log('onFinishFailed');
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('tokenUser')) {
+      navigate('/');
+    }
+  }, []); //eslint-disable-line
 
   return (
     <BasePage>
