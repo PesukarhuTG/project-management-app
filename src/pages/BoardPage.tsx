@@ -58,7 +58,7 @@ const BoardPage: React.FC = () => {
         const board = await getBoardById(id).then((res) => res.data);
         const boardInfo = {
           id: board._id,
-          title: board.title,
+          title: JSON.parse(board.title).title,
         };
         dispatch(setBoardInfo(boardInfo));
       } catch (e) {
