@@ -113,6 +113,7 @@ const StyledHeader = styled.header`
     top: 0;
     height: calc(var(--header-h) - var(--header-animate-offset));
     margin-bottom: var(--header-animate-offset);
+    z-index: 1;
   }
 
   @media (max-width: 768px) {

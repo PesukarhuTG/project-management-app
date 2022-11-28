@@ -49,6 +49,7 @@ const Layout = styled.section`
 const Content = styled.main<{
   $noScroll: boolean;
 }>`
+  margin: 0 auto;
   padding: 32px var(--page-gutter);
   flex-grow: 1;
 
