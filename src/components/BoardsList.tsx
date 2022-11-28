@@ -7,13 +7,14 @@ import SingleBoard from './SingleBoard';
 interface BoardsListProps {
   boards: BoardProps[];
   remove: (id: string) => void;
+  edit: (id: string) => void;
 }
 
-const BoardsList: FC<BoardsListProps> = ({ boards, remove }) => {
+const BoardsList: FC<BoardsListProps> = ({ boards, remove, edit }) => {
   return (
     <BoardsContainer>
       {boards.map((board) => (
-        <SingleBoard {...board} remove={remove} key={board.id} />
+        <SingleBoard {...board} remove={remove} edit={edit} key={board.id} />
       ))}
       <EmptyBoard />
     </BoardsContainer>

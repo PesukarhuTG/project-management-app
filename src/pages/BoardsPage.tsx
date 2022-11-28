@@ -1,9 +1,9 @@
 import { message as errorMessage } from 'antd';
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BasePage, BoardModal, BoardsList } from '../components';
+import { BasePage, BoardModal, BoardsList, Spinner } from '../components';
 import fetchBoardsData from '../services/dashboard.service';
-import { createBoard, deleteBoard, fetchUsers } from '../services/APIrequests';
+import { createBoard, deleteBoard, editBoard, fetchUsers, getUserIds } from '../services/APIrequests';
 import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/BoardsSlice';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 import { AppDispatch, RootState } from '../store/Store';
@@ -29,12 +29,12 @@ const BoardsPage: React.FC = () => {
     navigate('/');
   };
 
-  const showErrorMessage = () => {
+  const showErrorMessage = useCallback(() => {
     messageApi.open({
       type: 'error',
       content: message('failedEditMessage'),
     });
-  };
+  }, [message, messageApi]);
 
   useEffect(() => {
     const authStatus = checkTokenExpired();
@@ -58,7 +58,7 @@ const BoardsPage: React.FC = () => {
         const usersList = await fetchUsers().then((res) => res.data);
         const usersId = usersList.map((user) => user._id);
         const boardTitle = { title, description };
-        await createBoard(JSON.stringify(boardTitle), userId, usersId).then((res) => res.data);
+        await createBoard(JSON.stringify(boardTitle), userId, usersId);
         dispatch(fetchBoardsData());
       } catch {
         dispatch(setFetchLoading(false));
@@ -69,28 +69,54 @@ const BoardsPage: React.FC = () => {
     }
   };
 
-  const removeBoard = (id: string) => {
-    dispatch(setFetchLoading(true));
-    const boardsId = boards.map((board) => board.id);
-    boardsId.forEach(async (el) => {
-      if (el === id) {
-        try {
-          await deleteBoard(el);
-          dispatch(fetchBoardsData());
-        } catch {
-          dispatch(setFetchLoading(false));
-          showErrorMessage();
+  const removeBoard = useCallback(
+    (id: string) => {
+      dispatch(setFetchLoading(true));
+      const boardsId = boards.map((board) => board.id);
+      boardsId.forEach(async (boardId) => {
+        if (boardId === id) {
+          try {
+            await deleteBoard(boardId);
+            dispatch(fetchBoardsData());
+          } catch {
+            dispatch(setFetchLoading(false));
+            showErrorMessage();
+          }
         }
-      }
-    });
-  };
+      });
+    },
+    [boards, dispatch, showErrorMessage]
+  );
+
+  const handleEdit = useCallback(
+    (id: string) => {
+      dispatch(setBoardName(''));
+      dispatch(setBoardDescription(''));
+      dispatch(setFetchLoading(true));
+      const boardsId = boards.map((board) => board.id);
+      boardsId.forEach(async (boardId) => {
+        if (boardId === id) {
+          try {
+            const userIds = await getUserIds();
+            const boardTitle = { title, description };
+            await editBoard(boardId, JSON.stringify(boardTitle), userId, userIds);
+            dispatch(fetchBoardsData());
+          } catch {
+            dispatch(setFetchLoading(false));
+            showErrorMessage();
+          }
+        }
+      });
+    },
+    [showErrorMessage, dispatch, boards, description, title, userId]
+  );
 
   const boardsPageContent = useMemo(() => {
     if (fetchLoading) {
-      return <h1>Loading...</h1>;
+      return <Spinner />;
     }
-    return <BoardsList boards={boards} remove={removeBoard} />;
-  }, [fetchLoading, boards]); // eslint-disable-line
+    return <BoardsList boards={boards} remove={removeBoard} edit={handleEdit} />;
+  }, [fetchLoading, boards, removeBoard, handleEdit]);
 
   return (
     <>
