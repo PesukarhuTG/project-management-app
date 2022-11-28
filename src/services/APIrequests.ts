@@ -55,12 +55,32 @@ export const createBoard = async (
 
 export const fetchBoards = async (): Promise<AxiosResponse<BoardResponse[]>> => {
   console.log('запрос на получение board');
-  return await axiosApi.get('/boards');
+  return axiosApi.get('/boards');
 };
 
 export const deleteBoard = async (id: string) => {
-  console.log('запрос удаление board');
+  console.log('запрос на удаление board');
   return axiosApi.delete(`/boards/${id}`);
+};
+
+export const editBoard = async (
+  id: string,
+  title: string,
+  owner: string,
+  users: string[]
+): Promise<AxiosResponse<BoardResponse>> => {
+  console.log('запрос на изменение board');
+  return axiosApi.put<BoardResponse>(`/boards/${id}`, {
+    title,
+    owner,
+    users,
+  });
+};
+
+export const getUserIds = async (): Promise<string[]> => {
+  const usersList = await fetchUsers().then((res) => res.data);
+  const usersId = usersList.map((user) => user._id);
+  return usersId;
 };
 
 export const getBoardById = async (id: string): Promise<AxiosResponse<BoardResponse>> => {

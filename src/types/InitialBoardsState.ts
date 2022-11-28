@@ -6,6 +6,8 @@ interface InitialBoardsState {
   description: string;
   fetchLoading: boolean;
   boards: BoardProps[];
+  search: string;
+  filteredBoards: BoardProps[];
 }
 
 export default InitialBoardsState;

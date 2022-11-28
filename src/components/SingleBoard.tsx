@@ -14,6 +14,7 @@ const SingleBoard: FC<SingleBoardProps> = ({
   description = 'Board description',
   id,
   remove,
+  edit,
 }) => {
   const navigate = useNavigate();
   const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
@@ -23,10 +24,6 @@ const SingleBoard: FC<SingleBoardProps> = ({
   const openConfirmModal = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
     setConfirmModalVisible(true);
-  };
-
-  const closeConfirmModal = () => {
-    setConfirmModalVisible(false);
   };
 
   const handleDelete = () => {
@@ -39,13 +36,9 @@ const SingleBoard: FC<SingleBoardProps> = ({
     setEditModalVisible(true);
   };
 
-  const closeEditModal = () => {
-    setEditModalVisible(false);
-  };
-
   const handleEdit = () => {
+    edit(id);
     setEditModalVisible(false);
-    console.log('edit board info');
   };
 
   return (
@@ -64,13 +57,13 @@ const SingleBoard: FC<SingleBoardProps> = ({
         title={message('confirmDeleteBoard')}
         isVisible={confirmModalVisible}
         onOk={handleDelete}
-        onCancel={closeConfirmModal}
+        onCancel={() => setConfirmModalVisible(false)}
       />
       <BoardModal
         modalTitle={message('editBoardModalTitle')}
         isVisible={editModalVisible}
         onOk={handleEdit}
-        onCancel={closeEditModal}
+        onCancel={() => setEditModalVisible(false)}
       />
     </>
   );

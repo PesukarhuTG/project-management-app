@@ -11,6 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
 import { setBoardInfo } from '../store/BoardSlice';
 import { getBoardById } from '../services/APIrequests';
+import { changeAuthStatus, removeUserData } from '../store/UserSlice';
+import checkTokenExpired from '../services/checkTokenExpired';
 
 interface ColumnData {
   _id: string;
@@ -82,6 +84,25 @@ const BoardPage: React.FC = () => {
     console.log('Drag end');
     console.log(res);
   };
+
+  const logout = () => {
+    dispatch(changeAuthStatus(false));
+    dispatch(removeUserData());
+    localStorage.clear();
+    navigate('/');
+  };
+
+  useEffect(() => {
+    if (!localStorage.getItem('tokenUser')) {
+      navigate('/');
+    } else {
+      const authStatus = checkTokenExpired();
+
+      if (!authStatus) {
+        logout();
+      }
+    }
+  }, []); //eslint-disable-line
 
   return (
     <BasePage noScroll>

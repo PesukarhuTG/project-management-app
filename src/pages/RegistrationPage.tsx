@@ -1,5 +1,5 @@
 import { Form } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { BasePage, FormButton, FormInput } from '../components';
 import AccessIco from '../assets/ico/icon-access.svg';
@@ -55,6 +55,12 @@ const RegistrationPage: React.FC = () => {
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('tokenUser')) {
+      navigate('/');
+    }
+  }, []); //eslint-disable-line
 
   return (
     <BasePage>

@@ -100,9 +100,13 @@ const ProfilePage: React.FC = () => {
   };
 
   useEffect(() => {
-    const authStatus = checkTokenExpired();
-    if (!authStatus) {
-      logout();
+    if (!localStorage.getItem('tokenUser')) {
+      navigate('/');
+    } else {
+      const authStatus = checkTokenExpired();
+      if (!authStatus) {
+        logout();
+      }
     }
   }, []); // eslint-disable-line
 

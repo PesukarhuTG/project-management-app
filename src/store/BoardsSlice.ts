@@ -9,6 +9,8 @@ const initialState: InitialBoardsState = {
   description: '',
   fetchLoading: false,
   boards: [],
+  search: '',
+  filteredBoards: [],
 };
 
 const boardsSlice = createSlice({
@@ -30,9 +32,22 @@ const boardsSlice = createSlice({
     setBoards(state, action: PayloadAction<BoardProps[]>) {
       state.boards = action.payload;
     },
+    setSearch(state, action: PayloadAction<string>) {
+      state.search = action.payload;
+    },
+    setFilteredBoards(state, action: PayloadAction<BoardProps[]>) {
+      state.filteredBoards = action.payload;
+    },
   },
 });
 
-export const { setCreateModalVisible, setBoardName, setBoardDescription, setFetchLoading, setBoards } =
-  boardsSlice.actions;
+export const {
+  setCreateModalVisible,
+  setBoardName,
+  setBoardDescription,
+  setFetchLoading,
+  setBoards,
+  setSearch,
+  setFilteredBoards,
+} = boardsSlice.actions;
 export default boardsSlice.reducer;

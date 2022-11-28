@@ -74,6 +74,9 @@ const en: LocaleMessages = {
   confirmDeleteColumn: 'Do you want to delete this column?',
   defaultUser: 'Responsible user',
   errorTitle: 'Something went wrong...',
+  spinnerTip: 'Loading...',
+  searchPlaceholder: 'Search...',
+  nothingFound: 'Nothing found',
 };
 
 export default en;

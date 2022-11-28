@@ -2,17 +2,18 @@ import React from 'react';
 import { Radio, RadioChangeEvent } from 'antd';
 import styled from 'styled-components';
 import { changeLanguage } from '../store/UserSlice';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store/Store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/Store';
 import { useLocaleMessage } from '../hooks';
 
 const LanguageRadio = () => {
   const dispatch = useDispatch<AppDispatch>();
   const message = useLocaleMessage();
+  const { lang } = useSelector((state: RootState) => state.user);
 
   return (
     <StyledRadioGroup
-      defaultValue="en"
+      defaultValue={lang}
       buttonStyle="solid"
       onChange={(event: RadioChangeEvent) => dispatch(changeLanguage(event.target.value))}
     >
