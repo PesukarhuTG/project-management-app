@@ -1,18 +1,26 @@
 import { message as errorMessage } from 'antd';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BasePage, BoardModal, BoardsList, Spinner } from '../components';
+import { BasePage, BoardModal, BoardsList, FormInput, Spinner } from '../components';
 import fetchBoardsData from '../services/dashboard.service';
 import { createBoard, deleteBoard, editBoard, fetchUsers, getUserIds } from '../services/APIrequests';
-import { setBoardName, setBoardDescription, setCreateModalVisible, setFetchLoading } from '../store/BoardsSlice';
+import {
+  setBoardName,
+  setBoardDescription,
+  setCreateModalVisible,
+  setFetchLoading,
+  setFilteredBoards,
+  setSearch,
+} from '../store/BoardsSlice';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 import { AppDispatch, RootState } from '../store/Store';
 import { useLocaleMessage } from '../hooks';
 import checkTokenExpired from '../services/checkTokenExpired';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const BoardsPage: React.FC = () => {
-  const { createModalVisible, title, description, fetchLoading, boards } = useSelector(
+  const { createModalVisible, title, description, fetchLoading, boards, search, filteredBoards } = useSelector(
     (state: RootState) => state.boards
   );
   const { id: userId } = useSelector((state: RootState) => state.user);
@@ -115,12 +123,36 @@ const BoardsPage: React.FC = () => {
     [showErrorMessage, dispatch, boards, description, title, userId]
   );
 
+  const searchedItem = useCallback(() => {
+    const filteredBoards = boards.filter(
+      (board) =>
+        board.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) ||
+        board.description.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+    );
+    dispatch(setFilteredBoards(filteredBoards));
+  }, [boards, dispatch, search]);
+
+  useEffect(() => {
+    searchedItem();
+  }, [search, searchedItem]);
+
   const boardsPageContent = useMemo(() => {
+    if (!search) dispatch(setFilteredBoards(boards));
+
     if (fetchLoading) {
       return <Spinner />;
     }
-    return <BoardsList boards={boards} remove={removeBoard} edit={handleEdit} />;
-  }, [fetchLoading, boards, removeBoard, handleEdit]);
+    return (
+      <>
+        <SearchInput
+          onChange={(event) => dispatch(setSearch(event.target.value))}
+          value={search}
+          placeholder={message('searchPlaceholder')}
+        />
+        <BoardsList boards={filteredBoards} remove={removeBoard} edit={handleEdit} />
+      </>
+    );
+  }, [fetchLoading, boards, removeBoard, handleEdit, search, filteredBoards, dispatch, message]);
 
   return (
     <>
@@ -137,5 +169,26 @@ const BoardsPage: React.FC = () => {
     </>
   );
 };
+
+const SearchInput = styled(FormInput)`
+  min-width: 300px;
+  max-width: 1358px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  line-height: 24px;
+
+  @media (max-width: 1100px) {
+    max-width: 892px;
+    margin-bottom: 30px;
+  }
+
+  @media (max-width: 1100px) {
+    max-width: 892px;
+  }
+
+  @media (max-width: 750px) {
+    max-width: 426px;
+  }
+`;
 
 export default BoardsPage;

@@ -75,6 +75,8 @@ const en: LocaleMessages = {
   defaultUser: 'Responsible user',
   page404Subtitle: 'Something went wrong...',
   spinnerTip: 'Loading...',
+  searchPlaceholder: 'Search...',
+  nothingFound: 'Nothing found',
 };
 
 export default en;

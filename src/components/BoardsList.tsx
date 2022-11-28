@@ -1,5 +1,8 @@
 import React, { FC } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { useLocaleMessage } from '../hooks';
+import { RootState } from '../store/Store';
 import { BoardProps } from '../types/SingleBoardProps';
 import EmptyBoard from './EmptyBoard';
 import SingleBoard from './SingleBoard';
@@ -11,12 +14,17 @@ interface BoardsListProps {
 }
 
 const BoardsList: FC<BoardsListProps> = ({ boards, remove, edit }) => {
+  const { search } = useSelector((state: RootState) => state.boards);
+  const message = useLocaleMessage();
+
+  if (!boards.length) return <NothingFound>{message('nothingFound')}</NothingFound>;
+
   return (
     <BoardsContainer>
       {boards.map((board) => (
         <SingleBoard {...board} remove={remove} edit={edit} key={board.id} />
       ))}
-      <EmptyBoard />
+      {!search && <EmptyBoard />}
     </BoardsContainer>
   );
 };
@@ -39,6 +47,19 @@ const BoardsContainer = styled.div`
   @media (max-width: 750px) {
     max-width: 426px;
     grid-template-columns: 1fr;
+  }
+`;
+
+const NothingFound = styled.h2`
+  margin-top: 40px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 54px;
+  color: var(--primary-dark);
+
+  @media (max-width: 1100px) {
+    margin-top: 20px;
   }
 `;
 
