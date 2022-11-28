@@ -5,6 +5,10 @@ interface ColumnModel {
   boardId: string;
 }
 
-export type Column = Omit<ColumnModel, 'boardId'>;
+export interface ColumnResponse extends Omit<ColumnModel, 'id'> {
+  _id: string;
+}
+
+export type ColumnCreateData = Pick<ColumnModel, 'title' | 'order'>;
 
 export default ColumnModel;

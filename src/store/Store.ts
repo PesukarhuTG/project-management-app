@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './UserSlice';
 import boardsReducer from './BoardsSlice';
+import columnsReducer from './ColumnsSlice';
 
 const store = configureStore({
   reducer: {
     user: userReducer,
     boards: boardsReducer,
+    columns: columnsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
