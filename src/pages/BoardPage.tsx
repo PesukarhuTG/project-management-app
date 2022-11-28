@@ -102,6 +102,8 @@ const BoardPage: React.FC = () => {
         logout();
       }
     }
+
+    dispatch(setCurrentBoard(null)); // clear previous data
   }, []); //eslint-disable-line
 
   return (
