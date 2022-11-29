@@ -25,25 +25,56 @@ axiosApi.interceptors.response.use(
     return config;
   },
   async (error) => {
+    const lang = localStorage.getItem('currentLang');
+
     if (parseInt(error.response.data.statusCode) === 400) {
-      throw new Error('Bad Request: ' + error.response.status);
+      if (lang === 'en') {
+        throw new Error('Bad Request');
+      } else {
+        throw new Error('Ошибка запроса данных');
+      }
     }
     if (parseInt(error.response.data.statusCode) === 401) {
-      throw new Error('Authorization error: ' + error.response.status);
+      if (lang === 'en') {
+        throw new Error('Authorization error: check your login and password');
+      } else {
+        throw new Error('Ошибка авторизации: проверьте логин и пароль');
+      }
     }
     if (parseInt(error.response.data.statusCode) === 402) {
-      throw new Error('File already exist: ' + error.response.status);
+      if (lang === 'en') {
+        throw new Error('File already exist');
+      } else {
+        throw new Error('Файл уже существует');
+      }
     }
     if (parseInt(error.response.data.statusCode) === 403) {
-      throw new Error('You need to be logged: ' + error.response.status);
+      if (lang === 'en') {
+        throw new Error('You need to be logged');
+      } else {
+        throw new Error('Пожалуйста, войдите в систему');
+      }
     }
     if (parseInt(error.response.data.statusCode) === 404) {
-      throw new Error('Requested data was not founded: ' + error.response.status);
+      if (lang === 'en') {
+        throw new Error('Requested data was not founded');
+      } else {
+        throw new Error('Запрашиваемые данные не найдены');
+      }
     }
     if (parseInt(error.response.data.statusCode) === 409) {
-      throw new Error('Login already exist: ' + error.response.status);
+      if (lang === 'en') {
+        throw new Error('Login already exist');
+      } else {
+        throw new Error('Такой логин уже существует');
+      }
     }
-    throw error;
+
+    if (lang === 'en') {
+      throw new Error('Something went wrong. Try again');
+    } else {
+      throw new Error('Что-то пошло не так, попробуйте снова');
+    }
   }
 );
 

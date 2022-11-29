@@ -11,6 +11,7 @@ import { loginUser, getUserById } from '../services/APIrequests';
 import { decodeToken } from 'react-jwt';
 import { useLocaleMessage } from '../hooks';
 import { DecodedTokenProps } from '../types';
+import { showNotification } from '../services/notification.service';
 
 interface AuthValue {
   userLogin: string;
@@ -48,20 +49,18 @@ const AuthPage: React.FC = () => {
       dispatch(changeUserData(userData));
       dispatch(changeAuthStatus(true));
       navigate('/boards');
+      showNotification('success', message('successAuthTitle'));
     } catch (e) {
-      console.log(e);
+      showNotification('error', message('errorTitle'), (e as Error).message);
     } finally {
       authForm.resetFields();
     }
   };
 
-  const onFinishFailed = () => {
-    console.log('onFinishFailed');
-  };
-
   useEffect(() => {
     if (localStorage.getItem('tokenUser')) {
       navigate('/');
+      showNotification('info', message('pageAccessTitle'), message('pageAuthAccessMessage'));
     }
   }, []); //eslint-disable-line
 
@@ -75,7 +74,6 @@ const AuthPage: React.FC = () => {
         layout="vertical"
         initialValues={{ login, password }}
         onFinish={(values) => onFinish(values as AuthValue)}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
