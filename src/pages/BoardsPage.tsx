@@ -134,11 +134,10 @@ const BoardsPage: React.FC = () => {
 
   useEffect(() => {
     searchedItem();
+    if (!search) dispatch(setFilteredBoards(boards));
   }, [search, searchedItem]);
 
   const boardsPageContent = useMemo(() => {
-    if (!search) dispatch(setFilteredBoards(boards));
-
     if (fetchLoading) {
       return <Spinner />;
     }
