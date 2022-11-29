@@ -1,6 +1,7 @@
 import axiosApi from '../http';
 import { AxiosResponse } from 'axios';
 import { BoardResponse, LoginResponse, RegistrationResponse } from '../types';
+import { ColumnCreateData, ColumnResponse } from '../types/ColumnModel';
 
 export const registrationUser = async (
   name: string,
@@ -85,4 +86,12 @@ export const getUserIds = async (): Promise<string[]> => {
 
 export const getBoardById = async (id: string): Promise<AxiosResponse<BoardResponse>> => {
   return axiosApi.get<BoardResponse>(`/boards/${id}`);
+};
+
+export const getColumnsInBoard = async (id: string): Promise<AxiosResponse<ColumnResponse[]>> => {
+  return axiosApi.get<ColumnResponse[]>(`/boards/${id}/columns`);
+};
+
+export const createColumn = async (id: string, data: ColumnCreateData): Promise<AxiosResponse<ColumnResponse>> => {
+  return axiosApi.post<ColumnResponse>(`/boards/${id}/columns`, data);
 };
