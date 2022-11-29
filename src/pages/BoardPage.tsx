@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import { BasePage, Button, Column, ColumnModal } from '../components';
+import { BasePage, Button, Column, ColumnModal, Spinner } from '../components';
 
 import checkTokenExpired from '../services/checkTokenExpired';
 import { showNotification } from '../services/notification.service';
@@ -14,13 +14,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
 import { setCurrentBoard } from '../store/BoardsSlice';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
-import { setColumns, setNewColumn } from '../store/ColumnsSlice';
+import { setColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
+
+const DEFAULT_COLUMN_TITLE = 'Column';
 
 const BoardPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const title = useSelector((state: RootState) => state.boards.currentBoard?.title) ?? '';
   const newOrder = useSelector((state: RootState) => state.columns.orderCounter) + 1;
-  const columns = useSelector((state: RootState) => state.columns.columns);
+  const { columns, newColumnTitle } = useSelector((state: RootState) => state.columns);
 
   const { id: idParam } = useParams();
   const navigate = useNavigate();
@@ -53,36 +55,42 @@ const BoardPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (idParam) {
+        setIsLoading(true);
         try {
           await getBoardInfo(idParam);
           await getColumnsData(idParam);
         } catch (e) {
           showNotification('error', message('errorTitle'), (e as Error).message);
         }
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, [idParam, getBoardInfo, getColumnsData, message]);
 
+  const closeColumnModal = () => {
+    dispatch(setNewColumnTitle(''));
+    setIsShowColumnModal(false);
+  };
+
   const addColumn = async () => {
-    const newColumnTitle = 'New title'; // TODO забирать данные из модала
+    const titleColumn = newColumnTitle || DEFAULT_COLUMN_TITLE;
 
     if (idParam) {
+      setIsShowColumnModal(false);
       setIsLoading(true);
 
       try {
-        const newColumn = await createColumn(idParam, { title: newColumnTitle, order: newOrder }).then(
-          (res) => res.data
-        );
+        const newColumn = await createColumn(idParam, { title: titleColumn, order: newOrder }).then((res) => res.data);
         dispatch(setNewColumn(mapperColumn(newColumn)));
       } catch (e) {
         showNotification('error', message('errorTitle'), (e as Error).message);
-      } finally {
-        setIsLoading(false);
       }
+
+      dispatch(setNewColumnTitle(''));
+      setIsLoading(false);
     }
-    setIsShowColumnModal(false);
   };
 
   const onDragEnd = (res: DropResult) => {
@@ -139,11 +147,13 @@ const BoardPage: React.FC = () => {
         )}
       </Container>
 
+      {isLoading && <Spinner type="fullscreen" />}
+
       <ColumnModal
         title={message('addColumnModalTitle')}
         isVisible={isShowColumnModal}
         onOk={addColumn}
-        onCancel={() => setIsShowColumnModal(false)}
+        onCancel={closeColumnModal}
       />
     </BasePage>
   );

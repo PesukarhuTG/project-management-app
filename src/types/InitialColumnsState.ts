@@ -2,7 +2,7 @@ import ColumnModel from './ColumnModel';
 
 interface InitialColumnsState {
   columns: ColumnModel[];
-  createModalVisible: boolean;
+  newColumnTitle: string;
   orderCounter: number;
 }
 

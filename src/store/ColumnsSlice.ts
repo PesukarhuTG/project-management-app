@@ -5,7 +5,7 @@ import ColumnModel from '../types/ColumnModel';
 
 const initialState: InitialColumnsState = {
   columns: [],
-  createModalVisible: false,
+  newColumnTitle: '',
   orderCounter: 0, // largest current order
 };
 
@@ -21,8 +21,14 @@ const columnsSlice = createSlice({
       state.columns = [...state.columns, action.payload].sort((a, b) => a.order - b.order);
       state.orderCounter = action.payload.order;
     },
+    setNewColumnTitle(state, action: PayloadAction<string>) {
+      state.newColumnTitle = action.payload;
+    },
+    updateColumnData(state, action: PayloadAction<ColumnModel>) {
+      state.columns = state.columns.map((column) => (action.payload.id === column.id ? action.payload : column));
+    },
   },
 });
 
-export const { setColumns, setNewColumn } = columnsSlice.actions;
+export const { setColumns, setNewColumn, setNewColumnTitle, updateColumnData } = columnsSlice.actions;
 export default columnsSlice.reducer;
