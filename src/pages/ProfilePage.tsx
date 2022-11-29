@@ -174,16 +174,11 @@ const ProfileTitle = styled.p`
 `;
 
 const StyledForm = styled(Form)`
-  max-width: 646px;
-  margin: 0 auto 50px;
+  max-width: 600px;
+  width: 100%;
   background: var(--primary-light);
   border-radius: 30px;
-  padding: 50px 123px;
-
-  @media (max-width: 600px) {
-    margin-bottom: 0;
-    padding: 20px 20px;
-  }
+  padding: 20px 30px;
 
   .ant-form-item {
     margin: 0;

@@ -1,8 +1,8 @@
 :root {
   --page-gutter: 40px;
-  --header-h: 100px;
+  --header-h: 128px;
   --header-animate-offset: 20px;
-  --footer-h: 100px;
+  --footer-h: 128px;
 
   --btn-gutter: 20px;
   --btn-h: 48px;

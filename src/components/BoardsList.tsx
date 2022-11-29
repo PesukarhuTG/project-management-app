@@ -30,8 +30,8 @@ const BoardsList: FC<BoardsListProps> = ({ boards, remove, edit }) => {
 };
 
 const BoardsContainer = styled.div`
-  max-width: 1358px;
-  margin: 30px auto 60px;
+  width: 100%;
+  margin: 0 auto;
   gap: 40px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);

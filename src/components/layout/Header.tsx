@@ -97,8 +97,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 };
 
 const StyledHeader = styled.header`
-  padding: 0 var(--page-gutter);
-  height: var(--header-h);
+  padding: 26px var(--page-gutter);
   display: flex;
   align-items: center;
   justify-content: flex-end;

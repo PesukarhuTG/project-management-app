@@ -130,8 +130,9 @@ const PageTitle = styled.p`
 `;
 
 const StyledForm = styled(Form)`
+  max-width: 560px;
+  width: 100%;
   margin: 0 auto;
-  max-width: 400px;
 
   .ant-col-offset-8 {
     margin: 0;
