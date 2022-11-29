@@ -6,7 +6,6 @@ const InitialColumn = () => {
   const message = useLocaleMessage();
   return (
     <ColumnBody onClick={() => console.log('открывает модалку на создание колонки')}>
-      {' '}
       <ColumnTitle> + {message('initialColumnTitle')}</ColumnTitle>
     </ColumnBody>
   );
