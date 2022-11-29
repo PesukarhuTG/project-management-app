@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { BACKEND_URL } from '../types/constants';
+import messages from '../localization/messages';
+const { ru, en } = messages;
 
 const axiosApi = axios.create({
   baseURL: BACKEND_URL,
@@ -28,53 +30,25 @@ axiosApi.interceptors.response.use(
     const lang = localStorage.getItem('currentLang');
 
     if (parseInt(error.response.data.statusCode) === 400) {
-      if (lang === 'en') {
-        throw new Error('Bad Request');
-      } else {
-        throw new Error('Ошибка запроса данных');
-      }
+      throw new Error(lang === 'en' ? en.error400 : ru.error400);
     }
     if (parseInt(error.response.data.statusCode) === 401) {
-      if (lang === 'en') {
-        throw new Error('Authorization error: check your login and password');
-      } else {
-        throw new Error('Ошибка авторизации: проверьте логин и пароль');
-      }
+      throw new Error(lang === 'en' ? en.error401 : ru.error401);
     }
     if (parseInt(error.response.data.statusCode) === 402) {
-      if (lang === 'en') {
-        throw new Error('File already exist');
-      } else {
-        throw new Error('Файл уже существует');
-      }
+      throw new Error(lang === 'en' ? en.error402 : ru.error402);
     }
     if (parseInt(error.response.data.statusCode) === 403) {
-      if (lang === 'en') {
-        throw new Error('You need to be logged');
-      } else {
-        throw new Error('Пожалуйста, войдите в систему');
-      }
+      throw new Error(lang === 'en' ? en.error403 : ru.error403);
     }
     if (parseInt(error.response.data.statusCode) === 404) {
-      if (lang === 'en') {
-        throw new Error('Requested data was not founded');
-      } else {
-        throw new Error('Запрашиваемые данные не найдены');
-      }
+      throw new Error(lang === 'en' ? en.error404 : ru.error404);
     }
     if (parseInt(error.response.data.statusCode) === 409) {
-      if (lang === 'en') {
-        throw new Error('Login already exist');
-      } else {
-        throw new Error('Такой логин уже существует');
-      }
+      throw new Error(lang === 'en' ? en.error409 : ru.error409);
     }
 
-    if (lang === 'en') {
-      throw new Error('Something went wrong. Try again');
-    } else {
-      throw new Error('Что-то пошло не так, попробуйте снова');
-    }
+    throw new Error(lang === 'en' ? en.commonError : ru.commonError);
   }
 );
 

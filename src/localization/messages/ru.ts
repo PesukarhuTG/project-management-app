@@ -70,7 +70,7 @@ const ru: LocaleMessages = {
   confirmDeleteProfile: 'Вы действительно хотите удалить профиль?',
   confirmDeleteColumn: 'Вы действительно хотите удалить колонку?',
   defaultUser: 'Ответственное лицо',
-  errorTitle: 'Что-то пошло не так',
+  errorTitle: 'Что-то пошло не так:',
   successAuthTitle: 'Вход выполнен успешно!',
   expiredTokenTitle: 'Время действия вашего токена истекло',
   expiredTokenMessage: 'Пожалуйста, войдите снова, используя Ваш логин и пароль',
@@ -85,6 +85,13 @@ const ru: LocaleMessages = {
   pageBoardAccessMessage: 'Для просмотра страницы Доски войдите в систему',
   pageBoardsAccessMessage: 'Для просмотра страницы Досок войдите в систему',
   successDeleteTitle: 'Удаление прошло успешно',
+  error400: 'ошибка запроса данных',
+  error401: 'ошибка авторизации, проверьте логин и пароль',
+  error402: 'файл уже существует',
+  error403: 'пожалуйста, войдите в систему',
+  error404: 'запрашиваемые данные не найдены',
+  error409: 'такой логин уже существует',
+  commonError: 'попробуйте снова',
 };
 
 export default ru;

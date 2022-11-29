@@ -73,7 +73,7 @@ const en: LocaleMessages = {
   confirmDeleteProfile: 'Do you want to delete your profile?',
   confirmDeleteColumn: 'Do you want to delete this column?',
   defaultUser: 'Responsible user',
-  errorTitle: 'Something went wrong',
+  errorTitle: 'Something went wrong:',
   successAuthTitle: 'Your signin is successful!',
   expiredTokenTitle: 'Your token is expired',
   expiredTokenMessage: 'Please, signin again with your login and pasword',
@@ -88,6 +88,13 @@ const en: LocaleMessages = {
   pageBoardsAccessMessage: 'Please, signin to view Boards page',
   pageBoardAccessMessage: 'Please, signin to view Single board page',
   successDeleteTitle: 'Removal is successful',
+  error400: 'bad Request',
+  error401: 'authorization error, check your login and password',
+  error402: 'file already exist',
+  error403: 'you need to be logged',
+  error404: 'requested data was not founded',
+  error409: 'login already exists',
+  commonError: 'try again later',
 };
 
 export default en;
