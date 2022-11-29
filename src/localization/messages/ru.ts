@@ -74,6 +74,7 @@ const ru: LocaleMessages = {
   spinnerTip: 'Загрузка...',
   searchPlaceholder: 'Поиск...',
   nothingFound: 'Ничего не найдено',
+  initialColumnTitle: 'Создать новую колонку',
 };
 
 export default ru;

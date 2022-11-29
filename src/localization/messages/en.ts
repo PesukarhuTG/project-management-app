@@ -77,6 +77,7 @@ const en: LocaleMessages = {
   spinnerTip: 'Loading...',
   searchPlaceholder: 'Search...',
   nothingFound: 'Nothing found',
+  initialColumnTitle: 'Create new column',
 };
 
 export default en;
