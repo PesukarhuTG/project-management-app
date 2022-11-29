@@ -106,6 +106,7 @@ const StyledHeader = styled.header`
   color: var(--light-font);
   background-color: var(--nav-background);
   transition: height 0.5s ease-in-out, margin-bottom 0.5s ease-in-out;
+  box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
 
   &.header-sticky {
     width: 100%;
