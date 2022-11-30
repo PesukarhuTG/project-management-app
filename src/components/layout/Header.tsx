@@ -1,12 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { LanguageRadio } from '..';
 import iconAvatar from '../../assets/ico/icon-avatar.svg';
 import iconEditProfile from '../../assets/ico/icon-edit-profile.svg';
 import iconAddBoard from '../../assets/ico/icon-add-board.svg';
 import iconBoards from '../../assets/ico/icon-boards.svg';
+import iconMenu from '../../assets/ico/icon-menu.svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/Store';
 import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
@@ -18,6 +19,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
+  const [visibleBurgerMenu, setVisibleBurgerMenu] = useState<boolean>(false);
   const navigate = useNavigate();
   const message = useLocaleMessage();
   const { login, lang } = useSelector((state: RootState) => state.user);
@@ -50,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
             <Login>{login}</Login>
           </UserData>
 
-          <NavPanel>
+          <NavPanel $visibleBurgerMenu={visibleBurgerMenu}>
             <StyledNavLink to="/profile">
               <NavIcon src={iconEditProfile} alt="icon" />
               {message('editItemMenu')}
@@ -66,6 +68,10 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
               {message('mainItemMenu')}
             </StyledNavLink>
           </NavPanel>
+
+          <BurgerMenu onClick={() => setVisibleBurgerMenu(!visibleBurgerMenu)}>
+            <NavIcon src={iconMenu} alt="icon" />
+          </BurgerMenu>
         </>
       );
     }
@@ -76,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
         <StyledAuthButton to="/auth">{message('btnSignIn')}</StyledAuthButton>
       </UnauthorizedPanel>
     );
-  }, [login, lang]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [login, lang, visibleBurgerMenu]); //eslint-disable-line
 
   return (
     <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
@@ -96,6 +102,22 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   );
 };
 
+const BurgerMenu = styled.button`
+  display: none;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  background-color: transparent;
+
+  cursor: pointer;
+  z-index: 100;
+  order: 4;
+
+  @media (max-width: 1500px) {
+    display: block;
+  }
+`;
+
 const StyledHeader = styled.header`
   padding: 26px var(--page-gutter);
   display: flex;
@@ -103,7 +125,7 @@ const StyledHeader = styled.header`
   justify-content: flex-end;
   gap: 24px;
   color: var(--light-font);
-  background-color: var(--nav-background);
+  background-color: var(--primary-dark);
   transition: height 0.5s ease-in-out, margin-bottom 0.5s ease-in-out;
   box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
 
@@ -197,24 +219,41 @@ const Login = styled.span`
   text-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
 `;
 
-const NavPanel = styled(Panel)`
+const NavPanel = styled(Panel)<{
+  $visibleBurgerMenu: boolean;
+}>`
   align-items: center;
   order: 3;
 
-  @media (max-width: 1200px) {
-    margin-right: auto;
+  @media (max-width: 1500px) {
     flex-direction: column;
+    gap: 30px;
     align-items: flex-start;
-    order: 2;
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 320px;
+    height: 100%;
+    padding-top: 130px;
+    padding-left: 20px;
+    background-color: var(--nav-background);
+    background: linear-gradient(160deg, var(--burgerBgr-01) 0%, var(--burgerBgr-02) 100%);
+    transition: right 0.3s;
+    z-index: 5;
 
-    .header-sticky & {
-      gap: 4px 16px;
-    }
+    ${({ $visibleBurgerMenu }) => {
+      if ($visibleBurgerMenu) {
+        return css`
+          right: 0;
+        `;
+      }
+    }}
   }
 `;
 
 const StyledNavLink = styled(NavLink)`
   color: inherit;
+  transition: text-shadow 0.3s;
 
   & > span {
     border-bottom: 1px solid transparent;
@@ -229,9 +268,8 @@ const StyledNavLink = styled(NavLink)`
     }
   }
 
-  &.active {
-    text-shadow: 0 0 0 currentColor;
-    pointer-events: none;
+  &:hover {
+    text-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
   }
 `;
 
@@ -239,6 +277,7 @@ const StyledNavButton = styled.button`
   font-size: inherit;
   background: none;
   border: none;
+  transition: text-shadow 0.3s;
   cursor: pointer;
 
   & > span {
@@ -252,6 +291,10 @@ const StyledNavButton = styled.button`
     & > span {
       border-bottom-color: currentColor;
     }
+  }
+
+  &:hover {
+    text-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
   }
 `;
 
