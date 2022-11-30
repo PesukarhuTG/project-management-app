@@ -75,19 +75,17 @@ const WelcomePage: React.FC = () => {
 };
 
 const HeroSection = styled.section`
-  max-width: 1440px;
+  width: 100%;
   display: flex;
   gap: 50px;
   align-items: center;
   justify-content: space-between;
   margin: 0 auto 50px;
-  padding: 0 110px;
 
   @media (max-width: 1120px) {
     flex-direction: column;
     justify-items: center;
     gap: 20px;
-    padding: 0;
     margin: 0 auto 30px;
   }
 `;
@@ -108,8 +106,10 @@ const SectionTitle = styled.h2`
 `;
 
 const HeroDescription = styled.p`
-  max-width: 600px;
+  max-width: 800px;
+  width: 100%;
   font-size: 20px;
+  line-height: 1.5;
   margin: 0;
 
   @media (max-width: 1120px) {
@@ -142,14 +142,13 @@ const HeroImage = styled.div`
 `;
 
 const TeamSection = styled.section`
-  max-width: 1440px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
   justify-content: space-between;
   align-items: center;
   margin: 0 auto 50px;
-  padding: 0 110px;
 
   @media (max-width: 1000px) {
     padding: 0;
