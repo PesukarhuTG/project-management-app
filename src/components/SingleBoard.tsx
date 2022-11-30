@@ -8,7 +8,6 @@ import BoardModal from './BoardModal';
 import ConfirmModal from './ConfirmModal';
 import { BoardTitle, BoardWrapper } from './styled-components';
 import { useLocaleMessage } from '../hooks';
-import colorRandomizer from '../services/boardColorRandomize';
 
 const SingleBoard: FC<SingleBoardProps> = ({
   title = 'Board title',
@@ -45,7 +44,7 @@ const SingleBoard: FC<SingleBoardProps> = ({
   return (
     <>
       <BoardWrapper onClick={() => navigate(`/board/${id}`)}>
-        <BoardHeader style={{ backgroundColor: `${colorRandomizer()}` }}>
+        <BoardHeader>
           <BoardTitle>{title}</BoardTitle>
           <BoardDescription>{description}</BoardDescription>
         </BoardHeader>
@@ -74,6 +73,7 @@ const BoardHeader = styled.div`
   padding: 20px;
   flex-grow: 1;
   background-color: var(--board-background);
+  background: linear-gradient(150deg, var(--boardBgrColor-01) 0%, var(--boardBgrColor-02) 100%);
 `;
 
 const BoardDescription = styled.p`

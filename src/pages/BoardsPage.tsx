@@ -147,7 +147,9 @@ const BoardsPage: React.FC = () => {
 
   return (
     <>
-      <BasePage>{boardsPageContent}</BasePage>
+      <BasePage>
+        <div className="container">{boardsPageContent}</div>
+      </BasePage>
       <BoardModal
         modalTitle={message('boardModalTitle')}
         isVisible={createModalVisible}

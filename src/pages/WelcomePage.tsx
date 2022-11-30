@@ -28,48 +28,50 @@ const WelcomePage: React.FC = () => {
 
   return (
     <BasePage>
-      <HeroSection>
-        <div>
-          <SectionTitle>{message('mainTitle')}</SectionTitle>
-          <HeroDescription>{message('mainDescription')}</HeroDescription>
-        </div>
-        <HeroImage />
-      </HeroSection>
-      <TeamSection>
-        <SectionTitle>{message('sectionTeam')}</SectionTitle>
-
-        <TeamItem>
-          <TeamItemAvatar $name="tatiana" />
+      <div className="container">
+        <HeroSection>
           <div>
-            <TeamItemTitle>{message('personOneTitle')}</TeamItemTitle>
-            <TeamItemDescription>{message('personOneDescription')}</TeamItemDescription>
+            <SectionTitle>{message('mainTitle')}</SectionTitle>
+            <HeroDescription>{message('mainDescription')}</HeroDescription>
           </div>
-        </TeamItem>
+          <HeroImage />
+        </HeroSection>
+        <TeamSection>
+          <SectionTitle>{message('sectionTeam')}</SectionTitle>
 
-        <TeamItem>
-          <div>
-            <TeamItemTitle>{message('personSecondTitle')}</TeamItemTitle>
-            <TeamItemDescription>{message('personSecondDescription')}</TeamItemDescription>
-          </div>
-          <TeamItemAvatar $name="daria" />
-        </TeamItem>
+          <TeamItem>
+            <TeamItemAvatar $name="tatiana" />
+            <div>
+              <TeamItemTitle>{message('personOneTitle')}</TeamItemTitle>
+              <TeamItemDescription>{message('personOneDescription')}</TeamItemDescription>
+            </div>
+          </TeamItem>
 
-        <TeamItem>
-          <TeamItemAvatar $name="sergey" />
-          <div>
-            <TeamItemTitle>{message('personThirdTitle')}</TeamItemTitle>
-            <TeamItemDescription>{message('personThirdDescription')}</TeamItemDescription>
-          </div>
-        </TeamItem>
+          <TeamItem>
+            <div>
+              <TeamItemTitle>{message('personSecondTitle')}</TeamItemTitle>
+              <TeamItemDescription>{message('personSecondDescription')}</TeamItemDescription>
+            </div>
+            <TeamItemAvatar $name="daria" />
+          </TeamItem>
 
-        <TeamItem>
-          <div>
-            <TeamItemTitle>{message('personFourthTitle')}</TeamItemTitle>
-            <TeamItemDescription>{message('personFourthDescription')}</TeamItemDescription>
-          </div>
-          <TeamItemAvatar $name="denis" />
-        </TeamItem>
-      </TeamSection>
+          <TeamItem>
+            <TeamItemAvatar $name="sergey" />
+            <div>
+              <TeamItemTitle>{message('personThirdTitle')}</TeamItemTitle>
+              <TeamItemDescription>{message('personThirdDescription')}</TeamItemDescription>
+            </div>
+          </TeamItem>
+
+          <TeamItem>
+            <div>
+              <TeamItemTitle>{message('personFourthTitle')}</TeamItemTitle>
+              <TeamItemDescription>{message('personFourthDescription')}</TeamItemDescription>
+            </div>
+            <TeamItemAvatar $name="denis" />
+          </TeamItem>
+        </TeamSection>
+      </div>
     </BasePage>
   );
 };
