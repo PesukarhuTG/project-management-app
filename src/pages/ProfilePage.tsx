@@ -246,11 +246,7 @@ const FormButtons = styled.div`
   display: flex;
   justify-content: center;
   gap: 20px;
-  padding-top: 40px;
-
-  @media (max-width: 610px) {
-    padding-top: 20px;
-  }
+  padding: 30px 0;
 
   @media (max-width: 510px) {
     flex-direction: column;

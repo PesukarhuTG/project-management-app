@@ -37,6 +37,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 
   const createBoard = () => {
     dispatch(setCreateModalVisible(true));
+    setVisibleBurgerMenu(false);
     navigate('/boards');
   };
 
@@ -52,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
           </UserData>
 
           <NavPanel $visibleBurgerMenu={visibleBurgerMenu}>
-            <StyledNavLink to="/profile">
+            <StyledNavLink to="/profile" onClick={() => setVisibleBurgerMenu(false)}>
               <NavIcon src={iconEditProfile} alt="icon" />
               {message('editItemMenu')}
             </StyledNavLink>
@@ -62,7 +63,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
               {message('createItemMenu')}
             </StyledNavButton>
 
-            <StyledNavLink to="/boards">
+            <StyledNavLink to="/boards" onClick={() => setVisibleBurgerMenu(false)}>
               <NavIcon src={iconBoards} alt="icon" />
               {message('mainItemMenu')}
             </StyledNavLink>
@@ -200,7 +201,7 @@ const Panel = styled.div`
     gap: 8px 16px;
 
     .header-sticky & {
-      gap: 4px 16px;
+      gap: 16px;
     }
   }
 `;
@@ -275,8 +276,8 @@ const NavPanel = styled(Panel)<{
     align-items: flex-start;
     position: fixed;
     top: 0;
-    right: -320px;
-    width: 320px;
+    right: -300px;
+    width: 300px;
     height: 100%;
     padding-top: 130px;
     padding-left: 20px;
@@ -284,6 +285,10 @@ const NavPanel = styled(Panel)<{
     background: linear-gradient(160deg, var(--burgerBgr-01) 0%, var(--burgerBgr-02) 100%);
     transition: right 0.3s;
     z-index: 5;
+
+    @media (max-width: 340px) {
+      width: 100%;
+    }
 
     ${({ $visibleBurgerMenu }) => {
       if ($visibleBurgerMenu) {
