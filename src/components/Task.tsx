@@ -46,12 +46,12 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order }) => {
             <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
           </Footer>
 
-          <TaskModal
+          {/* <TaskModal
             title={message('taskModalTitle')}
             isVisible={isShowEditModal}
             onOk={editTask}
             onCancel={() => setIsShowEditModal(false)}
-          />
+          /> */}
 
           <ConfirmModal
             title={message('confirmDeleteTask')}

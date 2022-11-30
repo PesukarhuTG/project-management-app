@@ -1,22 +1,36 @@
 import React, { FC } from 'react';
 import { Select } from 'antd';
 import styled from 'styled-components';
-import { ModalProps } from '../types';
 import StyledModal from './StyledModal';
 import StyledInput from './StyledInput';
 import { useLocaleMessage } from '../hooks';
+import { useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../store/Store';
+import { setTaskDescription, setTaskTitle } from '../store/TasksSlice';
+import { useSelector } from 'react-redux';
+import { TaskModalProps } from '../types/ModalProps';
 
-const TaskModal: FC<ModalProps> = ({ title, isVisible, onOk, onCancel, onChange, options = [] }) => {
+const TaskModal: FC<TaskModalProps> = ({ title, isVisible, onOk, onCancel, onChange, options = [] }) => {
   const message = useLocaleMessage();
+  const dispatch = useDispatch<AppDispatch>();
+  const { title: taskTitle, description: taskDescription } = useSelector((state: RootState) => state.tasks);
 
   return (
     <StyledModal title={title} isVisible={isVisible} onOk={onOk} onCancel={onCancel}>
-      <StyledInput title={message('addNameTaskModal')} />
-      <StyledInput title={message('addDescriptionTaskModal')} />
+      <StyledInput
+        title={message('addNameTaskModal')}
+        onChange={(event) => dispatch(setTaskTitle(event.target.value))}
+        value={taskTitle}
+      />
+      <StyledInput
+        title={message('addDescriptionTaskModal')}
+        onChange={(event) => dispatch(setTaskDescription(event.target.value))}
+        value={taskDescription}
+      />
       <StyledSelect
         defaultValue={message('defaultUser')}
         style={{ width: 120 }}
-        onChange={onChange}
+        onChange={(value) => onChange(value as string)}
         options={options}
         bordered={false}
         dropdownStyle={{ borderRadius: '10px' }}

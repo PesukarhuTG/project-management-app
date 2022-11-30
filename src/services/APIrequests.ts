@@ -1,7 +1,8 @@
 import axiosApi from '../http';
 import { AxiosResponse } from 'axios';
-import { BoardResponse, LoginResponse, RegistrationResponse } from '../types';
+import { BoardResponse, LoginResponse, RegistrationResponse, TaskResponse } from '../types';
 import { ColumnCreateData, ColumnResponse } from '../types/ColumnModel';
+import { TaskCreateData } from '../types/TaskModel';
 
 export const registrationUser = async (
   name: string,
@@ -84,6 +85,12 @@ export const getUserIds = async (): Promise<string[]> => {
   return usersId;
 };
 
+export const getUserNames = async (): Promise<string[]> => {
+  const usersList = await fetchUsers().then((res) => res.data);
+  const userNames = usersList.map((user) => user.name);
+  return userNames;
+};
+
 export const getBoardById = async (id: string): Promise<AxiosResponse<BoardResponse>> => {
   return axiosApi.get<BoardResponse>(`/boards/${id}`);
 };
@@ -102,4 +109,22 @@ export const updateColumn = async (
   data: ColumnCreateData
 ): Promise<AxiosResponse<ColumnResponse>> => {
   return axiosApi.put<ColumnResponse>(`/boards/${idBoard}/columns/${idColumn}`, data);
+};
+
+export const createTask = async (
+  boardId: string,
+  columnId: string,
+  data: TaskCreateData
+): Promise<AxiosResponse<TaskResponse>> => {
+  console.log('createTask');
+  const res = await axiosApi.post<TaskResponse>(`/boards/${boardId}/columns/${columnId}/tasks`, data);
+  // console.log(res);
+  return res;
+};
+
+export const getTasksInColumn = async (boardId: string, columnId: string): Promise<AxiosResponse<TaskResponse[]>> => {
+  console.log('getAllTask');
+  const res = await axiosApi.get<TaskResponse[]>(`/boards/${boardId}/columns/${columnId}/tasks`);
+  // console.log(res);
+  return res;
 };

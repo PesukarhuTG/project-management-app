@@ -127,7 +127,7 @@ const BoardsPage: React.FC = () => {
   useEffect(() => {
     searchedItem();
     if (!search) dispatch(setFilteredBoards(boards));
-  }, [search, searchedItem]);
+  }, [search, searchedItem, dispatch, boards]);
 
   const boardsPageContent = useMemo(() => {
     if (fetchLoading) {
@@ -143,7 +143,7 @@ const BoardsPage: React.FC = () => {
         <BoardsList boards={filteredBoards} remove={removeBoard} edit={handleEdit} />
       </>
     );
-  }, [fetchLoading, boards, removeBoard, handleEdit, search, filteredBoards, dispatch, message]);
+  }, [fetchLoading, removeBoard, handleEdit, search, filteredBoards, dispatch, message]);
 
   return (
     <>
