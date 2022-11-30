@@ -131,7 +131,7 @@ const BoardsPage: React.FC = () => {
 
   const boardsPageContent = useMemo(() => {
     if (fetchLoading) {
-      return <Spinner />;
+      return <Spinner type="fullscreen" />;
     }
     return (
       <>
@@ -148,7 +148,7 @@ const BoardsPage: React.FC = () => {
   return (
     <>
       <BasePage>
-        <div className="container">{boardsPageContent}</div>
+        <Container>{boardsPageContent}</Container>
       </BasePage>
       <BoardModal
         modalTitle={message('boardModalTitle')}
@@ -159,6 +159,14 @@ const BoardsPage: React.FC = () => {
     </>
   );
 };
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
 
 const SearchInput = styled(FormInput)`
   min-width: 260px;

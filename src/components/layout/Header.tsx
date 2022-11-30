@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
 import styled, { css } from 'styled-components';
@@ -40,6 +40,19 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
     setVisibleBurgerMenu(false);
     navigate('/boards');
   };
+
+  useEffect(() => {
+    if (visibleBurgerMenu) {
+      const widthScroll = window.innerWidth - document.body.offsetWidth;
+
+      document.body.style.cssText = `
+          overflow: hidden;
+          padding-right: ${widthScroll}px;
+      `;
+    } else {
+      document.body.style.cssText = '';
+    }
+  }, [visibleBurgerMenu]);
 
   const headerContent = useMemo(() => {
     if (localStorage.getItem('tokenUser')) {
@@ -89,22 +102,45 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   }, [login, lang, visibleBurgerMenu]); //eslint-disable-line
 
   return (
-    <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
-      <Title>
-        <HomeLink to="/">RSS Kanban</HomeLink>
-      </Title>
-      {headerContent}
-      <SettingPanel>
-        {localStorage.getItem('tokenUser') && (
-          <StyledAuthButton to="/" onClick={logout}>
-            {message('btnSignOut')}
-          </StyledAuthButton>
-        )}
-        <LanguageRadio />
-      </SettingPanel>
-    </StyledHeader>
+    <>
+      <Overlay $visibleBurgerMenu={visibleBurgerMenu} onClick={() => setVisibleBurgerMenu(false)} />
+      <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
+        <Title>
+          <HomeLink to="/">RSS Kanban</HomeLink>
+        </Title>
+        {headerContent}
+        <SettingPanel>
+          {localStorage.getItem('tokenUser') && (
+            <StyledAuthButton to="/" onClick={logout}>
+              {message('btnSignOut')}
+            </StyledAuthButton>
+          )}
+          <LanguageRadio />
+        </SettingPanel>
+      </StyledHeader>
+    </>
   );
 };
+
+const Overlay = styled.div<{
+  $visibleBurgerMenu: boolean;
+}>`
+  ${({ $visibleBurgerMenu }) => {
+    if ($visibleBurgerMenu) {
+      return css`
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--burger-overlay);
+        z-index: 2;
+      `;
+    }
+  }}
+`;
 
 const BurgerMenu = styled.button<{
   $visibleBurgerMenu: boolean;

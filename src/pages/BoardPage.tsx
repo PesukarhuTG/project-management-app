@@ -173,13 +173,18 @@ const ControlPanel = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media (max-width: 480px) {
+  @media (max-width: 700px) {
+    padding: 0 20px;
+  }
+
+  @media (max-width: 540px) {
     flex-direction: column;
+    gap: 20px;
   }
 `;
 
 const HideXs = styled.div`
-  @media (max-width: 480px) {
+  @media (max-width: 300px) {
     display: none;
   }
 `;
