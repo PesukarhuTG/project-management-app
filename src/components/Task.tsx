@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { ConfirmModal, IconButton, TaskModal } from './';
 import { useLocaleMessage } from '../hooks';
 import { Draggable } from 'react-beautiful-dnd';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/Store';
 
 interface TaskProps {
   id: string;
@@ -19,6 +21,8 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order }) => {
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const message = useLocaleMessage();
+
+  const { options } = useSelector((state: RootState) => state.tasks);
   const userName = 'userName'; //TODO получить имя пользователя
 
   const editTask = () => {
@@ -46,12 +50,14 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order }) => {
             <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
           </Footer>
 
-          {/* <TaskModal
+          <TaskModal
             title={message('taskModalTitle')}
             isVisible={isShowEditModal}
             onOk={editTask}
             onCancel={() => setIsShowEditModal(false)}
-          /> */}
+            options={options}
+            onChange={(value) => console.log(value)}
+          />
 
           <ConfirmModal
             title={message('confirmDeleteTask')}

@@ -20,7 +20,7 @@ import { useLocaleMessage } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
 import { updateColumnData } from '../store/ColumnsSlice';
-import { setTaskLoading, setTaskModalVisible, setTaskOrder, setTasks } from '../store/TasksSlice';
+import { setOptions, setTaskLoading, setTaskModalVisible, setTaskOrder, setTasks } from '../store/TasksSlice';
 
 import { OptionsProps } from '../types/ModalProps';
 
@@ -42,8 +42,8 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
     order: taskOrder,
     description: taskDescription,
     tasks,
+    options,
   } = useSelector((state: RootState) => state.tasks);
-  // const [options, setOptions] = useState<OptionsProps[]>([]);
   const [responsibleUser, setResponsibleUser] = useState<string>('');
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
@@ -78,8 +78,18 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
     setIsEdit(false);
   }, [title]);
 
+  const getOptions = async () => {
+    const userNames = await getUserNames();
+    const userIds = await getUserIds();
+    const optionsList: OptionsProps[] = [];
+    for (let i = 0; i < userNames.length; i++) {
+      optionsList.push({ value: userIds[i], label: userNames[i] });
+    }
+    dispatch(setOptions(optionsList));
+  };
+
   useEffect(() => {
-    // getOptions();
+    getOptions();
     getTasks();
   }, []);
 
@@ -97,10 +107,9 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
 
   const addTask = async () => {
     console.log(id);
+    console.log(columns);
     dispatch(setTaskModalVisible(false));
     // if (idBoard) {
-    //   dispatch(setTaskModalVisible(false));
-
     // console.log(columns);
     // const columnIds = columns.map((column) => column.id);
     // console.log(columnIds);
@@ -186,7 +195,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
             isVisible={taskModalVisible}
             onOk={addTask}
             onCancel={() => dispatch(setTaskModalVisible(false))}
-            options={[]}
+            options={options}
             onChange={(value) => setResponsibleUser(value)}
           />
 
