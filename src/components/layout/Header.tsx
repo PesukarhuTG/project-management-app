@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
             <Avatar>
               <img src={iconAvatar} alt="user avatar" />
             </Avatar>
-            <Login>{login}</Login>
+            <Login>{login || localStorage.getItem('loginUser')}</Login>
           </UserData>
 
           <NavPanel $visibleBurgerMenu={visibleBurgerMenu}>

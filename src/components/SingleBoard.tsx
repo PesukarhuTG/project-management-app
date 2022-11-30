@@ -74,10 +74,16 @@ const BoardHeader = styled.div`
   flex-grow: 1;
   background-color: var(--board-background);
   background: linear-gradient(150deg, var(--boardBgrColor-01) 0%, var(--boardBgrColor-02) 100%);
+
+  @media (max-width: 610px) {
+    font-size: 16px;
+    padding: 20px 10px;
+  }
 `;
 
 const BoardDescription = styled.p`
   line-height: 25px;
+  overflow: hidden;
 `;
 
 const BoardTools = styled.div`

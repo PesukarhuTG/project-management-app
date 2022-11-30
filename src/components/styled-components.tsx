@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const BoardWrapper = styled.div`
   max-width: 426px;
-  min-width: 300px;
+  min-width: 260px;
   min-height: 250px;
   display: flex;
   flex-direction: column;
@@ -19,8 +19,15 @@ export const BoardWrapper = styled.div`
 `;
 
 export const BoardTitle = styled.p`
+  width: 100%;
   margin-bottom: 5px;
   font-weight: 700;
   font-size: 26px;
   line-height: 35px;
+  overflow: hidden;
+
+  @media (max-width: 610px) {
+    font-size: 22px;
+    line-height: 1.5;
+  }
 `;

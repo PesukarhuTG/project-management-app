@@ -161,11 +161,15 @@ const BoardsPage: React.FC = () => {
 };
 
 const SearchInput = styled(FormInput)`
-  min-width: 300px;
+  min-width: 260px;
   margin-bottom: 30px;
   width: 100%;
   font-size: 20px;
   line-height: 24px;
+
+  @media (max-width: 610px) {
+    font-size: 18px;
+  }
 `;
 
 export default BoardsPage;
