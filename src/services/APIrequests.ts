@@ -95,3 +95,11 @@ export const getColumnsInBoard = async (id: string): Promise<AxiosResponse<Colum
 export const createColumn = async (id: string, data: ColumnCreateData): Promise<AxiosResponse<ColumnResponse>> => {
   return axiosApi.post<ColumnResponse>(`/boards/${id}/columns`, data);
 };
+
+export const updateColumn = async (
+  idBoard: string,
+  idColumn: string,
+  data: ColumnCreateData
+): Promise<AxiosResponse<ColumnResponse>> => {
+  return axiosApi.put<ColumnResponse>(`/boards/${idBoard}/columns/${idColumn}`, data);
+};
