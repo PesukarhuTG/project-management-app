@@ -7,7 +7,6 @@ import iconAvatar from '../../assets/ico/icon-avatar.svg';
 import iconEditProfile from '../../assets/ico/icon-edit-profile.svg';
 import iconAddBoard from '../../assets/ico/icon-add-board.svg';
 import iconBoards from '../../assets/ico/icon-boards.svg';
-import iconMenu from '../../assets/ico/icon-menu.svg';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../../store/Store';
 import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
@@ -69,8 +68,12 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
             </StyledNavLink>
           </NavPanel>
 
-          <BurgerMenu onClick={() => setVisibleBurgerMenu(!visibleBurgerMenu)}>
-            <NavIcon src={iconMenu} alt="icon" />
+          <BurgerMenu $visibleBurgerMenu={visibleBurgerMenu} onClick={() => setVisibleBurgerMenu(!visibleBurgerMenu)}>
+            <div className="burger-menu-lines">
+              <div className="burger-menu-line-1"></div>
+              <div className="burger-menu-line-2"></div>
+              <div className="burger-menu-line-3"></div>
+            </div>
           </BurgerMenu>
         </>
       );
@@ -102,19 +105,62 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   );
 };
 
-const BurgerMenu = styled.button`
+const BurgerMenu = styled.button<{
+  $visibleBurgerMenu: boolean;
+}>`
   display: none;
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 48px;
   border: 0;
   background-color: transparent;
 
   cursor: pointer;
-  z-index: 100;
+  z-index: 10;
   order: 4;
+
+  & > .burger-menu-lines {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    cursor: pointer;
+  }
+
+  & > .burger-menu-lines [class^='burger-menu-line-'] {
+    width: 30px;
+    height: 2px;
+    margin: 4px 0;
+    background-color: #fff;
+    transition: all 0.5s ease;
+  }
+
+  &:hover {
+    & > .burger-menu-lines [class^='burger-menu-line-'] {
+      box-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
+    }
+  }
 
   @media (max-width: 1500px) {
     display: block;
+
+    ${({ $visibleBurgerMenu }) => {
+      if ($visibleBurgerMenu) {
+        return css`
+          & > .burger-menu-lines .burger-menu-line-1 {
+            transform: translatey(14px) rotate(45deg);
+          }
+
+          & > .burger-menu-lines .burger-menu-line-2 {
+            transform: scale(0);
+          }
+
+          & > .burger-menu-lines .burger-menu-line-3 {
+            transform: translatey(-6px) rotate(-45deg);
+          }
+        `;
+      }
+    }}
   }
 `;
 
