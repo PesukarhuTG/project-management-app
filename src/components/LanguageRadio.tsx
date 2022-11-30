@@ -38,11 +38,27 @@ const StyledRadioGroup = styled(Radio.Group)`
     &:first-child {
       border-top-left-radius: var(--btn-br);
       border-bottom-left-radius: var(--btn-br);
+
+      @media (max-width: 610px) {
+        font-size: 16px;
+        padding-left: 10px;
+        padding-right: 8px;
+      }
     }
 
     &:last-child {
       border-top-right-radius: var(--btn-br);
       border-bottom-right-radius: var(--btn-br);
+
+      @media (max-width: 610px) {
+        font-size: 16px;
+        padding-left: 8px;
+        padding-right: 10px;
+      }
+    }
+
+    @media (max-width: 610px) {
+      font-size: 16px;
     }
   }
 `;

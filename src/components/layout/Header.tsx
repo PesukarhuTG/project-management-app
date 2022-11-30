@@ -184,16 +184,10 @@ const StyledHeader = styled.header`
     z-index: 1;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 610px) {
     gap: 16px;
-  }
-
-  @media (max-width: 576px) {
+    padding: 20px;
     font-size: 16px;
-  }
-
-  @media (max-width: 480px) {
-    justify-content: space-between;
   }
 `;
 
@@ -216,10 +210,10 @@ const Title = styled.h1`
   padding: 0;
   color: var(--light-font);
   font-size: 26px;
-  font-weight: 800;
+  font-weight: 700;
   order: 1;
 
-  @media (max-width: 576px) {
+  @media (max-width: 460px) {
     display: none;
   }
 `;
@@ -230,6 +224,10 @@ const HomeLink = styled(Link)`
   &:hover {
     color: inherit;
   }
+
+  @media (max-width: 610px) {
+    font-size: 20px;
+  }
 `;
 
 const UserData = styled.div`
@@ -237,6 +235,10 @@ const UserData = styled.div`
   align-items: center;
   gap: 10px;
   order: 3;
+
+  @media (max-width: 772px) {
+    display: none;
+  }
 `;
 
 const Avatar = styled.div`
@@ -254,10 +256,6 @@ const Avatar = styled.div`
     height: 100%;
     width: 100%;
     object-fit: cover;
-  }
-
-  @media (max-width: 992px) {
-    display: none;
   }
 `;
 
@@ -351,19 +349,11 @@ const NavIcon = styled.img`
 
 const UnauthorizedPanel = styled(Panel)`
   order: 3;
-
-  @media (max-width: 480px) {
-    flex-direction: column;
-  }
 `;
 
 const SettingPanel = styled(Panel)`
   flex-shrink: 0;
   order: 3;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
 `;
 
 const StyledAuthButton = styled(Link)`
@@ -383,6 +373,11 @@ const StyledAuthButton = styled(Link)`
   &:hover {
     background: var(--btn-primary-hover);
     color: var(--light-font);
+  }
+
+  @media (max-width: 610px) {
+    font-size: 16px;
+    padding: 0 15px;
   }
 `;
 

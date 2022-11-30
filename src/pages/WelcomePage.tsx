@@ -105,6 +105,10 @@ const SectionTitle = styled.h2`
     text-align: center;
     margin: 0 auto;
   }
+
+  @media (max-width: 610px) {
+    font-size: 26px;
+  }
 `;
 
 const HeroDescription = styled.p`
@@ -120,6 +124,11 @@ const HeroDescription = styled.p`
     margin: 0 auto;
     font-size: 20px;
     line-height: 29px;
+  }
+
+  @media (max-width: 610px) {
+    font-size: 16px;
+    line-height: 1.5;
   }
 `;
 
@@ -180,12 +189,21 @@ const TeamItemTitle = styled.p`
   font-size: 24px;
   line-height: 24px;
   color: var(--primary-dark);
+
+  @media (max-width: 610px) {
+    font-size: 18px;
+  }
 `;
 
 const TeamItemDescription = styled.p`
   max-width: 900px;
   width: 100%;
   line-height: 29px;
+
+  @media (max-width: 610px) {
+    font-size: 16px;
+    line-height: 1.5;
+  }
 `;
 
 const TeamItemAvatar = styled.div<{
