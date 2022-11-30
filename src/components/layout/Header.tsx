@@ -276,8 +276,8 @@ const NavPanel = styled(Panel)<{
     align-items: flex-start;
     position: fixed;
     top: 0;
-    right: -300px;
-    width: 300px;
+    right: -320px;
+    width: 320px;
     height: 100%;
     padding-top: 130px;
     padding-left: 20px;
@@ -285,10 +285,6 @@ const NavPanel = styled(Panel)<{
     background: linear-gradient(160deg, var(--burgerBgr-01) 0%, var(--burgerBgr-02) 100%);
     transition: right 0.3s;
     z-index: 5;
-
-    @media (max-width: 340px) {
-      width: 100%;
-    }
 
     ${({ $visibleBurgerMenu }) => {
       if ($visibleBurgerMenu) {
