@@ -95,6 +95,7 @@ const en: LocaleMessages = {
   error404: 'requested data was not founded',
   error409: 'login already exists',
   commonError: 'try again later',
+  initialColumnTitle: 'Create new column',
 };
 
 export default en;

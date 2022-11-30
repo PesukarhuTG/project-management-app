@@ -92,6 +92,7 @@ const ru: LocaleMessages = {
   error404: 'запрашиваемые данные не найдены',
   error409: 'такой логин уже существует',
   commonError: 'попробуйте снова',
+  initialColumnTitle: 'Создать новую колонку',
 };
 
 export default ru;
