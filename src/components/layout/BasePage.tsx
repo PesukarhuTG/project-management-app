@@ -36,6 +36,7 @@ const BasePage: React.FC<BasePageProps> = ({ children, noScroll = false }) => {
 };
 
 const Layout = styled.section`
+  width: 100%;
   display: flex;
   flex: auto;
   flex-direction: column;
@@ -49,8 +50,14 @@ const Layout = styled.section`
 const Content = styled.main<{
   $noScroll: boolean;
 }>`
+  max-width: 1440px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   margin: 0 auto;
-  padding: 32px var(--page-gutter);
+  padding: 20px;
   flex-grow: 1;
 
   ${({ $noScroll }) => {

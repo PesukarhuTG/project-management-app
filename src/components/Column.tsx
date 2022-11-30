@@ -1,11 +1,18 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import { ConfirmModal, IconButton, TaskModal } from './';
+import { ConfirmModal, IconButton, TaskModal, Task, Spinner } from './';
 import checkIcon from '../assets/ico/icon-check.svg';
 import cancelIcon from '../assets/ico/icon-cancel.svg';
-import Task from './Task';
+
+import { updateColumn } from '../services/APIrequests';
+import { mapperColumn } from '../services/mappers';
+import { showNotification } from '../services/notification.service';
 import { useLocaleMessage } from '../hooks';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/Store';
+import { updateColumnData } from '../store/ColumnsSlice';
 
 interface ColumnProps {
   id: string;
@@ -49,16 +56,42 @@ const TaskMock: TaskData[] = [
 ];
 
 const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [tasks] = useState<TaskData[]>(TaskMock); //TODO get real task data
-  const [isShowTaskModal, setIsShowTaskModal] = useState<boolean>(false);
-  const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const idBoard = useSelector((state: RootState) => state.boards.currentBoard?.id);
   const message = useLocaleMessage();
 
-  const updateTitle = () => {
-    /*TODO update title*/
+  const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [newTitle, setNewTitle] = useState(title);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isShowTaskModal, setIsShowTaskModal] = useState<boolean>(false);
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+
+  const [tasks] = useState<TaskData[]>(TaskMock); //TODO get real task data
+
+  const updateTitle = useCallback(async () => {
     setIsEdit(false);
-  };
+
+    if (idBoard && newTitle && newTitle !== title) {
+      setIsLoading(true);
+
+      try {
+        const newColumn = await updateColumn(idBoard, id, { title: newTitle, order: order }).then((res) => res.data);
+        dispatch(updateColumnData(mapperColumn(newColumn)));
+        setNewTitle(newTitle);
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+        setNewTitle(title);
+      }
+
+      setIsLoading(false);
+    }
+  }, [dispatch, id, idBoard, message, newTitle, title, order]);
+
+  const cancelUpdateTitle = useCallback(() => {
+    setNewTitle(title);
+    setIsEdit(false);
+  }, [title]);
 
   const addTask = () => {
     /*TODO add new task*/
@@ -74,15 +107,20 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
     if (isEdit) {
       return (
         <ChangeTitle>
-          <Input />
+          <Input
+            value={newTitle}
+            onChange={(e) => {
+              setNewTitle(e.target.value);
+            }}
+          />
           <CheckButton aria-label="Save" onClick={updateTitle} />
-          <CancelButton aria-label="Cancel" onClick={() => setIsEdit(false)} />
+          <CancelButton aria-label="Cancel" onClick={cancelUpdateTitle} />
         </ChangeTitle>
       );
     }
 
     return <Title onClick={() => setIsEdit(true)}>{title}</Title>;
-  }, [isEdit, title]);
+  }, [isEdit, title, newTitle, cancelUpdateTitle, updateTitle]);
 
   return (
     <Draggable draggableId={id} index={order}>
@@ -126,6 +164,8 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
             onOk={deleteColumn}
             onCancel={() => setIsShowDeleteModal(false)}
           />
+
+          {isLoading && <Spinner type="fill" />}
         </ColumnPanel>
       )}
     </Draggable>
@@ -133,12 +173,13 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
 };
 
 const ColumnPanel = styled.section`
+  position: relative;
   margin-left: var(--page-gutter);
   max-height: calc(100% - 24px);
   display: flex;
   flex-direction: column;
   background: var(--board-background);
-  border: 2px solid var(--primary-dark);
+  box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
   border-radius: 30px;
   overflow: hidden;
 `;
@@ -174,6 +215,7 @@ const ChangeTitle = styled.div`
 
 const Input = styled.input`
   height: 40px;
+  width: 100%;
   flex-grow: 1;
   color: var(--primary-dark);
   font-size: 26px;

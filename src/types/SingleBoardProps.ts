@@ -8,5 +8,6 @@ interface SingleBoardProps {
 
 export type BoardProps = Omit<SingleBoardProps, 'remove' | 'edit'>;
 export type BoardTitle = Omit<BoardProps, 'id'>;
+export type BoardInfo = Omit<BoardProps, 'description'>;
 
 export default SingleBoardProps;

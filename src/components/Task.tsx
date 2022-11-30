@@ -73,6 +73,7 @@ const TaskPanel = styled.div`
   gap: 10px;
   background-color: var(--primary-light);
   border-radius: 10px;
+  box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
 `;
 
 const Title = styled.div`

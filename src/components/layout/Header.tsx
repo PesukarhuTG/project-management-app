@@ -97,8 +97,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 };
 
 const StyledHeader = styled.header`
-  padding: 0 var(--page-gutter);
-  height: var(--header-h);
+  padding: 26px var(--page-gutter);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -106,6 +105,7 @@ const StyledHeader = styled.header`
   color: var(--light-font);
   background-color: var(--nav-background);
   transition: height 0.5s ease-in-out, margin-bottom 0.5s ease-in-out;
+  box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
 
   &.header-sticky {
     width: 100%;

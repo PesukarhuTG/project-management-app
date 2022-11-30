@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BasePage, ConfirmModal, FormButton, FormInput } from '../components';
-import { Form, message as messageAntd } from 'antd';
+import { Form } from 'antd';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/Store';
@@ -11,6 +11,7 @@ import { useLocaleMessage } from '../hooks';
 import checkTokenExpired from '../services/checkTokenExpired';
 import { decodeToken } from 'react-jwt';
 import { DecodedTokenProps } from '../types';
+import { showNotification } from '../services/notification.service';
 
 interface EditFormValues {
   userName: string;
@@ -22,7 +23,6 @@ const ProfilePage: React.FC = () => {
   const [form] = Form.useForm();
   const [confirmFormVisible, setConfirmFormVisible] = useState<boolean>(false);
   const { name, login, password } = useSelector((state: RootState) => state.user);
-  const [messageApi, contextHolder] = messageAntd.useMessage();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const message = useLocaleMessage();
@@ -32,20 +32,6 @@ const ProfilePage: React.FC = () => {
     dispatch(removeUserData());
     localStorage.clear();
     navigate('/');
-  };
-
-  const showSuccessMessage = () => {
-    messageApi.open({
-      type: 'success',
-      content: message('successEditMessage'),
-    });
-  };
-
-  const showErrorMessage = () => {
-    messageApi.open({
-      type: 'error',
-      content: message('failedEditMessage'),
-    });
   };
 
   const onFinish = async (values: EditFormValues) => {
@@ -68,19 +54,20 @@ const ProfilePage: React.FC = () => {
         dispatch(changeUserData(userData));
         dispatch(changeAuthStatus(true));
 
-        showSuccessMessage();
+        showNotification('success', message('successEditMessage'));
 
         localStorage.setItem('idUser', id);
         localStorage.setItem('tokenUser', token);
         localStorage.setItem('loginUser', login);
         localStorage.setItem('expToken', String(exp));
-      } catch {
-        showErrorMessage();
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
       } finally {
         form.resetFields();
       }
     } else {
       logout();
+      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
   };
 
@@ -91,35 +78,37 @@ const ProfilePage: React.FC = () => {
       try {
         await deleteUser();
         logout();
-      } catch {
-        showErrorMessage();
+        showNotification('success', message('successDeleteUserTitle'));
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
       }
     } else {
       logout();
+      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
   };
 
   useEffect(() => {
     if (!localStorage.getItem('tokenUser')) {
       navigate('/');
-    } else {
-      const authStatus = checkTokenExpired();
-      if (!authStatus) {
-        logout();
-      }
+      showNotification('info', message('pageAccessTitle'), message('pageProfileAccessMessage'));
+    }
+
+    const authStatus = checkTokenExpired();
+    if (!authStatus) {
+      logout();
+      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
   }, []); // eslint-disable-line
 
   return (
     <BasePage>
-      {contextHolder}
       <ProfileTitle>{message('profilePageTitle')}</ProfileTitle>
       <StyledForm
         form={form}
         layout="vertical"
         initialValues={{ name, login, password }}
         onFinish={(values) => onFinish(values as EditFormValues)}
-        onFinishFailed={() => console.log('onFinishFailed')}
         autoComplete="off"
       >
         <Form.Item
@@ -185,16 +174,11 @@ const ProfileTitle = styled.p`
 `;
 
 const StyledForm = styled(Form)`
-  max-width: 646px;
-  margin: 0 auto 50px;
+  max-width: 600px;
+  width: 100%;
   background: var(--primary-light);
   border-radius: 30px;
-  padding: 50px 123px;
-
-  @media (max-width: 600px) {
-    margin-bottom: 0;
-    padding: 20px 20px;
-  }
+  padding: 20px 30px;
 
   .ant-form-item {
     margin: 0;

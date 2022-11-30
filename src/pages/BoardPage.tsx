@@ -2,81 +2,95 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import { BasePage, Button, Column, ColumnModal } from '../components';
+import { BasePage, Button, Column, ColumnModal, Spinner } from '../components';
 
+import checkTokenExpired from '../services/checkTokenExpired';
 import { showNotification } from '../services/notification.service';
+import { createColumn, getBoardById, getColumnsInBoard } from '../services/APIrequests';
+import { mapperColumn, mapperColumns } from '../services/mappers';
 import { useLocaleMessage } from '../hooks';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
-import { setBoardInfo } from '../store/BoardSlice';
-import { getBoardById } from '../services/APIrequests';
+import { setCurrentBoard } from '../store/BoardsSlice';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
-import checkTokenExpired from '../services/checkTokenExpired';
+import { setColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
 
-interface ColumnData {
-  _id: string;
-  title: string;
-  order: number;
-  boardId: string;
-}
-
-const columnsMock: ColumnData[] = [
-  {
-    _id: '01',
-    title: 'Column 1',
-    order: 1,
-    boardId: 'Id of boards',
-  },
-  {
-    _id: '02',
-    title: 'Column 2',
-    order: 2,
-    boardId: 'Id of boards',
-  },
-  {
-    _id: '03',
-    title: 'Column 3',
-    order: 3,
-    boardId: 'Id of boards',
-  },
-];
+const DEFAULT_COLUMN_TITLE = 'Column';
 
 const BoardPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { title } = useSelector((state: RootState) => state.board);
+  const title = useSelector((state: RootState) => state.boards.currentBoard?.title) ?? '';
+  const newOrder = useSelector((state: RootState) => state.columns.orderCounter) + 1;
+  const { columns, newColumnTitle } = useSelector((state: RootState) => state.columns);
 
-  const navigate = useNavigate();
-  const [isShowColumnModal, setIsShowColumnModal] = useState<boolean>(false);
-  const [columns] = useState<ColumnData[]>(columnsMock); //TODO get real columns list (sorted by order)
-  const message = useLocaleMessage();
   const { id: idParam } = useParams();
+  const navigate = useNavigate();
+
+  const message = useLocaleMessage();
+  const [isShowColumnModal, setIsShowColumnModal] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // TODO добавить лоадер на загрузку формы
 
   const getBoardInfo = useCallback(
     async (id: string) => {
-      try {
-        const board = await getBoardById(id).then((res) => res.data);
-        const boardInfo = {
-          id: board._id,
-          title: board.title,
-        };
-        dispatch(setBoardInfo(boardInfo));
-      } catch (e) {
-        showNotification('error', message('errorTitle'), (e as Error).message);
-      }
+      const board = await getBoardById(id).then((res) => res.data);
+      const boardInfo = {
+        id: board._id,
+        title: JSON.parse(board.title).title,
+      };
+      dispatch(setCurrentBoard(boardInfo));
     },
-    [message, dispatch]
+    [dispatch]
+  );
+
+  const getColumnsData = useCallback(
+    async (id: string) => {
+      const columns = await getColumnsInBoard(id).then((res) => res.data);
+
+      dispatch(setColumns(mapperColumns(columns)));
+    },
+    [dispatch]
   );
 
   useEffect(() => {
-    if (idParam) {
-      getBoardInfo(idParam);
-    }
-  }, [idParam, getBoardInfo]);
+    const fetchData = async () => {
+      if (idParam) {
+        setIsLoading(true);
+        try {
+          await getBoardInfo(idParam);
+          await getColumnsData(idParam);
+        } catch (e) {
+          showNotification('error', message('errorTitle'), (e as Error).message);
+        }
+        setIsLoading(false);
+      }
+    };
 
-  const addColumn = () => {
-    /*TODO add column*/
+    fetchData();
+  }, [idParam, getBoardInfo, getColumnsData, message]);
+
+  const closeColumnModal = () => {
+    dispatch(setNewColumnTitle(''));
     setIsShowColumnModal(false);
+  };
+
+  const addColumn = async () => {
+    const titleColumn = newColumnTitle || DEFAULT_COLUMN_TITLE;
+
+    if (idParam) {
+      setIsShowColumnModal(false);
+      setIsLoading(true);
+
+      try {
+        const newColumn = await createColumn(idParam, { title: titleColumn, order: newOrder }).then((res) => res.data);
+        dispatch(setNewColumn(mapperColumn(newColumn)));
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+
+      dispatch(setNewColumnTitle(''));
+      setIsLoading(false);
+    }
   };
 
   const onDragEnd = (res: DropResult) => {
@@ -95,13 +109,16 @@ const BoardPage: React.FC = () => {
   useEffect(() => {
     if (!localStorage.getItem('tokenUser')) {
       navigate('/');
-    } else {
-      const authStatus = checkTokenExpired();
-
-      if (!authStatus) {
-        logout();
-      }
+      showNotification('info', message('pageAccessTitle'), message('pageBoardAccessMessage'));
     }
+
+    const authStatus = checkTokenExpired();
+    if (!authStatus) {
+      logout();
+      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
+    }
+
+    dispatch(setCurrentBoard(null)); // clear previous data
   }, []); //eslint-disable-line
 
   return (
@@ -122,7 +139,7 @@ const BoardPage: React.FC = () => {
               {(provided) => (
                 <ColumnsPanel ref={provided.innerRef} {...provided.droppableProps}>
                   {columns.map((col) => (
-                    <Column id={col._id} title={col.title} order={col.order} boardId={col.boardId} key={col._id} />
+                    <Column {...col} key={col.id} />
                   ))}
                 </ColumnsPanel>
               )}
@@ -131,11 +148,13 @@ const BoardPage: React.FC = () => {
         )}
       </Container>
 
+      {isLoading && <Spinner type="fullscreen" />}
+
       <ColumnModal
         title={message('addColumnModalTitle')}
         isVisible={isShowColumnModal}
         onOk={addColumn}
-        onCancel={() => setIsShowColumnModal(false)}
+        onCancel={closeColumnModal}
       />
     </BasePage>
   );
