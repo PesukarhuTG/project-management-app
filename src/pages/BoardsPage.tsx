@@ -161,9 +161,12 @@ const BoardsPage: React.FC = () => {
 };
 
 const Container = styled.div`
+  max-width: 1440px;
   width: 100%;
   height: 100%;
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
   gap: 20px;
 `;
