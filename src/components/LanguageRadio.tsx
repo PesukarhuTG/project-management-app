@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Radio, RadioChangeEvent } from 'antd';
 import styled from 'styled-components';
 import { changeLanguage } from '../store/UserSlice';
@@ -10,6 +10,10 @@ const LanguageRadio = () => {
   const dispatch = useDispatch<AppDispatch>();
   const message = useLocaleMessage();
   const { lang } = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    localStorage.setItem('currentLang', lang);
+  }, [lang]);
 
   return (
     <StyledRadioGroup

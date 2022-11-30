@@ -101,12 +101,13 @@ const BoardPage: React.FC = () => {
   useEffect(() => {
     if (!localStorage.getItem('tokenUser')) {
       navigate('/');
-    } else {
-      const authStatus = checkTokenExpired();
+      showNotification('info', message('pageAccessTitle'), message('pageBoardAccessMessage'));
+    }
 
-      if (!authStatus) {
-        logout();
-      }
+    const authStatus = checkTokenExpired();
+    if (!authStatus) {
+      logout();
+      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
 
     dispatch(setCurrentBoard(null)); // clear previous data

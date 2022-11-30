@@ -9,6 +9,9 @@ import { RootState, AppDispatch } from '../store/Store';
 import { changeAuthStatus, changeUserData } from '../store/UserSlice';
 import { registrationUser, loginUser } from '../services/APIrequests';
 import { useLocaleMessage } from '../hooks';
+import { showNotification } from '../services/notification.service';
+import { decodeToken } from 'react-jwt';
+import { DecodedTokenProps } from '../types';
 
 interface RegistrationValue {
   userName: string;
@@ -24,12 +27,13 @@ const RegistrationPage: React.FC = () => {
   const message = useLocaleMessage();
 
   const onFinish = async (values: RegistrationValue) => {
-    console.log('Success:', values);
     const { userName, userLogin, userPassword } = values;
 
     try {
       const { name, _id, login } = await registrationUser(userName, userLogin, userPassword).then((res) => res.data);
       const { token } = await loginUser(userLogin, userPassword).then((res) => res.data);
+      const { id, exp } = (await decodeToken(token)) as DecodedTokenProps;
+
       const userData = {
         name,
         login,
@@ -40,25 +44,24 @@ const RegistrationPage: React.FC = () => {
       dispatch(changeUserData(userData));
       dispatch(changeAuthStatus(true));
 
-      localStorage.setItem('idUser', _id);
+      localStorage.setItem('idUser', id);
       localStorage.setItem('tokenUser', token);
       localStorage.setItem('loginUser', login);
+      localStorage.setItem('expToken', String(exp));
 
       navigate('/boards');
+      showNotification('success', message('successAuthTitle'));
     } catch (e) {
-      console.log(e);
+      showNotification('error', message('errorTitle'), (e as Error).message);
     } finally {
       registrationForm.resetFields();
     }
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
-
   useEffect(() => {
     if (localStorage.getItem('tokenUser')) {
       navigate('/');
+      showNotification('info', message('pageAccessTitle'), message('pageRegAccessMessage'));
     }
   }, []); //eslint-disable-line
 
@@ -72,7 +75,6 @@ const RegistrationPage: React.FC = () => {
         layout="vertical"
         initialValues={{ name, login, password }}
         onFinish={(values) => onFinish(values as RegistrationValue)}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
@@ -139,8 +141,9 @@ const PageTitle = styled.p`
 `;
 
 const StyledForm = styled(Form)`
+  max-width: 560px;
+  width: 100%;
   margin: 0 auto;
-  max-width: 400px;
 
   .ant-col-offset-8 {
     margin: 0;

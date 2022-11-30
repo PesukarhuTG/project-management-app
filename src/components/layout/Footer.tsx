@@ -28,8 +28,7 @@ const Footer: React.FC = () => {
 };
 
 const StyledFooter = styled.footer`
-  padding: 0 var(--page-gutter);
-  height: var(--footer-h);
+  padding: 20px var(--page-gutter);
   display: flex;
   align-items: center;
   justify-content: center;

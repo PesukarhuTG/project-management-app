@@ -138,7 +138,7 @@ const ColumnPanel = styled.section`
   display: flex;
   flex-direction: column;
   background: var(--board-background);
-  border: 2px solid var(--primary-dark);
+  box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
   border-radius: 30px;
   overflow: hidden;
 `;

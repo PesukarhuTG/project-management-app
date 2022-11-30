@@ -109,8 +109,7 @@ const SectionTitle = styled.h2`
 
 const HeroDescription = styled.p`
   max-width: 600px;
-  font-size: 24px;
-  line-height: 33px;
+  font-size: 20px;
   margin: 0;
 
   @media (max-width: 1120px) {
