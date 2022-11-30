@@ -166,10 +166,10 @@ const ProfileTitle = styled.p`
   font-size: 30px;
   line-height: 41px;
 
-  @media (max-width: 600px) {
+  @media (max-width: 610px) {
     margin: 10px 0 20px;
-    font-size: 26px;
-    line-height: 30px;
+    font-size: 24px;
+    line-height: 1.5;
   }
 `;
 
@@ -195,6 +195,11 @@ const StyledForm = styled(Form)`
       font-size: 18px;
       font-weight: 700;
       line-height: 26px;
+
+      @media (max-width: 610px) {
+        font-size: 16px;
+        line-height: 1.5;
+      }
     }
   }
 
@@ -231,6 +236,10 @@ const PrimaryButton = styled(FormButton)`
     background: var(--btn-primary);
     border: 1px solid var(--btn-primary);
   }
+
+  @media (max-width: 610px) {
+    font-size: 16px;
+  }
 `;
 
 const FormButtons = styled.div`
@@ -239,10 +248,12 @@ const FormButtons = styled.div`
   gap: 20px;
   padding-top: 40px;
 
-  @media (max-width: 450px) {
-    padding-top: 30px;
+  @media (max-width: 610px) {
+    padding-top: 20px;
+  }
+
+  @media (max-width: 510px) {
     flex-direction: column;
-    gap: 10px;
   }
 `;
 
@@ -259,6 +270,10 @@ const SecondaryButton = styled(FormButton)`
   &:active {
     background: var(--btn-second);
     border: 1px solid var(--btn-second);
+  }
+
+  @media (max-width: 610px) {
+    font-size: 16px;
   }
 `;
 
