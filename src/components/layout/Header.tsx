@@ -167,6 +167,7 @@ const BurgerMenu = styled.button<{
 
 const StyledHeader = styled.header`
   padding: 26px var(--page-gutter);
+  height: var(--header-h);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -182,12 +183,19 @@ const StyledHeader = styled.header`
     top: 0;
     height: calc(var(--header-h) - var(--header-animate-offset));
     margin-bottom: var(--header-animate-offset);
+    background: linear-gradient(180deg, var(--primary-dark) 0%, var(--burgerBgr-02) 100%);
     z-index: 1;
   }
 
-  @media (max-width: 610px) {
+  @media (max-width: 700px) {
     gap: 16px;
     padding: 20px;
+    font-size: 16px;
+  }
+
+  @media (max-width: 400px) {
+    gap: 5px;
+    padding: 20px 8px;
     font-size: 16px;
   }
 `;
@@ -214,7 +222,7 @@ const Title = styled.h1`
   font-weight: 700;
   order: 1;
 
-  @media (max-width: 460px) {
+  @media (max-width: 540px) {
     display: none;
   }
 `;
@@ -226,7 +234,7 @@ const HomeLink = styled(Link)`
     color: inherit;
   }
 
-  @media (max-width: 610px) {
+  @media (max-width: 700px) {
     font-size: 20px;
   }
 `;
@@ -350,6 +358,10 @@ const NavIcon = styled.img`
 
 const UnauthorizedPanel = styled(Panel)`
   order: 3;
+
+  @media (max-width: 400px) {
+    gap: 5px;
+  }
 `;
 
 const SettingPanel = styled(Panel)`
@@ -376,9 +388,13 @@ const StyledAuthButton = styled(Link)`
     color: var(--light-font);
   }
 
-  @media (max-width: 610px) {
+  @media (max-width: 700px) {
     font-size: 16px;
     padding: 0 15px;
+  }
+
+  @media (max-width: 400px) {
+    padding: 0 8px;
   }
 `;
 

@@ -36,7 +36,7 @@ const StyledFooter = styled.footer`
   font-size: 18px;
   background-color: var(--nav-background);
 
-  @media (max-width: 610px) {
+  @media (max-width: 700px) {
     padding: 20px;
     font-size: 16px;
     line-height: 1.5;
@@ -61,7 +61,7 @@ const Developers = styled.div`
     flex-direction: column;
   }
 
-  @media (max-width: 610px) {
+  @media (max-width: 700px) {
     margin: 0;
   }
 `;
