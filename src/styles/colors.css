@@ -13,4 +13,11 @@
   --btn-primary-hover: #61b2fd;
   --btn-second: #f53e94;
   --btn-second-hover: #fc67ad;
+
+  --boardBgrColor-01: rgba(0, 151, 250, 0.2);
+  --boardBgrColor-02: rgba(0, 80, 245, 0.2);
+
+  --burgerBgr-01: #1e54a2;
+  --burgerBgr-02: rgba(10, 48, 102, 1);
+  --burger-overlay: rgba(0, 0, 0, 0.45);
 }

@@ -138,6 +138,11 @@ const PageTitle = styled.p`
   line-height: 54px;
   text-align: center;
   color: var(--primary);
+
+  @media (max-width: 700px) {
+    font-size: 36px;
+    line-height: 1.5;
+  }
 `;
 
 const StyledForm = styled(Form)`
