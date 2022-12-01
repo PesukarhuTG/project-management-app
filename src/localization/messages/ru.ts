@@ -50,7 +50,7 @@ const ru: LocaleMessages = {
   boardModalTitle: 'Создать новую доску',
   saveModal: 'Сохранить',
   cancelModal: 'Отмена',
-  taskAuthor: 'Автор',
+  taskAuthor: 'Ответственный',
   taskModalTitle: 'Редактировать задачу',
   confirmDeleteTask: 'Вы действительно хотите удалить задачу?',
   addNameTaskModal: 'Название задачи',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { ConfirmModal, IconButton, TaskModal } from './';
 import { useLocaleMessage } from '../hooks';
@@ -17,13 +17,20 @@ interface TaskProps {
   users?: string[];
 }
 
-const Task: React.FC<TaskProps> = ({ id, title, description, order }) => {
+const Task: React.FC<TaskProps> = ({ id, title, description, order, userId }) => {
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const message = useLocaleMessage();
+  const { options } = useSelector((state: RootState) => state.tasks);
+  const [userName, setUserName] = useState<string>('');
 
-  const { options, responsibleUserName } = useSelector((state: RootState) => state.tasks);
-  // const userName = 'userName'; //TODO получить имя пользователя
+  useEffect(() => {
+    options.forEach((option) => {
+      if (option.value === userId) {
+        setUserName(option.label);
+      }
+    });
+  }, [userId, options]);
 
   const editTask = () => {
     /*TODO edit task*/
@@ -43,7 +50,7 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order }) => {
           <div>{description}</div>
           <div>
             <b>{message('taskAuthor')}: </b>
-            {responsibleUserName}
+            {userName}
           </div>
           <Footer>
             <IconButton icon="edit" onClick={() => setIsShowEditModal(true)} />

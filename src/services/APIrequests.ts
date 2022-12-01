@@ -116,20 +116,13 @@ export const createTask = async (
   columnId: string,
   data: TaskCreateData
 ): Promise<AxiosResponse<TaskResponse>> => {
-  console.log('createTask');
-  const res = await axiosApi.post<TaskResponse>(`/boards/${boardId}/columns/${columnId}/tasks`, data);
-  // console.log(res);
-  return res;
+  return axiosApi.post<TaskResponse>(`/boards/${boardId}/columns/${columnId}/tasks`, data);
 };
 
 export const getTasksInColumn = async (boardId: string, columnId: string): Promise<AxiosResponse<TaskResponse[]>> => {
-  console.log('getAllTask');
-  const res = await axiosApi.get<TaskResponse[]>(`/boards/${boardId}/columns/${columnId}/tasks`);
-  // console.log(res);
-  return res;
+  return axiosApi.get<TaskResponse[]>(`/boards/${boardId}/columns/${columnId}/tasks`);
 };
 
 export const getResponsibleUser = async (id: string): Promise<AxiosResponse<RegistrationResponse>> => {
-  console.log('запрос получения ResponsibleUser');
   return axiosApi.get<RegistrationResponse>(`/users/${id}`);
 };

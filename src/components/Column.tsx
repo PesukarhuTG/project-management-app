@@ -4,27 +4,15 @@ import styled from 'styled-components';
 import { ConfirmModal, IconButton, TaskModal, Task, Spinner } from './';
 import checkIcon from '../assets/ico/icon-check.svg';
 import cancelIcon from '../assets/ico/icon-cancel.svg';
-
-import {
-  createTask,
-  fetchUsers,
-  getResponsibleUser,
-  getTasksInColumn,
-  getUserIds,
-  getUserNames,
-  updateColumn,
-} from '../services/APIrequests';
+import { createTask, getTasksInColumn, getUserIds, getUserNames, updateColumn } from '../services/APIrequests';
 import { mapperColumn } from '../services/mappers';
 import { showNotification } from '../services/notification.service';
 import { useLocaleMessage } from '../hooks';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
 import { updateColumnData } from '../store/ColumnsSlice';
-import { setOptions, setResponsibleUserName, setTaskLoading, setTaskOrder, setTasks } from '../store/TasksSlice';
-
+import { setOptions, setTaskDescription, setTaskOrder, setTasks, setTaskTitle } from '../store/TasksSlice';
 import { OptionsProps } from '../types/ModalProps';
-import { TaskResponse } from '../types';
 
 interface ColumnProps {
   id: string;
@@ -35,18 +23,14 @@ interface ColumnProps {
 const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
   const dispatch = useDispatch<AppDispatch>();
   const idBoard = useSelector((state: RootState) => state.boards.currentBoard?.id);
-  const columns = useSelector((state: RootState) => state.columns.columns);
   const message = useLocaleMessage();
   const {
-    // taskModalVisible,
     title: taskTitle,
-    // order: taskOrder,
     description: taskDescription,
     tasks,
     options,
   } = useSelector((state: RootState) => state.tasks);
   const taskOrder = useSelector((state: RootState) => state.tasks.order) + 1;
-
   const [responsibleUser, setResponsibleUser] = useState<string>('');
   const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
 
@@ -55,10 +39,6 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
-
-  // const [tasks, setTasksUseState] = useState<TaskResponse[]>([]);
-
-  // const [tasks] = useState<TaskData[]>(TaskMock); //TODO get real task data
 
   const updateTitle = useCallback(async () => {
     setIsEdit(false);
@@ -84,74 +64,73 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
     setIsEdit(false);
   }, [title]);
 
-  const getOptions = async () => {
-    const userNames = await getUserNames();
-    const userIds = await getUserIds();
-    const optionsList: OptionsProps[] = [];
-    for (let i = 0; i < userNames.length; i++) {
-      optionsList.push({ value: userIds[i], label: userNames[i] });
-    }
-    dispatch(setOptions(optionsList));
-  };
-
-  useEffect(() => {
-    getOptions();
-    getTasks(id);
-  }, []);
-
-  useEffect(() => {
-    findMaxOrder();
-  }, [tasks]);
-
-  const findMaxOrder = () => {
-    const ordersArr = Object.values(tasks);
-    let orders: number[] = [];
-    ordersArr.forEach((el) =>
-      el.forEach((elem) => {
-        orders.push(elem.order);
-      })
-    );
-    const maxOrder = orders.length ? Math.max(...orders) : 0;
-    dispatch(setTaskOrder(maxOrder));
-  };
-
-  const getResponsibleUserName = async (user: string) => {
-    console.log(responsibleUser);
-    const userName = await getResponsibleUser(user).then((res) => res.data.name);
-    console.log(userName);
-    dispatch(setResponsibleUserName(userName));
-  };
-
-  const getTasks = async (id: string) => {
+  const getTasks = useCallback(async () => {
     if (idBoard) {
-      const tasksArray = await getTasksInColumn(idBoard, id).then((res) => res.data);
-
-      dispatch(setTasks({ [id]: tasksArray }));
-
-      // setTasksUseState(tasks);
+      setIsLoading(true);
+      try {
+        const tasksArray = await getTasksInColumn(idBoard, id).then((res) => res.data);
+        dispatch(setTasks({ [id]: tasksArray }));
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+      setIsLoading(false);
     }
-  };
+  }, [dispatch, idBoard, message, id]);
+
+  useEffect(() => {
+    const getOptions = async () => {
+      try {
+        const userNames = await getUserNames();
+        const userIds = await getUserIds();
+        const optionsList: OptionsProps[] = [];
+        for (let i = 0; i < userNames.length; i++) {
+          optionsList.push({ value: userIds[i], label: userNames[i] });
+        }
+        dispatch(setOptions(optionsList));
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+    };
+
+    getOptions();
+    getTasks();
+  }, [dispatch, getTasks, message]);
+
+  useEffect(() => {
+    if (idBoard) {
+      const tasksArray = Object.values(tasks);
+      let orders: number[] = [];
+      tasksArray.forEach((el) =>
+        el.forEach((elem) => {
+          orders.push(elem.order);
+        })
+      );
+      const maxOrder = orders.length ? Math.max(...orders) : 0;
+      dispatch(setTaskOrder(maxOrder));
+    }
+  }, [tasks, dispatch, idBoard]);
 
   const addTask = async () => {
     setTaskModalVisible(false);
-
+    setIsLoading(true);
+    dispatch(setTaskTitle(''));
+    dispatch(setTaskDescription(''));
     if (idBoard) {
       try {
         const userIds = await getUserIds();
-        const newTask = await createTask(idBoard, id, {
+        await createTask(idBoard, id, {
           title: taskTitle,
           order: taskOrder,
           description: taskDescription,
           userId: responsibleUser,
           users: userIds,
-        }).then((res) => res.data);
-        console.log(newTask);
-        getResponsibleUserName(newTask.userId);
+        });
         dispatch(setTaskOrder(taskOrder));
-        getTasks(id);
-      } catch {
-        console.log('error');
+        getTasks();
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
       }
+      setIsLoading(false);
     }
   };
 
@@ -194,6 +173,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
                       title={task.title}
                       description={task.description}
                       order={task.order}
+                      userId={task.userId}
                       key={task._id}
                     />
                   ))}
