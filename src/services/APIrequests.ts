@@ -103,3 +103,7 @@ export const updateColumn = async (
 ): Promise<AxiosResponse<ColumnResponse>> => {
   return axiosApi.put<ColumnResponse>(`/boards/${idBoard}/columns/${idColumn}`, data);
 };
+
+export const deleteColumn = async (idBoard: string, idColumn: string): Promise<AxiosResponse<ColumnResponse>> => {
+  return axiosApi.delete<ColumnResponse>(`/boards/${idBoard}/columns/${idColumn}`);
+};

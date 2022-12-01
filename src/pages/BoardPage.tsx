@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
 import { setCurrentBoard } from '../store/BoardsSlice';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
-import { setColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
+import { setColumns, setInitialColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
 
 const DEFAULT_COLUMN_TITLE = 'Column';
 
@@ -118,7 +118,9 @@ const BoardPage: React.FC = () => {
       showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
 
-    dispatch(setCurrentBoard(null)); // clear previous data
+    // clear previous data
+    dispatch(setCurrentBoard(null));
+    dispatch(setInitialColumns());
   }, []); //eslint-disable-line
 
   return (
