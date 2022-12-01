@@ -1,7 +1,7 @@
 import axiosApi from '../http';
 import { AxiosResponse } from 'axios';
 import { BoardResponse, LoginResponse, RegistrationResponse } from '../types';
-import { ColumnCreateData, ColumnResponse } from '../types/ColumnModel';
+import { ColumnCreateData, ColumnReorderData, ColumnResponse } from '../types/ColumnModel';
 
 export const registrationUser = async (
   name: string,
@@ -106,4 +106,8 @@ export const updateColumn = async (
 
 export const deleteColumn = async (idBoard: string, idColumn: string): Promise<AxiosResponse<ColumnResponse>> => {
   return axiosApi.delete<ColumnResponse>(`/boards/${idBoard}/columns/${idColumn}`);
+};
+
+export const reorderColumns = async (data: ColumnReorderData[]): Promise<AxiosResponse<ColumnResponse[]>> => {
+  return axiosApi.patch<ColumnResponse[]>(`/columnsSet`, data);
 };

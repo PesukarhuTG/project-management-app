@@ -19,6 +19,7 @@ interface ColumnProps {
   title: string;
   order: number;
   boardId: string;
+  dndIndex: number;
 }
 
 interface TaskData {
@@ -55,7 +56,7 @@ const TaskMock: TaskData[] = [
   },
 ];
 
-const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
+const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
   const dispatch = useDispatch<AppDispatch>();
   const idBoard = useSelector((state: RootState) => state.boards.currentBoard?.id);
   const message = useLocaleMessage();
@@ -137,7 +138,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
   }, [isEdit, title, newTitle, cancelUpdateTitle, updateTitle]);
 
   return (
-    <Draggable draggableId={id} index={order}>
+    <Draggable draggableId={id} index={dndIndex}>
       {(provided) => (
         <ColumnPanel ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
           <Header>{titleContent}</Header>
