@@ -36,15 +36,17 @@ const StyledFooter = styled.footer`
   font-size: 18px;
   background-color: var(--nav-background);
 
-  @media (max-width: 576px) {
+  @media (max-width: 700px) {
+    padding: 20px;
     font-size: 16px;
+    line-height: 1.5;
   }
 `;
 
 const CopyRight = styled.div`
   margin-right: auto;
 
-  @media (max-width: 576px) {
+  @media (max-width: 530px) {
     display: none;
   }
 `;
@@ -59,8 +61,8 @@ const Developers = styled.div`
     flex-direction: column;
   }
 
-  @media (max-width: 576px) {
-    margin-left: 0;
+  @media (max-width: 700px) {
+    margin: 0;
   }
 `;
 
@@ -96,6 +98,12 @@ const LinkCourse = styled.a`
 
   &:hover {
     opacity: 1;
+  }
+
+  @media (max-width: 360px) {
+    & > img {
+      width: 80px;
+    }
   }
 `;
 

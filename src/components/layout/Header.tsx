@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import classNames from 'classnames';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { LanguageRadio } from '..';
 import iconAvatar from '../../assets/ico/icon-avatar.svg';
 import iconEditProfile from '../../assets/ico/icon-edit-profile.svg';
@@ -18,6 +18,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
+  const [visibleBurgerMenu, setVisibleBurgerMenu] = useState<boolean>(false);
   const navigate = useNavigate();
   const message = useLocaleMessage();
   const { login, lang } = useSelector((state: RootState) => state.user);
@@ -36,8 +37,22 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 
   const createBoard = () => {
     dispatch(setCreateModalVisible(true));
+    setVisibleBurgerMenu(false);
     navigate('/boards');
   };
+
+  useEffect(() => {
+    if (visibleBurgerMenu) {
+      const widthScroll = window.innerWidth - document.body.offsetWidth;
+
+      document.body.style.cssText = `
+          overflow: hidden;
+          padding-right: ${widthScroll}px;
+      `;
+    } else {
+      document.body.style.cssText = '';
+    }
+  }, [visibleBurgerMenu]);
 
   const headerContent = useMemo(() => {
     if (localStorage.getItem('tokenUser')) {
@@ -47,11 +62,11 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
             <Avatar>
               <img src={iconAvatar} alt="user avatar" />
             </Avatar>
-            <Login>{login}</Login>
+            <Login>{login || localStorage.getItem('loginUser')}</Login>
           </UserData>
 
-          <NavPanel>
-            <StyledNavLink to="/profile">
+          <NavPanel $visibleBurgerMenu={visibleBurgerMenu}>
+            <StyledNavLink to="/profile" onClick={() => setVisibleBurgerMenu(false)}>
               <NavIcon src={iconEditProfile} alt="icon" />
               {message('editItemMenu')}
             </StyledNavLink>
@@ -61,11 +76,19 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
               {message('createItemMenu')}
             </StyledNavButton>
 
-            <StyledNavLink to="/boards">
+            <StyledNavLink to="/boards" onClick={() => setVisibleBurgerMenu(false)}>
               <NavIcon src={iconBoards} alt="icon" />
               {message('mainItemMenu')}
             </StyledNavLink>
           </NavPanel>
+
+          <BurgerMenu $visibleBurgerMenu={visibleBurgerMenu} onClick={() => setVisibleBurgerMenu(!visibleBurgerMenu)}>
+            <div className="burger-menu-lines">
+              <div className="burger-menu-line-1"></div>
+              <div className="burger-menu-line-2"></div>
+              <div className="burger-menu-line-3"></div>
+            </div>
+          </BurgerMenu>
         </>
       );
     }
@@ -76,34 +99,117 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
         <StyledAuthButton to="/auth">{message('btnSignIn')}</StyledAuthButton>
       </UnauthorizedPanel>
     );
-  }, [login, lang]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [login, lang, visibleBurgerMenu]); //eslint-disable-line
 
   return (
-    <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
-      <Title>
-        <HomeLink to="/">RSS Kanban</HomeLink>
-      </Title>
-      {headerContent}
-      <SettingPanel>
-        {localStorage.getItem('tokenUser') && (
-          <StyledAuthButton to="/" onClick={logout}>
-            {message('btnSignOut')}
-          </StyledAuthButton>
-        )}
-        <LanguageRadio />
-      </SettingPanel>
-    </StyledHeader>
+    <>
+      <Overlay $visibleBurgerMenu={visibleBurgerMenu} onClick={() => setVisibleBurgerMenu(false)} />
+      <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
+        <Title>
+          <HomeLink to="/">RSS Kanban</HomeLink>
+        </Title>
+        {headerContent}
+        <SettingPanel>
+          {localStorage.getItem('tokenUser') && (
+            <StyledAuthButton to="/" onClick={logout}>
+              {message('btnSignOut')}
+            </StyledAuthButton>
+          )}
+          <LanguageRadio />
+        </SettingPanel>
+      </StyledHeader>
+    </>
   );
 };
 
+const Overlay = styled.div<{
+  $visibleBurgerMenu: boolean;
+}>`
+  ${({ $visibleBurgerMenu }) => {
+    if ($visibleBurgerMenu) {
+      return css`
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--burger-overlay);
+        z-index: 2;
+      `;
+    }
+  }}
+`;
+
+const BurgerMenu = styled.button<{
+  $visibleBurgerMenu: boolean;
+}>`
+  display: none;
+  width: 40px;
+  height: 48px;
+  border: 0;
+  background-color: transparent;
+
+  cursor: pointer;
+  z-index: 10;
+  order: 4;
+
+  & > .burger-menu-lines {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    cursor: pointer;
+  }
+
+  & > .burger-menu-lines [class^='burger-menu-line-'] {
+    width: 30px;
+    height: 2px;
+    margin: 4px 0;
+    background-color: #fff;
+    transition: all 0.5s ease;
+  }
+
+  &:hover {
+    & > .burger-menu-lines [class^='burger-menu-line-'] {
+      box-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
+    }
+  }
+
+  @media (max-width: 1500px) {
+    display: block;
+
+    ${({ $visibleBurgerMenu }) => {
+      if ($visibleBurgerMenu) {
+        return css`
+          & > .burger-menu-lines .burger-menu-line-1 {
+            transform: translatey(14px) rotate(45deg);
+          }
+
+          & > .burger-menu-lines .burger-menu-line-2 {
+            transform: scale(0);
+          }
+
+          & > .burger-menu-lines .burger-menu-line-3 {
+            transform: translatey(-6px) rotate(-45deg);
+          }
+        `;
+      }
+    }}
+  }
+`;
+
 const StyledHeader = styled.header`
   padding: 26px var(--page-gutter);
+  height: var(--header-h);
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 24px;
   color: var(--light-font);
-  background-color: var(--nav-background);
+  background-color: var(--primary-dark);
   transition: height 0.5s ease-in-out, margin-bottom 0.5s ease-in-out;
   box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
 
@@ -113,19 +219,20 @@ const StyledHeader = styled.header`
     top: 0;
     height: calc(var(--header-h) - var(--header-animate-offset));
     margin-bottom: var(--header-animate-offset);
+    background: linear-gradient(180deg, var(--primary-dark) 0%, var(--burgerBgr-02) 100%);
     z-index: 1;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 700px) {
     gap: 16px;
-  }
-
-  @media (max-width: 576px) {
+    padding: 20px;
     font-size: 16px;
   }
 
-  @media (max-width: 480px) {
-    justify-content: space-between;
+  @media (max-width: 400px) {
+    gap: 5px;
+    padding: 20px 8px;
+    font-size: 16px;
   }
 `;
 
@@ -138,7 +245,7 @@ const Panel = styled.div`
     gap: 8px 16px;
 
     .header-sticky & {
-      gap: 4px 16px;
+      gap: 16px;
     }
   }
 `;
@@ -148,10 +255,10 @@ const Title = styled.h1`
   padding: 0;
   color: var(--light-font);
   font-size: 26px;
-  font-weight: 800;
+  font-weight: 700;
   order: 1;
 
-  @media (max-width: 576px) {
+  @media (max-width: 540px) {
     display: none;
   }
 `;
@@ -162,6 +269,10 @@ const HomeLink = styled(Link)`
   &:hover {
     color: inherit;
   }
+
+  @media (max-width: 700px) {
+    font-size: 20px;
+  }
 `;
 
 const UserData = styled.div`
@@ -169,6 +280,10 @@ const UserData = styled.div`
   align-items: center;
   gap: 10px;
   order: 3;
+
+  @media (max-width: 772px) {
+    display: none;
+  }
 `;
 
 const Avatar = styled.div`
@@ -187,34 +302,47 @@ const Avatar = styled.div`
     width: 100%;
     object-fit: cover;
   }
-
-  @media (max-width: 992px) {
-    display: none;
-  }
 `;
 
 const Login = styled.span`
   text-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
 `;
 
-const NavPanel = styled(Panel)`
+const NavPanel = styled(Panel)<{
+  $visibleBurgerMenu: boolean;
+}>`
   align-items: center;
   order: 3;
 
-  @media (max-width: 1200px) {
-    margin-right: auto;
+  @media (max-width: 1500px) {
     flex-direction: column;
+    gap: 30px;
     align-items: flex-start;
-    order: 2;
+    position: fixed;
+    top: 0;
+    right: -320px;
+    width: 320px;
+    height: 100%;
+    padding-top: 130px;
+    padding-left: 20px;
+    background-color: var(--nav-background);
+    background: linear-gradient(160deg, var(--burgerBgr-01) 0%, var(--burgerBgr-02) 100%);
+    transition: right 0.3s;
+    z-index: 5;
 
-    .header-sticky & {
-      gap: 4px 16px;
-    }
+    ${({ $visibleBurgerMenu }) => {
+      if ($visibleBurgerMenu) {
+        return css`
+          right: 0;
+        `;
+      }
+    }}
   }
 `;
 
 const StyledNavLink = styled(NavLink)`
   color: inherit;
+  transition: text-shadow 0.3s;
 
   & > span {
     border-bottom: 1px solid transparent;
@@ -229,9 +357,8 @@ const StyledNavLink = styled(NavLink)`
     }
   }
 
-  &.active {
-    text-shadow: 0 0 0 currentColor;
-    pointer-events: none;
+  &:hover {
+    text-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
   }
 `;
 
@@ -239,6 +366,7 @@ const StyledNavButton = styled.button`
   font-size: inherit;
   background: none;
   border: none;
+  transition: text-shadow 0.3s;
   cursor: pointer;
 
   & > span {
@@ -253,6 +381,10 @@ const StyledNavButton = styled.button`
       border-bottom-color: currentColor;
     }
   }
+
+  &:hover {
+    text-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
+  }
 `;
 
 const NavIcon = styled.img`
@@ -263,18 +395,14 @@ const NavIcon = styled.img`
 const UnauthorizedPanel = styled(Panel)`
   order: 3;
 
-  @media (max-width: 480px) {
-    flex-direction: column;
+  @media (max-width: 400px) {
+    gap: 5px;
   }
 `;
 
 const SettingPanel = styled(Panel)`
   flex-shrink: 0;
   order: 3;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-  }
 `;
 
 const StyledAuthButton = styled(Link)`
@@ -294,6 +422,15 @@ const StyledAuthButton = styled(Link)`
   &:hover {
     background: var(--btn-primary-hover);
     color: var(--light-font);
+  }
+
+  @media (max-width: 700px) {
+    font-size: 16px;
+    padding: 0 15px;
+  }
+
+  @media (max-width: 400px) {
+    padding: 0 8px;
   }
 `;
 
