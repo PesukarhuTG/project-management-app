@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { InitialTasksState, TaskResponse } from '../types';
+import { InitialTasksState } from '../types';
 import { OptionsProps } from '../types/ModalProps';
+import { Tasks } from '../types/InitialTasksState';
 
 const initialState: InitialTasksState = {
   taskModalVisible: false,
@@ -9,16 +10,10 @@ const initialState: InitialTasksState = {
   title: '',
   description: '',
   order: 0,
-  tasks: [],
+  tasks: { id: [] },
   options: [],
+  responsibleUserName: '',
 };
-
-//  const newOrder = useSelector((state: RootState) => state.columns.orderCounter) + 1;
-
-// setNewColumn(state, action: PayloadAction<ColumnModel>) {
-//       state.columns = [...state.columns, action.payload].sort((a, b) => a.order - b.order);
-//       state.orderCounter = action.payload.order;
-//     },
 
 const tasksSlice = createSlice({
   name: 'tasks',
@@ -39,22 +34,24 @@ const tasksSlice = createSlice({
     setTaskOrder(state, action: PayloadAction<number>) {
       state.order = action.payload;
     },
-    setTasks(state, action: PayloadAction<TaskResponse[]>) {
-      state.tasks = action.payload;
+    setTasks(state, action: PayloadAction<Tasks>) {
+      state.tasks = { ...state.tasks, ...action.payload };
+
+      // const ordersArr = Object.values(state.tasks);
+      // let orders: number[] = [];
+      // ordersArr.forEach((el) =>
+      //   el.forEach((elem) => {
+      //     orders.push(elem.order);
+      //   })
+      // );
+      // state.order = Math.max(...orders);
     },
     setOptions(state, action: PayloadAction<OptionsProps[]>) {
       state.options = action.payload;
     },
-
-    // setSearch(state, action: PayloadAction<string>) {
-    //   state.search = action.payload;
-    // },
-    // setFilteredBoards(state, action: PayloadAction<BoardProps[]>) {
-    //   state.filteredBoards = action.payload;
-    // },
-    // setCurrentBoard(state, action: PayloadAction<BoardInfo | null>) {
-    //   state.currentBoard = action.payload;
-    // },
+    setResponsibleUserName(state, action: PayloadAction<string>) {
+      state.responsibleUserName = action.payload;
+    },
   },
 });
 
@@ -66,5 +63,6 @@ export const {
   setTaskOrder,
   setTasks,
   setOptions,
+  setResponsibleUserName,
 } = tasksSlice.actions;
 export default tasksSlice.reducer;

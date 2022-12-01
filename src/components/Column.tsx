@@ -8,6 +8,7 @@ import cancelIcon from '../assets/ico/icon-cancel.svg';
 import {
   createTask,
   fetchUsers,
+  getResponsibleUser,
   getTasksInColumn,
   getUserIds,
   getUserNames,
@@ -20,15 +21,15 @@ import { useLocaleMessage } from '../hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
 import { updateColumnData } from '../store/ColumnsSlice';
-import { setOptions, setTaskLoading, setTaskModalVisible, setTaskOrder, setTasks } from '../store/TasksSlice';
+import { setOptions, setResponsibleUserName, setTaskLoading, setTaskOrder, setTasks } from '../store/TasksSlice';
 
 import { OptionsProps } from '../types/ModalProps';
+import { TaskResponse } from '../types';
 
 interface ColumnProps {
   id: string;
   title: string;
   order: number;
-  boardId: string;
 }
 
 const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
@@ -37,20 +38,25 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
   const columns = useSelector((state: RootState) => state.columns.columns);
   const message = useLocaleMessage();
   const {
-    taskModalVisible,
+    // taskModalVisible,
     title: taskTitle,
-    order: taskOrder,
+    // order: taskOrder,
     description: taskDescription,
     tasks,
     options,
   } = useSelector((state: RootState) => state.tasks);
+  const taskOrder = useSelector((state: RootState) => state.tasks.order) + 1;
+
   const [responsibleUser, setResponsibleUser] = useState<string>('');
+  const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState(title);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+
+  // const [tasks, setTasksUseState] = useState<TaskResponse[]>([]);
 
   // const [tasks] = useState<TaskData[]>(TaskMock); //TODO get real task data
 
@@ -90,51 +96,63 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
 
   useEffect(() => {
     getOptions();
-    getTasks();
+    getTasks(id);
   }, []);
 
-  // useEffect(() => {
-  //   // getTasks();
-  //   dispatch(setTasks(tasks));
-  // }, [tasks]);
+  useEffect(() => {
+    findMaxOrder();
+  }, [tasks]);
 
-  const getTasks = async () => {
+  const findMaxOrder = () => {
+    const ordersArr = Object.values(tasks);
+    let orders: number[] = [];
+    ordersArr.forEach((el) =>
+      el.forEach((elem) => {
+        orders.push(elem.order);
+      })
+    );
+    const maxOrder = orders.length ? Math.max(...orders) : 0;
+    dispatch(setTaskOrder(maxOrder));
+  };
+
+  const getResponsibleUserName = async (user: string) => {
+    console.log(responsibleUser);
+    const userName = await getResponsibleUser(user).then((res) => res.data.name);
+    console.log(userName);
+    dispatch(setResponsibleUserName(userName));
+  };
+
+  const getTasks = async (id: string) => {
     if (idBoard) {
-      const tasks = await getTasksInColumn(idBoard, id).then((res) => res.data);
-      dispatch(setTasks(tasks));
+      const tasksArray = await getTasksInColumn(idBoard, id).then((res) => res.data);
+
+      dispatch(setTasks({ [id]: tasksArray }));
+
+      // setTasksUseState(tasks);
     }
   };
 
   const addTask = async () => {
-    console.log(id);
-    console.log(columns);
-    dispatch(setTaskModalVisible(false));
-    // if (idBoard) {
-    // console.log(columns);
-    // const columnIds = columns.map((column) => column.id);
-    // console.log(columnIds);
-    // columnIds.forEach(async (columnId) => {
-    //   if (columnId === id) {
-    // console.log(columnId);
-    //   try {
-    //     const userIds = await getUserIds();
-    //     const newTask = await createTask(idBoard, id, {
-    //       title: taskTitle,
-    //       order: taskOrder,
-    //       description: taskDescription,
-    //       userId: responsibleUser,
-    //       users: userIds,
-    //     }).then((res) => res.data);
-    //     console.log(newTask);
-    //     dispatch(setTaskOrder(taskOrder + 1));
-    //     getTasks();
-    //   } catch {
-    //     console.log('error');
-    //   }
-    // }
-    //   });
-    // }
-    // }
+    setTaskModalVisible(false);
+
+    if (idBoard) {
+      try {
+        const userIds = await getUserIds();
+        const newTask = await createTask(idBoard, id, {
+          title: taskTitle,
+          order: taskOrder,
+          description: taskDescription,
+          userId: responsibleUser,
+          users: userIds,
+        }).then((res) => res.data);
+        console.log(newTask);
+        getResponsibleUserName(newTask.userId);
+        dispatch(setTaskOrder(taskOrder));
+        getTasks(id);
+      } catch {
+        console.log('error');
+      }
+    }
   };
 
   const deleteColumn = () => {
@@ -166,11 +184,11 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
       {(provided) => (
         <ColumnPanel ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
           <Header>{titleContent}</Header>
-          {!!tasks.length && (
+          {!!tasks[id] && (
             <Droppable droppableId={id} type="task">
               {(providedInner) => (
                 <Body ref={providedInner.innerRef} {...providedInner.droppableProps}>
-                  {tasks.map((task) => (
+                  {tasks[id].map((task) => (
                     <Task
                       id={`${id}-${task._id}`}
                       title={task.title}
@@ -186,7 +204,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
           )}
 
           <Footer>
-            <AddButton onClick={() => dispatch(setTaskModalVisible(true))}>{message('btnAddNewTask')}</AddButton>
+            <AddButton onClick={() => setTaskModalVisible(true)}>{message('btnAddNewTask')}</AddButton>
             <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
           </Footer>
 
@@ -194,7 +212,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
             title={message('addTaskModalTitle')}
             isVisible={taskModalVisible}
             onOk={addTask}
-            onCancel={() => dispatch(setTaskModalVisible(false))}
+            onCancel={() => setTaskModalVisible(false)}
             options={options}
             onChange={(value) => setResponsibleUser(value)}
           />

@@ -128,3 +128,8 @@ export const getTasksInColumn = async (boardId: string, columnId: string): Promi
   // console.log(res);
   return res;
 };
+
+export const getResponsibleUser = async (id: string): Promise<AxiosResponse<RegistrationResponse>> => {
+  console.log('запрос получения ResponsibleUser');
+  return axiosApi.get<RegistrationResponse>(`/users/${id}`);
+};

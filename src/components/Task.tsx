@@ -22,8 +22,8 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order }) => {
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const message = useLocaleMessage();
 
-  const { options } = useSelector((state: RootState) => state.tasks);
-  const userName = 'userName'; //TODO получить имя пользователя
+  const { options, responsibleUserName } = useSelector((state: RootState) => state.tasks);
+  // const userName = 'userName'; //TODO получить имя пользователя
 
   const editTask = () => {
     /*TODO edit task*/
@@ -43,7 +43,7 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order }) => {
           <div>{description}</div>
           <div>
             <b>{message('taskAuthor')}: </b>
-            {userName}
+            {responsibleUserName}
           </div>
           <Footer>
             <IconButton icon="edit" onClick={() => setIsShowEditModal(true)} />

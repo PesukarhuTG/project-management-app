@@ -1,17 +1,20 @@
 import { OptionsProps } from './ModalProps';
 import TaskResponse from './TaskModel';
 
+export interface Tasks {
+  [id: string]: TaskResponse[];
+}
+
 interface InitialTasksState {
   taskModalVisible: boolean;
   taskLoading: boolean;
   title: string;
   description: string;
   order: number;
-  tasks: TaskResponse[];
+  // tasks: TaskResponse[];
+  tasks: Tasks;
   options: OptionsProps[];
-  //   search: string;
-  //   filteredBoards: BoardProps[];
-  //   currentBoard: BoardInfo | null;
+  responsibleUserName: string;
 }
 
 export default InitialTasksState;
