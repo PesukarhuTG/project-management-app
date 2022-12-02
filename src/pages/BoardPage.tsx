@@ -15,7 +15,8 @@ import { AppDispatch, RootState } from '../store/Store';
 import { setCurrentBoard } from '../store/BoardsSlice';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 import { setColumns, setInitialColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
-import { reorderColumn } from '../services/dnd.service';
+import { reorderDroppableZone } from '../services/dnd.service';
+import ColumnModel from '../types/ColumnModel';
 
 const DEFAULT_COLUMN_TITLE = 'Column';
 
@@ -115,7 +116,7 @@ const BoardPage: React.FC = () => {
       }
 
       const columnsBeforeOrder = [...columns];
-      const reorder = reorderColumn(columns, source.index, destination.index);
+      const reorder = reorderDroppableZone<ColumnModel>(columns, source.index, destination.index);
 
       setIsLoading(true);
       try {
