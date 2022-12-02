@@ -21,6 +21,7 @@ import { setOptions, setTaskDescription, setTaskOrder, setTasks, setTaskTitle } 
 import { OptionsProps } from '../types/ModalProps';
 import { deleteColumnById, updateColumnData } from '../store/ColumnsSlice';
 import TaskResponse from '../types/TaskModel';
+import { DEFAULT_TASK_DESCRIPTION, DEFAULT_TASK_TITLE } from '../types/constants';
 
 interface ColumnProps {
   id: string;
@@ -42,6 +43,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
   const taskOrder = useSelector((state: RootState) => state.tasks.order) + 1;
   const [responsibleUser, setResponsibleUser] = useState<string>('');
   const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
+  const { id: userId } = useSelector((state: RootState) => state.user);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState(title);
@@ -128,13 +130,12 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
       try {
         const userIds = await getUserIds();
         const newTask = await createTask(idBoard, id, {
-          title: taskTitle,
+          title: taskTitle || DEFAULT_TASK_TITLE,
           order: taskOrder,
-          description: taskDescription,
-          userId: responsibleUser,
+          description: taskDescription || DEFAULT_TASK_DESCRIPTION,
+          userId: responsibleUser || userId,
           users: userIds,
-        }).then((res) => res.data);
-        console.log(newTask);
+        });
         dispatch(setTaskOrder(taskOrder));
         getTasks();
       } catch (e) {

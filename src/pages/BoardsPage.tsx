@@ -106,7 +106,10 @@ const BoardsPage: React.FC = () => {
         if (boardId === id) {
           try {
             const userIds = await getUserIds();
-            const boardTitle = { title, description };
+            const boardTitle = {
+              title: title || DEFAULT_BOARD_TITLE,
+              description: description || DEFAULT_BOARD_DESCRIPTION,
+            };
             await editBoard(boardId, JSON.stringify(boardTitle), userId, userIds);
             dispatch(fetchBoardsData());
           } catch (e) {
