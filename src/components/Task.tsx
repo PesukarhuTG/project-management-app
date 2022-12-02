@@ -77,7 +77,7 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, colu
     if (boardId && columnId && taskId) {
       setIsLoading(true);
       try {
-        await deleteTask(boardId, columnId, taskId).then((res) => console.log(res.data));
+        await deleteTask(boardId, columnId, taskId);
         const tasksArray = await getTasksInColumn(boardId, columnId).then((res) => res.data);
         dispatch(setTasks({ [columnId]: tasksArray }));
       } catch (e) {

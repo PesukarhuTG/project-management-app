@@ -126,6 +126,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
     setIsLoading(true);
     dispatch(setTaskTitle(''));
     dispatch(setTaskDescription(''));
+    setResponsibleUser('');
     if (idBoard) {
       try {
         const userIds = await getUserIds();
@@ -222,6 +223,9 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
             onCancel={() => setTaskModalVisible(false)}
             options={options}
             onChange={(value) => setResponsibleUser(value)}
+            okButtonProps={{
+              disabled: !(taskTitle && taskDescription && responsibleUser),
+            }}
           />
 
           <ConfirmModal

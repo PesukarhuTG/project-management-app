@@ -5,8 +5,6 @@ export interface OptionsProps {
   label: string;
 }
 
-// interface OkButtonProps
-
 interface ModalProps {
   title: string;
   isVisible: boolean;

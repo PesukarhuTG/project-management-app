@@ -96,6 +96,8 @@ const en: LocaleMessages = {
   error409: 'login already exists',
   commonError: 'try again later',
   initialColumnTitle: 'Create new column',
+  taskNamePlaceholder: 'Name *',
+  taskDescriptionPlaceholder: 'Description *',
 };
 
 export default en;
