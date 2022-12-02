@@ -42,7 +42,6 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
   const taskOrder = useSelector((state: RootState) => state.tasks.order) + 1;
   const [responsibleUser, setResponsibleUser] = useState<string>('');
   const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
-  const { id: userId } = useSelector((state: RootState) => state.user);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState(title);

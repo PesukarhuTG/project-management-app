@@ -16,6 +16,7 @@ import { setCurrentBoard } from '../store/BoardsSlice';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 import { setColumns, setInitialColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
 import { reorderColumn } from '../services/dnd.service';
+import InitialColumn from '../components/InitialColumn';
 
 const DEFAULT_COLUMN_TITLE = 'Column';
 
@@ -196,6 +197,7 @@ const BoardPage: React.FC = () => {
             </Droppable>
           </DragDropContext>
         )}
+        {!columns.length && <InitialColumn onClick={() => setIsShowColumnModal(true)} />}
       </Container>
 
       {isLoading && <Spinner type="fullscreen" />}
