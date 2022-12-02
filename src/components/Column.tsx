@@ -20,6 +20,8 @@ import { AppDispatch, RootState } from '../store/Store';
 import { setOptions, setTaskDescription, setTaskOrder, setTasks, setTaskTitle } from '../store/TasksSlice';
 import { OptionsProps } from '../types/ModalProps';
 import { deleteColumnById, updateColumnData } from '../store/ColumnsSlice';
+import TaskResponse from '../types/TaskModel';
+import { DEFAULT_TASK_DESCRIPTION, DEFAULT_TASK_TITLE } from '../types/constants';
 
 interface ColumnProps {
   id: string;
@@ -41,6 +43,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
   const taskOrder = useSelector((state: RootState) => state.tasks.order) + 1;
   const [responsibleUser, setResponsibleUser] = useState<string>('');
   const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
+  const { id: userId } = useSelector((state: RootState) => state.user);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState(title);
@@ -106,7 +109,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
 
   useEffect(() => {
     if (idBoard) {
-      const tasksArray = Object.values(tasks);
+      const tasksArray: TaskResponse[][] = Object.values(tasks);
       let orders: number[] = [];
       tasksArray.forEach((el) =>
         el.forEach((elem) => {
@@ -126,11 +129,11 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
     if (idBoard) {
       try {
         const userIds = await getUserIds();
-        await createTask(idBoard, id, {
-          title: taskTitle,
+        const newTask = await createTask(idBoard, id, {
+          title: taskTitle || DEFAULT_TASK_TITLE,
           order: taskOrder,
-          description: taskDescription,
-          userId: responsibleUser,
+          description: taskDescription || DEFAULT_TASK_DESCRIPTION,
+          userId: responsibleUser || userId,
           users: userIds,
         });
         dispatch(setTaskOrder(taskOrder));
@@ -189,13 +192,15 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
             <Droppable droppableId={id} type="task">
               {(providedInner) => (
                 <Body ref={providedInner.innerRef} {...providedInner.droppableProps}>
-                  {tasks[id].map((task) => (
+                  {tasks[id].map((task: TaskResponse) => (
                     <Task
                       id={`${id}-${task._id}`}
                       title={task.title}
                       description={task.description}
                       order={task.order}
                       userId={task.userId}
+                      columnId={id}
+                      boardId={idBoard}
                       key={task._id}
                     />
                   ))}
