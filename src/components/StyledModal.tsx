@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import { Modal } from 'antd';
 import styled from 'styled-components';
-import { ModalProps } from '../types';
 import { useLocaleMessage } from '../hooks';
+import { ModalProps } from '../types';
 
-const StyledModal: FC<ModalProps> = ({ children, title, isVisible, onOk, onCancel }) => {
+const StyledModal: FC<ModalProps> = ({ children, title, isVisible, onOk, onCancel, okButtonProps }) => {
   const message = useLocaleMessage();
 
   return (
@@ -18,6 +18,7 @@ const StyledModal: FC<ModalProps> = ({ children, title, isVisible, onOk, onCance
       destroyOnClose
       centered
       width={600}
+      okButtonProps={okButtonProps}
     >
       {children}
     </StyledAntModal>

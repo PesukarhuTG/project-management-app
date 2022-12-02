@@ -1,7 +1,11 @@
+import { ButtonProps } from 'antd';
+
 export interface OptionsProps {
   value: string;
   label: string;
 }
+
+// interface OkButtonProps
 
 interface ModalProps {
   title: string;
@@ -9,6 +13,7 @@ interface ModalProps {
   onOk: () => void;
   onCancel: () => void;
   children?: React.ReactNode;
+  okButtonProps?: ButtonProps;
 }
 
 export interface TaskModalProps extends ModalProps {

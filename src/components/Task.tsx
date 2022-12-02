@@ -6,9 +6,9 @@ import { Draggable } from 'react-beautiful-dnd';
 import { useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
 import { OptionsProps } from '../types/ModalProps';
-import { deleteTask, getTasksInColumn } from '../services/APIrequests';
+import { deleteTask, getTasksInColumn, getUserIds, updateTask } from '../services/APIrequests';
 import { showNotification } from '../services/notification.service';
-import { setTasks } from '../store/TasksSlice';
+import { setTaskDescription, setTasks, setTaskTitle } from '../store/TasksSlice';
 import { useDispatch } from 'react-redux';
 
 interface TaskProps {
@@ -26,9 +26,10 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, colu
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const message = useLocaleMessage();
-  const { options, tasks } = useSelector((state: RootState) => state.tasks);
+  const { options, title: taskTitle, description: taskDescription } = useSelector((state: RootState) => state.tasks);
   const [userName, setUserName] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [responsibleUser, setResponsibleUser] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -39,9 +40,33 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, colu
     });
   }, [userId, options]);
 
-  const editTask = () => {
-    /*TODO edit task*/
+  const editTask = async () => {
     setIsShowEditModal(false);
+    dispatch(setTaskTitle(''));
+    dispatch(setTaskDescription(''));
+    setResponsibleUser('');
+    const taskId = id.split('-').at(-1);
+
+    if (boardId && columnId && taskId) {
+      setIsLoading(true);
+
+      try {
+        const userIds = await getUserIds();
+        await updateTask(boardId, columnId, taskId, {
+          title: taskTitle || title,
+          order,
+          description: taskDescription || description,
+          columnId,
+          userId: responsibleUser,
+          users: userIds,
+        });
+        const tasksArray = await getTasksInColumn(boardId, columnId).then((res) => res.data);
+        dispatch(setTasks({ [columnId]: tasksArray }));
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+      setIsLoading(false);
+    }
   };
 
   const onDeleteTask = async () => {
@@ -51,10 +76,6 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, colu
 
     if (boardId && columnId && taskId) {
       setIsLoading(true);
-      console.log(tasks);
-      console.log(boardId);
-      console.log(columnId);
-      console.log(taskId);
       try {
         await deleteTask(boardId, columnId, taskId).then((res) => console.log(res.data));
         const tasksArray = await getTasksInColumn(boardId, columnId).then((res) => res.data);
@@ -87,7 +108,10 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, colu
             onOk={editTask}
             onCancel={() => setIsShowEditModal(false)}
             options={options}
-            onChange={(value) => console.log(value)}
+            onChange={(value) => setResponsibleUser(value)}
+            okButtonProps={{
+              disabled: !(taskTitle && taskDescription && responsibleUser),
+            }}
           />
 
           <ConfirmModal

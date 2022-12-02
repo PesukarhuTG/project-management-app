@@ -129,7 +129,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
     if (idBoard) {
       try {
         const userIds = await getUserIds();
-        const newTask = await createTask(idBoard, id, {
+        await createTask(idBoard, id, {
           title: taskTitle || DEFAULT_TASK_TITLE,
           order: taskOrder,
           description: taskDescription || DEFAULT_TASK_DESCRIPTION,

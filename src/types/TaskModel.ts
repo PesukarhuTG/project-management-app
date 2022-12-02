@@ -10,4 +10,5 @@ interface TaskResponse {
 }
 
 export type TaskCreateData = Pick<TaskResponse, 'title' | 'order' | 'description' | 'userId' | 'users'>;
+export type TaskUpdateData = Omit<TaskResponse, '_id' | 'boardId'>;
 export default TaskResponse;

@@ -6,13 +6,14 @@ interface StyledInputProps {
   title: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string;
+  placeholder?: string;
 }
 
-const StyledInput: FC<StyledInputProps> = ({ title, onChange, value }) => {
+const StyledInput: FC<StyledInputProps> = ({ title, onChange, value, placeholder }) => {
   return (
     <div>
       <InputTitle>{title}</InputTitle>
-      <StyledAntInput onChange={onChange} value={value} />
+      <StyledAntInput onChange={onChange} value={value} placeholder={placeholder} />
     </div>
   );
 };
