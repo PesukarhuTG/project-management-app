@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ConfirmModal, IconButton, TaskModal } from './';
+import { ConfirmModal, IconButton, Spinner, TaskModal } from './';
 import { useLocaleMessage } from '../hooks';
 import { Draggable } from 'react-beautiful-dnd';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store/Store';
+import { AppDispatch, RootState } from '../store/Store';
+import { OptionsProps } from '../types/ModalProps';
+import { deleteTask, getTasksInColumn } from '../services/APIrequests';
+import { showNotification } from '../services/notification.service';
+import { setTasks } from '../store/TasksSlice';
+import { useDispatch } from 'react-redux';
 
 interface TaskProps {
   id: string;
@@ -17,15 +22,17 @@ interface TaskProps {
   users?: string[];
 }
 
-const Task: React.FC<TaskProps> = ({ id, title, description, order, userId }) => {
+const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, columnId, boardId }) => {
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
   const message = useLocaleMessage();
-  const { options } = useSelector((state: RootState) => state.tasks);
+  const { options, tasks } = useSelector((state: RootState) => state.tasks);
   const [userName, setUserName] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    options.forEach((option) => {
+    options.forEach((option: OptionsProps) => {
       if (option.value === userId) {
         setUserName(option.label);
       }
@@ -37,9 +44,26 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId }) =>
     setIsShowEditModal(false);
   };
 
-  const deleteTask = () => {
-    /*TODO delete task*/
+  const onDeleteTask = async () => {
     setIsShowDeleteModal(false);
+
+    const taskId = id.split('-').at(-1);
+
+    if (boardId && columnId && taskId) {
+      setIsLoading(true);
+      console.log(tasks);
+      console.log(boardId);
+      console.log(columnId);
+      console.log(taskId);
+      try {
+        await deleteTask(boardId, columnId, taskId).then((res) => console.log(res.data));
+        const tasksArray = await getTasksInColumn(boardId, columnId).then((res) => res.data);
+        dispatch(setTasks({ [columnId]: tasksArray }));
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -69,9 +93,10 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId }) =>
           <ConfirmModal
             title={message('confirmDeleteTask')}
             isVisible={isShowDeleteModal}
-            onOk={deleteTask}
+            onOk={onDeleteTask}
             onCancel={() => setIsShowDeleteModal(false)}
           />
+          {isLoading && <Spinner type="fill" />}
         </TaskPanel>
       )}
     </Draggable>

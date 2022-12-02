@@ -123,8 +123,12 @@ export const getTasksInColumn = async (boardId: string, columnId: string): Promi
   return axiosApi.get<TaskResponse[]>(`/boards/${boardId}/columns/${columnId}/tasks`);
 };
 
-export const getResponsibleUser = async (id: string): Promise<AxiosResponse<RegistrationResponse>> => {
-  return axiosApi.get<RegistrationResponse>(`/users/${id}`);
+export const deleteTask = async (
+  boardId: string,
+  columnId: string,
+  taskId: string
+): Promise<AxiosResponse<TaskResponse>> => {
+  return axiosApi.delete<TaskResponse>(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`);
 };
 
 export const deleteColumn = async (idBoard: string, idColumn: string): Promise<AxiosResponse<ColumnResponse>> => {

@@ -127,13 +127,14 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
     if (idBoard) {
       try {
         const userIds = await getUserIds();
-        await createTask(idBoard, id, {
+        const newTask = await createTask(idBoard, id, {
           title: taskTitle,
           order: taskOrder,
           description: taskDescription,
           userId: responsibleUser,
           users: userIds,
-        });
+        }).then((res) => res.data);
+        console.log(newTask);
         dispatch(setTaskOrder(taskOrder));
         getTasks();
       } catch (e) {
@@ -197,6 +198,8 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
                       description={task.description}
                       order={task.order}
                       userId={task.userId}
+                      columnId={id}
+                      boardId={idBoard}
                       key={task._id}
                     />
                   ))}
