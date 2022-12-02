@@ -9,8 +9,6 @@ interface ModalProps {
   onOk: () => void;
   onCancel: () => void;
   children?: React.ReactNode;
-  // onChange?: () => void;
-  // options?: OptionsProps[];
 }
 
 export interface TaskModalProps extends ModalProps {
