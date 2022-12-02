@@ -5,20 +5,21 @@ import { ConfirmModal, IconButton, TaskModal, Task, Spinner } from './';
 import checkIcon from '../assets/ico/icon-check.svg';
 import cancelIcon from '../assets/ico/icon-cancel.svg';
 
-import { updateColumn } from '../services/APIrequests';
+import { deleteColumn, updateColumn } from '../services/APIrequests';
 import { mapperColumn } from '../services/mappers';
 import { showNotification } from '../services/notification.service';
 import { useLocaleMessage } from '../hooks';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
-import { updateColumnData } from '../store/ColumnsSlice';
+import { deleteColumnById, updateColumnData } from '../store/ColumnsSlice';
 
 interface ColumnProps {
   id: string;
   title: string;
   order: number;
   boardId: string;
+  dndIndex: number;
 }
 
 interface TaskData {
@@ -55,7 +56,7 @@ const TaskMock: TaskData[] = [
   },
 ];
 
-const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
+const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
   const dispatch = useDispatch<AppDispatch>();
   const idBoard = useSelector((state: RootState) => state.boards.currentBoard?.id);
   const message = useLocaleMessage();
@@ -98,9 +99,23 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
     setIsShowTaskModal(false);
   };
 
-  const deleteColumn = () => {
-    /*TODO delete column*/
+  const onDeleteColumn = async () => {
     setIsShowDeleteModal(false);
+
+    if (idBoard) {
+      setIsLoading(true);
+
+      try {
+        /*TODO тут должно быть удаление всех тасок в колонке борд idBoard колонка id*/
+
+        const removedColumn = await deleteColumn(idBoard, id).then((res) => res.data);
+        dispatch(deleteColumnById(removedColumn._id));
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+
+      setIsLoading(false);
+    }
   };
 
   const titleContent = useMemo(() => {
@@ -123,7 +138,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
   }, [isEdit, title, newTitle, cancelUpdateTitle, updateTitle]);
 
   return (
-    <Draggable draggableId={id} index={order}>
+    <Draggable draggableId={id} index={dndIndex}>
       {(provided) => (
         <ColumnPanel ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
           <Header>{titleContent}</Header>
@@ -161,7 +176,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order }) => {
           <ConfirmModal
             title={message('confirmDeleteColumn')}
             isVisible={isShowDeleteModal}
-            onOk={deleteColumn}
+            onOk={onDeleteColumn}
             onCancel={() => setIsShowDeleteModal(false)}
           />
 
