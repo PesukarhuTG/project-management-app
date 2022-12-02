@@ -20,6 +20,7 @@ import { AppDispatch, RootState } from '../store/Store';
 import { setOptions, setTaskDescription, setTaskOrder, setTasks, setTaskTitle } from '../store/TasksSlice';
 import { OptionsProps } from '../types/ModalProps';
 import { deleteColumnById, updateColumnData } from '../store/ColumnsSlice';
+import TaskResponse from '../types/TaskModel';
 
 interface ColumnProps {
   id: string;
@@ -106,7 +107,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
 
   useEffect(() => {
     if (idBoard) {
-      const tasksArray = Object.values(tasks);
+      const tasksArray: TaskResponse[][] = Object.values(tasks);
       let orders: number[] = [];
       tasksArray.forEach((el) =>
         el.forEach((elem) => {
@@ -189,7 +190,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
             <Droppable droppableId={id} type="task">
               {(providedInner) => (
                 <Body ref={providedInner.innerRef} {...providedInner.droppableProps}>
-                  {tasks[id].map((task) => (
+                  {tasks[id].map((task: TaskResponse) => (
                     <Task
                       id={`${id}-${task._id}`}
                       title={task.title}
