@@ -49,6 +49,10 @@ const StyledButton = styled.button<{
         }
       `;
   }}
+
+  @media (max-width: 700px) {
+    font-size: 16px;
+  }
 `;
 
 export default Button;

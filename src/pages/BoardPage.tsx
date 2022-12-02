@@ -6,7 +6,7 @@ import { BasePage, Button, Column, ColumnModal, Spinner } from '../components';
 
 import checkTokenExpired from '../services/checkTokenExpired';
 import { showNotification } from '../services/notification.service';
-import { createColumn, getBoardById, getColumnsInBoard } from '../services/APIrequests';
+import { createColumn, getBoardById, getColumnsInBoard, reorderColumns } from '../services/APIrequests';
 import { mapperColumn, mapperColumns } from '../services/mappers';
 import { useLocaleMessage } from '../hooks';
 
@@ -14,7 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
 import { setCurrentBoard } from '../store/BoardsSlice';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
-import { setColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
+import { setColumns, setInitialColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
+import { reorderColumn } from '../services/dnd.service';
 
 const DEFAULT_COLUMN_TITLE = 'Column';
 
@@ -93,10 +94,56 @@ const BoardPage: React.FC = () => {
     }
   };
 
-  const onDragEnd = (res: DropResult) => {
-    // TODO определять что и куда перетащили, обновлять данные в соответствии с действием
-    console.log('Drag end');
-    console.log(res);
+  const onDragEnd = async (result: DropResult) => {
+    const { source, destination } = result;
+
+    // перетаскивание за пределы зоны
+    if (!destination) {
+      return;
+    }
+
+    // перетаскивание в пределах одной зоны без изменения положения
+    if (source.droppableId === destination.droppableId && source.index === destination.index) {
+      return;
+    }
+
+    // перетаскивание колонки
+    if (source.droppableId === idParam) {
+      // если всего одна колонка
+      if (columns.length < 2) {
+        return;
+      }
+
+      const columnsBeforeOrder = [...columns];
+      const reorder = reorderColumn(columns, source.index, destination.index);
+
+      setIsLoading(true);
+      try {
+        dispatch(setColumns(reorder.data));
+        await reorderColumns(reorder.request).then((res) => res.data);
+      } catch (e) {
+        dispatch(setColumns(columnsBeforeOrder));
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+      setIsLoading(false);
+      return;
+    }
+
+    // перетаскивание таски внутри одной колонки
+    if (source.droppableId === destination.droppableId) {
+      // TODO ждет реализации
+      return;
+    }
+
+    // перетаскивание таски между колонок
+    // TODO ждет реализации
+
+    // result.draggableId = id таска, который перетаскивали
+    // source.droppableId = id колонки откуда таск забрали
+    // source.index = стартовая позиция элемента (атрибут у <Draggable> - сейчас передаю индекс массива)
+    // destination.droppableId = id колонки куда таск бросили
+    // destination.index = конечная позиция элемента (в новой колонке)
+    return;
   };
 
   const logout = () => {
@@ -118,7 +165,9 @@ const BoardPage: React.FC = () => {
       showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
 
-    dispatch(setCurrentBoard(null)); // clear previous data
+    // clear previous data
+    dispatch(setCurrentBoard(null));
+    dispatch(setInitialColumns());
   }, []); //eslint-disable-line
 
   return (
@@ -135,12 +184,13 @@ const BoardPage: React.FC = () => {
         </Title>
         {!!columns.length && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="board" direction="horizontal" type="column">
+            <Droppable droppableId={idParam as string} direction="horizontal" type="column">
               {(provided) => (
                 <ColumnsPanel ref={provided.innerRef} {...provided.droppableProps}>
-                  {columns.map((col) => (
-                    <Column {...col} key={col.id} />
+                  {columns.map((col, i) => (
+                    <Column {...col} key={col.id} dndIndex={i} />
                   ))}
+                  {provided.placeholder}
                 </ColumnsPanel>
               )}
             </Droppable>
@@ -161,6 +211,7 @@ const BoardPage: React.FC = () => {
 };
 
 const Container = styled.div`
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -172,13 +223,18 @@ const ControlPanel = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media (max-width: 480px) {
+  @media (max-width: 700px) {
+    padding: 0 20px;
+  }
+
+  @media (max-width: 540px) {
     flex-direction: column;
+    gap: 20px;
   }
 `;
 
 const HideXs = styled.div`
-  @media (max-width: 480px) {
+  @media (max-width: 300px) {
     display: none;
   }
 `;

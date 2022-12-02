@@ -3,7 +3,7 @@ type LocaleMessages = {
 };
 
 const ru: LocaleMessages = {
-  editItemMenu: 'Редактировать профиль',
+  editItemMenu: 'Изменить профиль',
   createItemMenu: 'Создать новую доску',
   mainItemMenu: 'Главная страница',
   btnSignUp: 'Регистрация',

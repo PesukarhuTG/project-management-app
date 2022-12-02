@@ -28,66 +28,66 @@ const WelcomePage: React.FC = () => {
 
   return (
     <BasePage>
-      <HeroSection>
-        <div>
-          <SectionTitle>{message('mainTitle')}</SectionTitle>
-          <HeroDescription>{message('mainDescription')}</HeroDescription>
-        </div>
-        <HeroImage />
-      </HeroSection>
-      <TeamSection>
-        <SectionTitle>{message('sectionTeam')}</SectionTitle>
-
-        <TeamItem>
-          <TeamItemAvatar $name="tatiana" />
+      <div className="container">
+        <HeroSection>
           <div>
-            <TeamItemTitle>{message('personOneTitle')}</TeamItemTitle>
-            <TeamItemDescription>{message('personOneDescription')}</TeamItemDescription>
+            <SectionTitle>{message('mainTitle')}</SectionTitle>
+            <HeroDescription>{message('mainDescription')}</HeroDescription>
           </div>
-        </TeamItem>
+          <HeroImage />
+        </HeroSection>
+        <TeamSection>
+          <SectionTitle>{message('sectionTeam')}</SectionTitle>
 
-        <TeamItem>
-          <div>
-            <TeamItemTitle>{message('personSecondTitle')}</TeamItemTitle>
-            <TeamItemDescription>{message('personSecondDescription')}</TeamItemDescription>
-          </div>
-          <TeamItemAvatar $name="daria" />
-        </TeamItem>
+          <TeamItem>
+            <TeamItemAvatar $name="tatiana" />
+            <div>
+              <TeamItemTitle>{message('personOneTitle')}</TeamItemTitle>
+              <TeamItemDescription>{message('personOneDescription')}</TeamItemDescription>
+            </div>
+          </TeamItem>
 
-        <TeamItem>
-          <TeamItemAvatar $name="sergey" />
-          <div>
-            <TeamItemTitle>{message('personThirdTitle')}</TeamItemTitle>
-            <TeamItemDescription>{message('personThirdDescription')}</TeamItemDescription>
-          </div>
-        </TeamItem>
+          <TeamItem>
+            <div>
+              <TeamItemTitle>{message('personSecondTitle')}</TeamItemTitle>
+              <TeamItemDescription>{message('personSecondDescription')}</TeamItemDescription>
+            </div>
+            <TeamItemAvatar $name="daria" />
+          </TeamItem>
 
-        <TeamItem>
-          <div>
-            <TeamItemTitle>{message('personFourthTitle')}</TeamItemTitle>
-            <TeamItemDescription>{message('personFourthDescription')}</TeamItemDescription>
-          </div>
-          <TeamItemAvatar $name="denis" />
-        </TeamItem>
-      </TeamSection>
+          <TeamItem>
+            <TeamItemAvatar $name="sergey" />
+            <div>
+              <TeamItemTitle>{message('personThirdTitle')}</TeamItemTitle>
+              <TeamItemDescription>{message('personThirdDescription')}</TeamItemDescription>
+            </div>
+          </TeamItem>
+
+          <TeamItem>
+            <div>
+              <TeamItemTitle>{message('personFourthTitle')}</TeamItemTitle>
+              <TeamItemDescription>{message('personFourthDescription')}</TeamItemDescription>
+            </div>
+            <TeamItemAvatar $name="denis" />
+          </TeamItem>
+        </TeamSection>
+      </div>
     </BasePage>
   );
 };
 
 const HeroSection = styled.section`
-  max-width: 1440px;
+  width: 100%;
   display: flex;
   gap: 50px;
   align-items: center;
   justify-content: space-between;
   margin: 0 auto 50px;
-  padding: 0 110px;
 
   @media (max-width: 1120px) {
     flex-direction: column;
     justify-items: center;
     gap: 20px;
-    padding: 0;
     margin: 0 auto 30px;
   }
 `;
@@ -105,11 +105,17 @@ const SectionTitle = styled.h2`
     text-align: center;
     margin: 0 auto;
   }
+
+  @media (max-width: 610px) {
+    font-size: 26px;
+  }
 `;
 
 const HeroDescription = styled.p`
-  max-width: 600px;
+  max-width: 800px;
+  width: 100%;
   font-size: 20px;
+  line-height: 1.5;
   margin: 0;
 
   @media (max-width: 1120px) {
@@ -118,6 +124,11 @@ const HeroDescription = styled.p`
     margin: 0 auto;
     font-size: 20px;
     line-height: 29px;
+  }
+
+  @media (max-width: 610px) {
+    font-size: 16px;
+    line-height: 1.5;
   }
 `;
 
@@ -142,14 +153,13 @@ const HeroImage = styled.div`
 `;
 
 const TeamSection = styled.section`
-  max-width: 1440px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;
   justify-content: space-between;
   align-items: center;
   margin: 0 auto 50px;
-  padding: 0 110px;
 
   @media (max-width: 1000px) {
     padding: 0;
@@ -179,12 +189,21 @@ const TeamItemTitle = styled.p`
   font-size: 24px;
   line-height: 24px;
   color: var(--primary-dark);
+
+  @media (max-width: 610px) {
+    font-size: 18px;
+  }
 `;
 
 const TeamItemDescription = styled.p`
   max-width: 900px;
   width: 100%;
   line-height: 29px;
+
+  @media (max-width: 610px) {
+    font-size: 16px;
+    line-height: 1.5;
+  }
 `;
 
 const TeamItemAvatar = styled.div<{

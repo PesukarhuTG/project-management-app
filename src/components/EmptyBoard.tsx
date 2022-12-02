@@ -12,7 +12,7 @@ const EmptyBoard = () => {
 
   return (
     <BoardBody onClick={() => dispatch(setCreateModalVisible(true))}>
-      <BoardTitle> + {message('boardModalTitle')}</BoardTitle>
+      <BoardText> + {message('boardModalTitle')}</BoardText>
     </BoardBody>
   );
 };
@@ -21,6 +21,15 @@ const BoardBody = styled(BoardWrapper)`
   justify-content: center;
   align-items: center;
   background: var(--primary-light);
+`;
+
+const BoardText = styled(BoardTitle)`
+  text-align: center;
+
+  @media (max-width: 610px) {
+    padding: 20px 10px;
+    line-height: 1.3;
+  }
 `;
 
 export default EmptyBoard;

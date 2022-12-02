@@ -28,6 +28,10 @@ const StyledAntInput = styled(Input)`
 
 const InputTitle = styled.p`
   padding: 0 20px 3px;
+
+  @media (max-width: 610px) {
+    font-size: 16px;
+  }
 `;
 
 export default StyledInput;

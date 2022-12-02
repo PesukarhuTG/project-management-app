@@ -1,7 +1,7 @@
 import axiosApi from '../http';
 import { AxiosResponse } from 'axios';
 import { BoardResponse, LoginResponse, RegistrationResponse, TaskResponse } from '../types';
-import { ColumnCreateData, ColumnResponse } from '../types/ColumnModel';
+import { ColumnCreateData, ColumnReorderData, ColumnResponse } from '../types/ColumnModel';
 import { TaskCreateData } from '../types/TaskModel';
 
 export const registrationUser = async (
@@ -125,4 +125,12 @@ export const getTasksInColumn = async (boardId: string, columnId: string): Promi
 
 export const getResponsibleUser = async (id: string): Promise<AxiosResponse<RegistrationResponse>> => {
   return axiosApi.get<RegistrationResponse>(`/users/${id}`);
+};
+
+export const deleteColumn = async (idBoard: string, idColumn: string): Promise<AxiosResponse<ColumnResponse>> => {
+  return axiosApi.delete<ColumnResponse>(`/boards/${idBoard}/columns/${idColumn}`);
+};
+
+export const reorderColumns = async (data: ColumnReorderData[]): Promise<AxiosResponse<ColumnResponse[]>> => {
+  return axiosApi.patch<ColumnResponse[]>(`/columnsSet`, data);
 };

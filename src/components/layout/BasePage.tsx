@@ -50,7 +50,6 @@ const Layout = styled.section`
 const Content = styled.main<{
   $noScroll: boolean;
 }>`
-  max-width: 1440px;
   width: 100%;
   display: flex;
   flex-direction: column;
