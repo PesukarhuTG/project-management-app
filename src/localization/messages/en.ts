@@ -53,7 +53,7 @@ const en: LocaleMessages = {
   boardModalTitle: 'Create new board',
   saveModal: 'Save',
   cancelModal: 'Cancel',
-  taskAuthor: 'Author',
+  taskAuthor: 'Responsible',
   taskModalTitle: 'Edit task',
   confirmDeleteTask: 'Do you want to delete this task?',
   addNameTaskModal: 'Task name',

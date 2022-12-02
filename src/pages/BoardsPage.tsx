@@ -127,7 +127,7 @@ const BoardsPage: React.FC = () => {
   useEffect(() => {
     searchedItem();
     if (!search) dispatch(setFilteredBoards(boards));
-  }, [search, searchedItem]); //eslint-disable-line
+  }, [search, searchedItem, dispatch, boards]);
 
   const boardsPageContent = useMemo(() => {
     if (fetchLoading) {

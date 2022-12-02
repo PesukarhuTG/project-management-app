@@ -1,74 +1,52 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { ConfirmModal, IconButton, TaskModal, Task, Spinner } from './';
 import checkIcon from '../assets/ico/icon-check.svg';
 import cancelIcon from '../assets/ico/icon-cancel.svg';
-
-import { deleteColumn, updateColumn } from '../services/APIrequests';
+import {
+  createTask,
+  getTasksInColumn,
+  getUserIds,
+  getUserNames,
+  updateColumn,
+  deleteColumn,
+} from '../services/APIrequests';
 import { mapperColumn } from '../services/mappers';
 import { showNotification } from '../services/notification.service';
 import { useLocaleMessage } from '../hooks';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store/Store';
+import { setOptions, setTaskDescription, setTaskOrder, setTasks, setTaskTitle } from '../store/TasksSlice';
+import { OptionsProps } from '../types/ModalProps';
 import { deleteColumnById, updateColumnData } from '../store/ColumnsSlice';
 
 interface ColumnProps {
   id: string;
   title: string;
   order: number;
-  boardId: string;
   dndIndex: number;
 }
-
-interface TaskData {
-  _id: string;
-  title: string;
-  order: number;
-  boardId: string;
-  columnId: string;
-  description: string;
-  userId: string;
-  users: string[];
-}
-
-const TaskMock: TaskData[] = [
-  {
-    _id: '001',
-    title: 'Task 1',
-    order: 1,
-    boardId: 'Id of boards',
-    columnId: 'Id of boards',
-    description: 'Task description1 where you can write full information about task',
-    userId: '001',
-    users: [],
-  },
-  {
-    _id: '002',
-    title: 'Task 2',
-    order: 2,
-    boardId: 'Id of boards',
-    columnId: 'Id of boards',
-    description: 'Implement Select component from Antd and custom its design',
-    userId: '001',
-    users: [],
-  },
-];
 
 const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
   const dispatch = useDispatch<AppDispatch>();
   const idBoard = useSelector((state: RootState) => state.boards.currentBoard?.id);
   const message = useLocaleMessage();
+  const {
+    title: taskTitle,
+    description: taskDescription,
+    tasks,
+    options,
+  } = useSelector((state: RootState) => state.tasks);
+  const taskOrder = useSelector((state: RootState) => state.tasks.order) + 1;
+  const [responsibleUser, setResponsibleUser] = useState<string>('');
+  const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState(title);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isShowTaskModal, setIsShowTaskModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
-
-  const [tasks] = useState<TaskData[]>(TaskMock); //TODO get real task data
 
   const updateTitle = useCallback(async () => {
     setIsEdit(false);
@@ -94,9 +72,74 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
     setIsEdit(false);
   }, [title]);
 
-  const addTask = () => {
-    /*TODO add new task*/
-    setIsShowTaskModal(false);
+  const getTasks = useCallback(async () => {
+    if (idBoard) {
+      setIsLoading(true);
+      try {
+        const tasksArray = await getTasksInColumn(idBoard, id).then((res) => res.data);
+        dispatch(setTasks({ [id]: tasksArray }));
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+      setIsLoading(false);
+    }
+  }, [dispatch, idBoard, message, id]);
+
+  useEffect(() => {
+    const getOptions = async () => {
+      try {
+        const userNames = await getUserNames();
+        const userIds = await getUserIds();
+        const optionsList: OptionsProps[] = [];
+        for (let i = 0; i < userNames.length; i++) {
+          optionsList.push({ value: userIds[i], label: userNames[i] });
+        }
+        dispatch(setOptions(optionsList));
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+    };
+
+    getOptions();
+    getTasks();
+  }, [dispatch, getTasks, message]);
+
+  useEffect(() => {
+    if (idBoard) {
+      const tasksArray = Object.values(tasks);
+      let orders: number[] = [];
+      tasksArray.forEach((el) =>
+        el.forEach((elem) => {
+          orders.push(elem.order);
+        })
+      );
+      const maxOrder = orders.length ? Math.max(...orders) : 0;
+      dispatch(setTaskOrder(maxOrder));
+    }
+  }, [tasks, dispatch, idBoard]);
+
+  const addTask = async () => {
+    setTaskModalVisible(false);
+    setIsLoading(true);
+    dispatch(setTaskTitle(''));
+    dispatch(setTaskDescription(''));
+    if (idBoard) {
+      try {
+        const userIds = await getUserIds();
+        await createTask(idBoard, id, {
+          title: taskTitle,
+          order: taskOrder,
+          description: taskDescription,
+          userId: responsibleUser,
+          users: userIds,
+        });
+        dispatch(setTaskOrder(taskOrder));
+        getTasks();
+      } catch (e) {
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+      setIsLoading(false);
+    }
   };
 
   const onDeleteColumn = async () => {
@@ -142,16 +185,17 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
       {(provided) => (
         <ColumnPanel ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
           <Header>{titleContent}</Header>
-          {!!tasks.length && (
+          {!!tasks[id] && (
             <Droppable droppableId={id} type="task">
               {(providedInner) => (
                 <Body ref={providedInner.innerRef} {...providedInner.droppableProps}>
-                  {tasks.map((task) => (
+                  {tasks[id].map((task) => (
                     <Task
                       id={`${id}-${task._id}`}
                       title={task.title}
                       description={task.description}
                       order={task.order}
+                      userId={task.userId}
                       key={task._id}
                     />
                   ))}
@@ -162,15 +206,17 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
           )}
 
           <Footer>
-            <AddButton onClick={() => setIsShowTaskModal(true)}>{message('btnAddNewTask')}</AddButton>
+            <AddButton onClick={() => setTaskModalVisible(true)}>{message('btnAddNewTask')}</AddButton>
             <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
           </Footer>
 
           <TaskModal
             title={message('addTaskModalTitle')}
-            isVisible={isShowTaskModal}
+            isVisible={taskModalVisible}
             onOk={addTask}
-            onCancel={() => setIsShowTaskModal(false)}
+            onCancel={() => setTaskModalVisible(false)}
+            options={options}
+            onChange={(value) => setResponsibleUser(value)}
           />
 
           <ConfirmModal

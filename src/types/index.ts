@@ -7,3 +7,5 @@ export type { default as InitialBoardsState } from './InitialBoardsState';
 export type { default as InitialColumnsState } from './InitialColumnsState';
 export type { default as BoardResponse } from './BoardResponse';
 export type { default as DecodedTokenProps } from './DecodedTokenProps';
+export type { default as TaskResponse } from './TaskModel';
+export type { default as InitialTasksState } from './InitialTasksState';
