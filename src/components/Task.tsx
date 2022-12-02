@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ConfirmModal, IconButton, Spinner, TaskModal } from './';
+import { ConfirmModal, IconButton, Spinner, TaskModal, OpenTaskModal } from './';
 import { useLocaleMessage } from '../hooks';
 import { Draggable } from 'react-beautiful-dnd';
 import { useSelector } from 'react-redux';
@@ -25,6 +25,7 @@ interface TaskProps {
 const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, columnId, boardId }) => {
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false);
+  const [isShowOpenModal, setIsShowOpenModal] = useState<boolean>(false);
   const message = useLocaleMessage();
   const { options, tasks } = useSelector((state: RootState) => state.tasks);
   const [userName, setUserName] = useState<string>('');
@@ -77,6 +78,7 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, colu
             {userName}
           </div>
           <Footer>
+            <IconButton icon="open" onClick={() => setIsShowOpenModal(true)} />
             <IconButton icon="edit" onClick={() => setIsShowEditModal(true)} />
             <IconButton icon="delete" onClick={() => setIsShowDeleteModal(true)} />
           </Footer>
@@ -88,6 +90,13 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, colu
             onCancel={() => setIsShowEditModal(false)}
             options={options}
             onChange={(value) => console.log(value)}
+          />
+
+          <OpenTaskModal
+            title={message('openTaskModalTitle')}
+            isVisible={isShowOpenModal}
+            onCancel={() => setIsShowOpenModal(false)}
+            data={{ title, description, userName }}
           />
 
           <ConfirmModal
