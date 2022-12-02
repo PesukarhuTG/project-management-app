@@ -1,3 +1,6 @@
+import { ColumnReorderData } from '../types/ColumnModel';
+import { TaskReorderData } from '../types/TaskModel';
+
 type ReorderData = {
   _id?: string;
   id?: string;
@@ -5,11 +8,7 @@ type ReorderData = {
   columnId?: string;
 };
 
-type ReorderRequest = {
-  _id: string;
-  order: number;
-  columnId?: string;
-};
+type ReorderRequest = ColumnReorderData | TaskReorderData;
 
 /** сортировка после перетаскивания в пределах одной зоны */
 export const reorderDroppableZone = <D extends ReorderData>(
@@ -27,14 +26,20 @@ export const reorderDroppableZone = <D extends ReorderData>(
   });
 
   const resultRequest = resultData.map((item) => {
-    const res: ReorderRequest = {
+    if (item._id && item.columnId) {
+      const res: TaskReorderData = {
+        _id: item._id as string,
+        order: item.order,
+        columnId: item.columnId,
+      };
+
+      return res;
+    }
+
+    const res: ColumnReorderData = {
       _id: (item.id ?? item._id) as string,
       order: item.order,
     };
-
-    if (item.columnId) {
-      res.columnId = item.columnId;
-    }
 
     return res;
   });

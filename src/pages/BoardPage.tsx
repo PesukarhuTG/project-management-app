@@ -6,7 +6,7 @@ import { BasePage, Button, Column, ColumnModal, Spinner } from '../components';
 
 import checkTokenExpired from '../services/checkTokenExpired';
 import { showNotification } from '../services/notification.service';
-import { createColumn, getBoardById, getColumnsInBoard, reorderColumns } from '../services/APIrequests';
+import { createColumn, getBoardById, getColumnsInBoard, reorderColumns, reorderTasks } from '../services/APIrequests';
 import { mapperColumn, mapperColumns } from '../services/mappers';
 import { useLocaleMessage } from '../hooks';
 
@@ -17,6 +17,8 @@ import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 import { setColumns, setInitialColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
 import { reorderDroppableZone } from '../services/dnd.service';
 import ColumnModel from '../types/ColumnModel';
+import TaskResponse, { TaskReorderData } from '../types/TaskModel';
+import { setTasks } from '../store/TasksSlice';
 
 const DEFAULT_COLUMN_TITLE = 'Column';
 
@@ -25,6 +27,7 @@ const BoardPage: React.FC = () => {
   const title = useSelector((state: RootState) => state.boards.currentBoard?.title) ?? '';
   const newOrder = useSelector((state: RootState) => state.columns.orderCounter) + 1;
   const { columns, newColumnTitle } = useSelector((state: RootState) => state.columns);
+  const { tasks } = useSelector((state: RootState) => state.tasks);
 
   const { id: idParam } = useParams();
   const navigate = useNavigate();
@@ -98,19 +101,15 @@ const BoardPage: React.FC = () => {
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
 
-    // перетаскивание за пределы зоны
     if (!destination) {
       return;
     }
 
-    // перетаскивание в пределах одной зоны без изменения положения
     if (source.droppableId === destination.droppableId && source.index === destination.index) {
       return;
     }
 
-    // перетаскивание колонки
     if (source.droppableId === idParam) {
-      // если всего одна колонка
       if (columns.length < 2) {
         return;
       }
@@ -130,9 +129,22 @@ const BoardPage: React.FC = () => {
       return;
     }
 
-    // перетаскивание таски внутри одной колонки
     if (source.droppableId === destination.droppableId) {
-      // TODO ждет реализации
+      const currentColumn = source.droppableId;
+      const currentTasks = tasks[currentColumn];
+
+      const tasksBeforeOrder = [...currentTasks];
+      const reorder = reorderDroppableZone<TaskResponse>(currentTasks, source.index, destination.index);
+
+      setIsLoading(true);
+      try {
+        dispatch(setTasks({ [currentColumn]: reorder.data }));
+        await reorderTasks(reorder.request as TaskReorderData[]).then((res) => res.data);
+      } catch (e) {
+        dispatch(setTasks({ [currentColumn]: tasksBeforeOrder }));
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+      setIsLoading(false);
       return;
     }
 

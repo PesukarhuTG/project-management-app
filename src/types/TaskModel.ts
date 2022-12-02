@@ -10,4 +10,6 @@ interface TaskResponse {
 }
 
 export type TaskCreateData = Pick<TaskResponse, 'title' | 'order' | 'description' | 'userId' | 'users'>;
+export type TaskReorderData = Pick<TaskResponse, '_id' | 'order' | 'columnId'>;
+
 export default TaskResponse;
