@@ -21,7 +21,6 @@ import { setOptions, setTaskDescription, setTaskOrder, setTasks, setTaskTitle } 
 import { OptionsProps } from '../types/ModalProps';
 import { deleteColumnById, updateColumnData } from '../store/ColumnsSlice';
 import TaskResponse from '../types/TaskModel';
-import { DEFAULT_TASK_DESCRIPTION, DEFAULT_TASK_TITLE } from '../types/constants';
 
 interface ColumnProps {
   id: string;
@@ -131,10 +130,10 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
       try {
         const userIds = await getUserIds();
         await createTask(idBoard, id, {
-          title: taskTitle || DEFAULT_TASK_TITLE,
+          title: taskTitle,
           order: taskOrder,
-          description: taskDescription || DEFAULT_TASK_DESCRIPTION,
-          userId: responsibleUser || userId,
+          description: taskDescription,
+          userId: responsibleUser,
           users: userIds,
         });
         dispatch(setTaskOrder(taskOrder));

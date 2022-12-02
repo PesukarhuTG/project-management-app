@@ -18,7 +18,6 @@ import checkTokenExpired from '../services/checkTokenExpired';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { showNotification } from '../services/notification.service';
-import { DEFAULT_BOARD_DESCRIPTION, DEFAULT_BOARD_TITLE } from '../types/constants';
 
 const BoardsPage: React.FC = () => {
   const { createModalVisible, title, description, fetchLoading, boards, search, filteredBoards } = useSelector(
@@ -62,8 +61,8 @@ const BoardsPage: React.FC = () => {
         const usersList = await fetchUsers().then((res) => res.data);
         const usersId = usersList.map((user) => user._id);
         const boardTitle = {
-          title: title || DEFAULT_BOARD_TITLE,
-          description: description || DEFAULT_BOARD_DESCRIPTION,
+          title,
+          description,
         };
         await createBoard(JSON.stringify(boardTitle), userId, usersId);
         dispatch(fetchBoardsData());
@@ -107,8 +106,8 @@ const BoardsPage: React.FC = () => {
           try {
             const userIds = await getUserIds();
             const boardTitle = {
-              title: title || DEFAULT_BOARD_TITLE,
-              description: description || DEFAULT_BOARD_DESCRIPTION,
+              title,
+              description,
             };
             await editBoard(boardId, JSON.stringify(boardTitle), userId, userIds);
             dispatch(fetchBoardsData());
@@ -162,6 +161,9 @@ const BoardsPage: React.FC = () => {
         isVisible={createModalVisible}
         onOk={handleSubmit}
         onCancel={() => dispatch(setCreateModalVisible(false))}
+        okButtonProps={{
+          disabled: !(title && description),
+        }}
       />
     </>
   );

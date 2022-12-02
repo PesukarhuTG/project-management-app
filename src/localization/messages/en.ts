@@ -98,6 +98,8 @@ const en: LocaleMessages = {
   initialColumnTitle: 'Create new column',
   taskNamePlaceholder: 'Name *',
   taskDescriptionPlaceholder: 'Description *',
+  boardTitlePlaceholder: 'Title *',
+  boardDescriptionPlaceholder: 'Description *',
 };
 
 export default en;

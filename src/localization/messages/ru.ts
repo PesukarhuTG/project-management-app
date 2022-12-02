@@ -95,6 +95,8 @@ const ru: LocaleMessages = {
   initialColumnTitle: 'Создать новую колонку',
   taskNamePlaceholder: 'Название *',
   taskDescriptionPlaceholder: 'Описание *',
+  boardTitlePlaceholder: 'Заголовок *',
+  boardDescriptionPlaceholder: 'Описание *',
 };
 
 export default ru;
