@@ -8,6 +8,8 @@ import BoardModal from './BoardModal';
 import ConfirmModal from './ConfirmModal';
 import { BoardTitle, BoardWrapper } from './styled-components';
 import { useLocaleMessage } from '../hooks';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/Store';
 
 const SingleBoard: FC<SingleBoardProps> = ({
   title = 'Board title',
@@ -20,6 +22,7 @@ const SingleBoard: FC<SingleBoardProps> = ({
   const [confirmModalVisible, setConfirmModalVisible] = useState<boolean>(false);
   const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
   const message = useLocaleMessage();
+  const { title: boardTitle, description: boardDescription } = useSelector((state: RootState) => state.boards);
 
   const openConfirmModal = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
@@ -64,6 +67,9 @@ const SingleBoard: FC<SingleBoardProps> = ({
         isVisible={editModalVisible}
         onOk={handleEdit}
         onCancel={() => setEditModalVisible(false)}
+        okButtonProps={{
+          disabled: !(boardTitle.trim() && boardDescription.trim()),
+        }}
       />
     </>
   );

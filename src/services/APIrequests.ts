@@ -2,7 +2,7 @@ import axiosApi from '../http';
 import { AxiosResponse } from 'axios';
 import { BoardResponse, LoginResponse, RegistrationResponse, TaskResponse } from '../types';
 import { ColumnCreateData, ColumnReorderData, ColumnResponse } from '../types/ColumnModel';
-import { TaskCreateData, TaskReorderData } from '../types/TaskModel';
+import { TaskCreateData, TaskUpdateData, TaskReorderData } from '../types/TaskModel';
 
 export const registrationUser = async (
   name: string,
@@ -117,6 +117,15 @@ export const createTask = async (
   data: TaskCreateData
 ): Promise<AxiosResponse<TaskResponse>> => {
   return axiosApi.post<TaskResponse>(`/boards/${boardId}/columns/${columnId}/tasks`, data);
+};
+
+export const updateTask = async (
+  boardId: string,
+  columnId: string,
+  taskId: string,
+  data: TaskUpdateData
+): Promise<AxiosResponse<TaskResponse>> => {
+  return axiosApi.put<TaskResponse>(`/boards/${boardId}/columns/${columnId}/tasks/${taskId}`, data);
 };
 
 export const getTasksInColumn = async (boardId: string, columnId: string): Promise<AxiosResponse<TaskResponse[]>> => {

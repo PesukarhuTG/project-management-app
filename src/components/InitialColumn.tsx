@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import { useLocaleMessage } from '../hooks';
 
-const InitialColumn = () => {
+interface InitialColumnProps {
+  onClick: () => void;
+}
+
+const InitialColumn: FC<InitialColumnProps> = ({ onClick }) => {
   const message = useLocaleMessage();
   return (
-    <ColumnBody onClick={() => console.log('открывает модалку на создание колонки')}>
+    <ColumnBody onClick={onClick}>
       <ColumnTitle> + {message('initialColumnTitle')}</ColumnTitle>
     </ColumnBody>
   );
 };
 
 const ColumnBody = styled.div`
-  margin-left: 100px;
+  margin-left: var(--page-gutter);
   max-width: 386px;
   min-width: 300px;
-  height: 156px;
+  height: 152px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,6 +28,7 @@ const ColumnBody = styled.div`
   box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
   border-radius: 30px;
   overflow: hidden;
+  z-index: 1;
   transition: 0.3s;
   cursor: pointer;
 

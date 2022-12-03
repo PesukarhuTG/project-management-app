@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import { BasePage, Button, Column, ColumnModal, Spinner } from '../components';
+import { BasePage, Button, Column, ColumnModal, InitialColumn, Spinner } from '../components';
 
 import checkTokenExpired from '../services/checkTokenExpired';
 import { showNotification } from '../services/notification.service';
@@ -17,8 +17,9 @@ import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 import { setColumns, setInitialColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
 import { reorderDroppableZone } from '../services/dnd.service';
 import ColumnModel from '../types/ColumnModel';
-import TaskResponse, { TaskReorderData } from '../types/TaskModel';
+import { TaskResponse } from '../types';
 import { setTasks } from '../store/TasksSlice';
+import { TaskReorderData } from '../types/TaskModel';
 
 const DEFAULT_COLUMN_TITLE = 'Column';
 
@@ -209,6 +210,7 @@ const BoardPage: React.FC = () => {
             </Droppable>
           </DragDropContext>
         )}
+        {!columns.length && <InitialColumn onClick={() => setIsShowColumnModal(true)} />}
       </Container>
 
       {isLoading && <Spinner type="fullscreen" />}

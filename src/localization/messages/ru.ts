@@ -70,7 +70,7 @@ const ru: LocaleMessages = {
   confirmDeleteBoard: 'Вы действительно хотите удалить доску?',
   confirmDeleteProfile: 'Вы действительно хотите удалить профиль?',
   confirmDeleteColumn: 'Вы действительно хотите удалить колонку?',
-  defaultUser: 'Ответственное лицо',
+  defaultUser: 'Ответственное лицо *',
   errorTitle: 'Что-то пошло не так:',
   successAuthTitle: 'Вход выполнен успешно!',
   expiredTokenTitle: 'Время действия вашего токена истекло',
@@ -94,6 +94,10 @@ const ru: LocaleMessages = {
   error409: 'такой логин уже существует',
   commonError: 'попробуйте снова',
   initialColumnTitle: 'Создать новую колонку',
+  taskNamePlaceholder: 'Название *',
+  taskDescriptionPlaceholder: 'Описание *',
+  boardTitlePlaceholder: 'Заголовок *',
+  boardDescriptionPlaceholder: 'Описание *',
 };
 
 export default ru;

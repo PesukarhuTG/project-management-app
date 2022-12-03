@@ -73,7 +73,7 @@ const en: LocaleMessages = {
   confirmDeleteBoard: 'Do you want to delete this board?',
   confirmDeleteProfile: 'Do you want to delete your profile?',
   confirmDeleteColumn: 'Do you want to delete this column?',
-  defaultUser: 'Responsible user',
+  defaultUser: 'Responsible user *',
   errorTitle: 'Something went wrong:',
   successAuthTitle: 'Your signin is successful!',
   expiredTokenTitle: 'Your token is expired',
@@ -97,6 +97,10 @@ const en: LocaleMessages = {
   error409: 'login already exists',
   commonError: 'try again later',
   initialColumnTitle: 'Create new column',
+  taskNamePlaceholder: 'Name *',
+  taskDescriptionPlaceholder: 'Description *',
+  boardTitlePlaceholder: 'Title *',
+  boardDescriptionPlaceholder: 'Description *',
 };
 
 export default en;

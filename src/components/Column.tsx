@@ -21,7 +21,6 @@ import { setOptions, setTaskDescription, setTaskOrder, setTasks, setTaskTitle } 
 import { OptionsProps } from '../types/ModalProps';
 import { deleteColumnById, updateColumnData } from '../store/ColumnsSlice';
 import TaskResponse from '../types/TaskModel';
-import { DEFAULT_TASK_DESCRIPTION, DEFAULT_TASK_TITLE } from '../types/constants';
 
 interface ColumnProps {
   id: string;
@@ -43,7 +42,6 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
   const taskOrder = useSelector((state: RootState) => state.tasks.order) + 1;
   const [responsibleUser, setResponsibleUser] = useState<string>('');
   const [taskModalVisible, setTaskModalVisible] = useState<boolean>(false);
-  const { id: userId } = useSelector((state: RootState) => state.user);
 
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [newTitle, setNewTitle] = useState(title);
@@ -126,14 +124,15 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
     setIsLoading(true);
     dispatch(setTaskTitle(''));
     dispatch(setTaskDescription(''));
+    setResponsibleUser('');
     if (idBoard) {
       try {
         const userIds = await getUserIds();
-        const newTask = await createTask(idBoard, id, {
-          title: taskTitle || DEFAULT_TASK_TITLE,
+        await createTask(idBoard, id, {
+          title: taskTitle,
           order: taskOrder,
-          description: taskDescription || DEFAULT_TASK_DESCRIPTION,
-          userId: responsibleUser || userId,
+          description: taskDescription,
+          userId: responsibleUser,
           users: userIds,
         });
         dispatch(setTaskOrder(taskOrder));
@@ -222,6 +221,9 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
             onCancel={() => setTaskModalVisible(false)}
             options={options}
             onChange={(value) => setResponsibleUser(value)}
+            okButtonProps={{
+              disabled: !(taskTitle.trim() && taskDescription.trim() && responsibleUser),
+            }}
           />
 
           <ConfirmModal
