@@ -73,8 +73,6 @@ const ru: LocaleMessages = {
   defaultUser: 'Ответственное лицо *',
   errorTitle: 'Что-то пошло не так:',
   successAuthTitle: 'Вход выполнен успешно!',
-  expiredTokenTitle: 'Время действия вашего токена истекло',
-  expiredTokenMessage: 'Пожалуйста, войдите снова, используя Ваш логин и пароль',
   successDeleteUserTitle: 'Профиль был успешно удален',
   spinnerTip: 'Загрузка...',
   searchPlaceholder: 'Поиск...',

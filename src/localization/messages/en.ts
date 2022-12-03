@@ -76,8 +76,6 @@ const en: LocaleMessages = {
   defaultUser: 'Responsible user *',
   errorTitle: 'Something went wrong:',
   successAuthTitle: 'Your signin is successful!',
-  expiredTokenTitle: 'Your token is expired',
-  expiredTokenMessage: 'Please, signin again with your login and pasword',
   successDeleteUserTitle: 'Your profile was successful deleted!',
   spinnerTip: 'Loading...',
   searchPlaceholder: 'Search...',

@@ -176,7 +176,6 @@ const BoardPage: React.FC = () => {
     const authStatus = checkTokenExpired();
     if (!authStatus) {
       logout();
-      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
 
     // clear previous data

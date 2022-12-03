@@ -67,7 +67,6 @@ const ProfilePage: React.FC = () => {
       }
     } else {
       logout();
-      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
   };
 
@@ -84,7 +83,6 @@ const ProfilePage: React.FC = () => {
       }
     } else {
       logout();
-      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
   };
 
@@ -97,7 +95,6 @@ const ProfilePage: React.FC = () => {
     const authStatus = checkTokenExpired();
     if (!authStatus) {
       logout();
-      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
   }, []); // eslint-disable-line
 
