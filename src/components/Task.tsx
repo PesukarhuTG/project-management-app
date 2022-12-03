@@ -59,7 +59,7 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, colu
       try {
         await deleteTask(boardId, columnId, taskId).then((res) => console.log(res.data));
         const tasksArray = await getTasksInColumn(boardId, columnId).then((res) => res.data);
-        dispatch(setTasks({ [columnId]: tasksArray }));
+        dispatch(setTasks({ [columnId]: tasksArray.sort((a, b) => a.order - b.order) }));
       } catch (e) {
         showNotification('error', message('errorTitle'), (e as Error).message);
       }
