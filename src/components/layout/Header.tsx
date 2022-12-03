@@ -103,7 +103,6 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 
   return (
     <>
-      <Overlay $visibleBurgerMenu={visibleBurgerMenu} onClick={() => setVisibleBurgerMenu(false)} />
       <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
         <Title>
           <HomeLink to="/">RSS Kanban</HomeLink>
@@ -118,6 +117,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
           <LanguageRadio />
         </SettingPanel>
       </StyledHeader>
+      <Overlay className="overlay" $visibleBurgerMenu={visibleBurgerMenu} onClick={() => setVisibleBurgerMenu(false)} />
     </>
   );
 };
@@ -125,10 +125,11 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 const Overlay = styled.div<{
   $visibleBurgerMenu: boolean;
 }>`
+  z-index: 10;
   ${({ $visibleBurgerMenu }) => {
     if ($visibleBurgerMenu) {
       return css`
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         right: 0;
@@ -136,7 +137,6 @@ const Overlay = styled.div<{
         width: 100%;
         height: 100%;
         background-color: var(--burger-overlay);
-        z-index: 2;
       `;
     }
   }}
@@ -152,7 +152,7 @@ const BurgerMenu = styled.button<{
   background-color: transparent;
 
   cursor: pointer;
-  z-index: 10;
+  z-index: 20;
   order: 4;
 
   & > .burger-menu-lines {
@@ -174,7 +174,8 @@ const BurgerMenu = styled.button<{
 
   &:hover {
     & > .burger-menu-lines [class^='burger-menu-line-'] {
-      box-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary), 0 0 20px white;
+      box-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary), 0 0 15px var(--primary),
+        0 0 20px var(--primary-light);
     }
   }
 
@@ -220,7 +221,7 @@ const StyledHeader = styled.header`
     height: calc(var(--header-h) - var(--header-animate-offset));
     margin-bottom: var(--header-animate-offset);
     background: linear-gradient(180deg, var(--primary-dark) 0%, var(--burgerBgr-02) 100%);
-    z-index: 1;
+    z-index: 5;
   }
 
   @media (max-width: 700px) {
@@ -328,7 +329,7 @@ const NavPanel = styled(Panel)<{
     background-color: var(--nav-background);
     background: linear-gradient(160deg, var(--burgerBgr-01) 0%, var(--burgerBgr-02) 100%);
     transition: right 0.3s;
-    z-index: 5;
+    z-index: 15;
 
     ${({ $visibleBurgerMenu }) => {
       if ($visibleBurgerMenu) {

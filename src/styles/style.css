@@ -50,3 +50,14 @@ a {
   max-width: 1440px;
   width: 100%;
 }
+
+.ant-back-top {
+  right: 30px;
+  bottom: 120px;
+}
+
+@media (max-width: 770px) {
+  .ant-back-top {
+    bottom: 160px;
+  }
+}
