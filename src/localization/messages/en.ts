@@ -55,6 +55,7 @@ const en: LocaleMessages = {
   cancelModal: 'Cancel',
   taskAuthor: 'Responsible',
   taskModalTitle: 'Edit task',
+  openTaskModalTitle: 'Task view',
   confirmDeleteTask: 'Do you want to delete this task?',
   addNameTaskModal: 'Task name',
   addDescriptionTaskModal: 'Task description',

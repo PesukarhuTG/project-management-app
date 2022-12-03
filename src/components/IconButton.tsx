@@ -2,9 +2,10 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import editIcon from '../assets/ico/icon-edit.svg';
 import deleteIcon from '../assets/ico/icon-trush.svg';
+import openIcon from '../assets/ico/icon-open.svg';
 
 interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  icon: 'edit' | 'delete';
+  icon: 'edit' | 'delete' | 'open';
 }
 
 const IconButton: React.FC<IconButtonProps> = ({ icon, ...rest }) => {
@@ -25,6 +26,12 @@ const StyledIconButton = styled.button<{
     if ($icon === 'edit') {
       return css`
         background-image: url(${editIcon});
+      `;
+    }
+
+    if ($icon === 'open') {
+      return css`
+        background-image: url(${openIcon});
       `;
     }
 
