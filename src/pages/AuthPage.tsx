@@ -34,7 +34,6 @@ const AuthPage: React.FC = () => {
 
       localStorage.setItem('idUser', id);
       localStorage.setItem('tokenUser', token);
-      localStorage.setItem('loginUser', userLogin);
       localStorage.setItem('expToken', String(exp));
 
       const { name } = await getUserById().then((res) => res.data);

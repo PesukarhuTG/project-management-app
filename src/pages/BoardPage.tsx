@@ -37,6 +37,13 @@ const BoardPage: React.FC = () => {
   const [isShowColumnModal, setIsShowColumnModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false); // TODO добавить лоадер на загрузку формы
 
+  const logout = () => {
+    dispatch(changeAuthStatus(false));
+    dispatch(removeUserData());
+    localStorage.clear();
+    navigate('/');
+  };
+
   const getBoardInfo = useCallback(
     async (id: string) => {
       const board = await getBoardById(id).then((res) => res.data);
@@ -81,21 +88,28 @@ const BoardPage: React.FC = () => {
   };
 
   const addColumn = async () => {
+    const authStatus = checkTokenExpired();
     const titleColumn = newColumnTitle || DEFAULT_COLUMN_TITLE;
 
-    if (idParam) {
-      setIsShowColumnModal(false);
-      setIsLoading(true);
+    if (authStatus) {
+      if (idParam) {
+        setIsShowColumnModal(false);
+        setIsLoading(true);
 
-      try {
-        const newColumn = await createColumn(idParam, { title: titleColumn, order: newOrder }).then((res) => res.data);
-        dispatch(setNewColumn(mapperColumn(newColumn)));
-      } catch (e) {
-        showNotification('error', message('errorTitle'), (e as Error).message);
+        try {
+          const newColumn = await createColumn(idParam, { title: titleColumn, order: newOrder }).then(
+            (res) => res.data
+          );
+          dispatch(setNewColumn(mapperColumn(newColumn)));
+        } catch (e) {
+          showNotification('error', message('errorTitle'), (e as Error).message);
+        }
+
+        dispatch(setNewColumnTitle(''));
+        setIsLoading(false);
       }
-
-      dispatch(setNewColumnTitle(''));
-      setIsLoading(false);
+    } else {
+      logout();
     }
   };
 
@@ -160,13 +174,6 @@ const BoardPage: React.FC = () => {
     return;
   };
 
-  const logout = () => {
-    dispatch(changeAuthStatus(false));
-    dispatch(removeUserData());
-    localStorage.clear();
-    navigate('/');
-  };
-
   useEffect(() => {
     if (!localStorage.getItem('tokenUser')) {
       navigate('/');
@@ -176,7 +183,6 @@ const BoardPage: React.FC = () => {
     const authStatus = checkTokenExpired();
     if (!authStatus) {
       logout();
-      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
 
     // clear previous data

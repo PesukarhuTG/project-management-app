@@ -72,7 +72,6 @@ const BoardsPage: React.FC = () => {
       }
     } else {
       logout();
-      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
   };
 

@@ -58,7 +58,6 @@ const ProfilePage: React.FC = () => {
 
         localStorage.setItem('idUser', id);
         localStorage.setItem('tokenUser', token);
-        localStorage.setItem('loginUser', login);
         localStorage.setItem('expToken', String(exp));
       } catch (e) {
         showNotification('error', message('errorTitle'), (e as Error).message);
@@ -67,7 +66,6 @@ const ProfilePage: React.FC = () => {
       }
     } else {
       logout();
-      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
   };
 
@@ -84,7 +82,6 @@ const ProfilePage: React.FC = () => {
       }
     } else {
       logout();
-      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
   };
 
@@ -97,7 +94,6 @@ const ProfilePage: React.FC = () => {
     const authStatus = checkTokenExpired();
     if (!authStatus) {
       logout();
-      showNotification('warning', message('expiredTokenTitle'), message('expiredTokenMessage'));
     }
   }, []); // eslint-disable-line
 
