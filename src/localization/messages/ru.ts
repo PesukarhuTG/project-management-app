@@ -70,7 +70,7 @@ const ru: LocaleMessages = {
   confirmDeleteBoard: 'Вы действительно хотите удалить доску?',
   confirmDeleteProfile: 'Вы действительно хотите удалить профиль?',
   confirmDeleteColumn: 'Вы действительно хотите удалить колонку?',
-  defaultUser: 'Ответственное лицо *',
+  defaultUser: 'Ответственный *',
   errorTitle: 'Что-то пошло не так:',
   successAuthTitle: 'Вход выполнен успешно!',
   successDeleteUserTitle: 'Профиль был успешно удален',
