@@ -2,7 +2,7 @@ import axiosApi from '../http';
 import { AxiosResponse } from 'axios';
 import { BoardResponse, LoginResponse, RegistrationResponse, TaskResponse } from '../types';
 import { ColumnCreateData, ColumnReorderData, ColumnResponse } from '../types/ColumnModel';
-import { TaskCreateData, TaskUpdateData } from '../types/TaskModel';
+import { TaskCreateData, TaskUpdateData, TaskReorderData } from '../types/TaskModel';
 
 export const registrationUser = async (
   name: string,
@@ -146,4 +146,8 @@ export const deleteColumn = async (idBoard: string, idColumn: string): Promise<A
 
 export const reorderColumns = async (data: ColumnReorderData[]): Promise<AxiosResponse<ColumnResponse[]>> => {
   return axiosApi.patch<ColumnResponse[]>(`/columnsSet`, data);
+};
+
+export const reorderTasks = async (data: TaskReorderData[]): Promise<AxiosResponse<TaskResponse[]>> => {
+  return axiosApi.patch<TaskResponse[]>(`/tasksSet`, data);
 };

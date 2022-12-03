@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import { BasePage, Button, Column, ColumnModal, Spinner } from '../components';
+import { BasePage, Button, Column, ColumnModal, InitialColumn, Spinner } from '../components';
 
 import checkTokenExpired from '../services/checkTokenExpired';
 import { showNotification } from '../services/notification.service';
-import { createColumn, getBoardById, getColumnsInBoard, reorderColumns } from '../services/APIrequests';
+import { createColumn, getBoardById, getColumnsInBoard, reorderColumns, reorderTasks } from '../services/APIrequests';
 import { mapperColumn, mapperColumns } from '../services/mappers';
 import { useLocaleMessage } from '../hooks';
 
@@ -15,8 +15,11 @@ import { AppDispatch, RootState } from '../store/Store';
 import { setCurrentBoard } from '../store/BoardsSlice';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 import { setColumns, setInitialColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
-import { reorderColumn } from '../services/dnd.service';
-import InitialColumn from '../components/InitialColumn';
+import { reorderDroppableZone } from '../services/dnd.service';
+import ColumnModel from '../types/ColumnModel';
+import { TaskResponse } from '../types';
+import { setTasks } from '../store/TasksSlice';
+import { TaskReorderData } from '../types/TaskModel';
 
 const DEFAULT_COLUMN_TITLE = 'Column';
 
@@ -25,6 +28,7 @@ const BoardPage: React.FC = () => {
   const title = useSelector((state: RootState) => state.boards.currentBoard?.title) ?? '';
   const newOrder = useSelector((state: RootState) => state.columns.orderCounter) + 1;
   const { columns, newColumnTitle } = useSelector((state: RootState) => state.columns);
+  const { tasks } = useSelector((state: RootState) => state.tasks);
 
   const { id: idParam } = useParams();
   const navigate = useNavigate();
@@ -98,25 +102,21 @@ const BoardPage: React.FC = () => {
   const onDragEnd = async (result: DropResult) => {
     const { source, destination } = result;
 
-    // перетаскивание за пределы зоны
     if (!destination) {
       return;
     }
 
-    // перетаскивание в пределах одной зоны без изменения положения
     if (source.droppableId === destination.droppableId && source.index === destination.index) {
       return;
     }
 
-    // перетаскивание колонки
     if (source.droppableId === idParam) {
-      // если всего одна колонка
       if (columns.length < 2) {
         return;
       }
 
       const columnsBeforeOrder = [...columns];
-      const reorder = reorderColumn(columns, source.index, destination.index);
+      const reorder = reorderDroppableZone<ColumnModel>(columns, source.index, destination.index);
 
       setIsLoading(true);
       try {
@@ -130,9 +130,22 @@ const BoardPage: React.FC = () => {
       return;
     }
 
-    // перетаскивание таски внутри одной колонки
     if (source.droppableId === destination.droppableId) {
-      // TODO ждет реализации
+      const currentColumn = source.droppableId;
+      const currentTasks = tasks[currentColumn];
+
+      const tasksBeforeOrder = [...currentTasks];
+      const reorder = reorderDroppableZone<TaskResponse>(currentTasks, source.index, destination.index);
+
+      setIsLoading(true);
+      try {
+        dispatch(setTasks({ [currentColumn]: reorder.data }));
+        await reorderTasks(reorder.request as TaskReorderData[]).then((res) => res.data);
+      } catch (e) {
+        dispatch(setTasks({ [currentColumn]: tasksBeforeOrder }));
+        showNotification('error', message('errorTitle'), (e as Error).message);
+      }
+      setIsLoading(false);
       return;
     }
 

@@ -7,6 +7,7 @@ interface StyledInputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   value?: string;
   placeholder?: string;
+  disabled?: boolean;
 }
 
 const StyledInput: FC<StyledInputProps> = ({ title, onChange, value, placeholder }) => {

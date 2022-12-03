@@ -52,6 +52,7 @@ const ru: LocaleMessages = {
   cancelModal: 'Отмена',
   taskAuthor: 'Ответственный',
   taskModalTitle: 'Редактировать задачу',
+  openTaskModalTitle: 'Просмотр задачи',
   confirmDeleteTask: 'Вы действительно хотите удалить задачу?',
   addNameTaskModal: 'Название задачи',
   addDescriptionTaskModal: 'Описание задачи',

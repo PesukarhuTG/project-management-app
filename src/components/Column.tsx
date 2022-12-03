@@ -78,7 +78,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
       setIsLoading(true);
       try {
         const tasksArray = await getTasksInColumn(idBoard, id).then((res) => res.data);
-        dispatch(setTasks({ [id]: tasksArray }));
+        dispatch(setTasks({ [id]: tasksArray.sort((a, b) => a.order - b.order) }));
       } catch (e) {
         showNotification('error', message('errorTitle'), (e as Error).message);
       }
@@ -191,12 +191,12 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
             <Droppable droppableId={id} type="task">
               {(providedInner) => (
                 <Body ref={providedInner.innerRef} {...providedInner.droppableProps}>
-                  {tasks[id].map((task: TaskResponse) => (
+                  {tasks[id].map((task: TaskResponse, i) => (
                     <Task
                       id={`${id}-${task._id}`}
                       title={task.title}
                       description={task.description}
-                      order={task.order}
+                      order={i}
                       userId={task.userId}
                       columnId={id}
                       boardId={idBoard}
@@ -318,6 +318,7 @@ const CancelButton = styled(ChangeBtn)`
 
 const Body = styled.div`
   padding: 0 20px;
+  min-height: 10px;
   overflow: auto;
 `;
 
