@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   const [visibleBurgerMenu, setVisibleBurgerMenu] = useState<boolean>(false);
   const navigate = useNavigate();
   const message = useLocaleMessage();
-  const { login, lang } = useSelector((state: RootState) => state.user);
+  const { login, lang, isAuth } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
   const logout = () => {
@@ -55,14 +55,14 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   }, [visibleBurgerMenu]);
 
   const headerContent = useMemo(() => {
-    if (localStorage.getItem('tokenUser')) {
+    if (isAuth) {
       return (
         <>
           <UserData>
             <Avatar>
               <img src={iconAvatar} alt="user avatar" />
             </Avatar>
-            <Login>{login || localStorage.getItem('loginUser')}</Login>
+            <Login>{login}</Login>
           </UserData>
 
           <NavPanel $visibleBurgerMenu={visibleBurgerMenu}>
@@ -110,7 +110,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
         </Title>
         {headerContent}
         <SettingPanel>
-          {localStorage.getItem('tokenUser') && (
+          {isAuth && (
             <StyledAuthButton to="/" onClick={logout}>
               {message('btnSignOut')}
             </StyledAuthButton>
