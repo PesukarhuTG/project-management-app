@@ -68,7 +68,7 @@ const SingleBoard: FC<SingleBoardProps> = ({
         onOk={handleEdit}
         onCancel={() => setEditModalVisible(false)}
         okButtonProps={{
-          disabled: !(boardTitle && boardDescription),
+          disabled: !(boardTitle.trim() && boardDescription.trim()),
         }}
       />
     </>

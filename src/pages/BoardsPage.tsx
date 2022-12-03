@@ -162,7 +162,7 @@ const BoardsPage: React.FC = () => {
         onOk={handleSubmit}
         onCancel={() => dispatch(setCreateModalVisible(false))}
         okButtonProps={{
-          disabled: !(title && description),
+          disabled: !(title.trim() && description.trim()),
         }}
       />
     </>

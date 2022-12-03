@@ -222,7 +222,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
             options={options}
             onChange={(value) => setResponsibleUser(value)}
             okButtonProps={{
-              disabled: !(taskTitle && taskDescription && responsibleUser),
+              disabled: !(taskTitle.trim() && taskDescription.trim() && responsibleUser),
             }}
           />
 

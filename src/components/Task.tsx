@@ -110,7 +110,7 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, colu
             options={options}
             onChange={(value) => setResponsibleUser(value)}
             okButtonProps={{
-              disabled: !(taskTitle && taskDescription && responsibleUser),
+              disabled: !(taskTitle.trim() && taskDescription.trim() && responsibleUser),
             }}
           />
 
