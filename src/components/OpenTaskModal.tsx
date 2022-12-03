@@ -9,15 +9,16 @@ const { TextArea } = Input;
 
 const OpenTaskModal: FC<OpenModalProps> = ({ title, isVisible, onCancel, data }) => {
   const message = useLocaleMessage();
+  const { title: inputTitle, description, userName } = data;
 
   return (
     <StyledOpenModal title={title} isVisible={isVisible} onCancel={onCancel}>
       <InputTitle>{message('addNameTaskModal')}</InputTitle>
-      <StyledInput placeholder={data.title} value={data.title} disabled />
+      <StyledInput placeholder={inputTitle} value={inputTitle} disabled />
       <InputTitle>{message('addDescriptionTaskModal')}</InputTitle>
-      <StyledTextarea autoSize={true} placeholder={data.description} value={data.description} disabled />
+      <StyledTextarea autoSize={true} placeholder={description} value={description} disabled />
       <InputTitle>{message('taskAuthor')}</InputTitle>
-      <StyledInput placeholder={data.userName} value={data.userName} disabled />
+      <StyledInput placeholder={userName} value={userName} disabled />
     </StyledOpenModal>
   );
 };
