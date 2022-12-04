@@ -20,6 +20,7 @@ import ColumnModel from '../types/ColumnModel';
 import { TaskResponse } from '../types';
 import { setTasks } from '../store/TasksSlice';
 import { TaskReorderData } from '../types/TaskModel';
+import iconBack from '../assets/ico/icon-back.svg';
 
 const BoardPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,7 +34,7 @@ const BoardPage: React.FC = () => {
 
   const message = useLocaleMessage();
   const [isShowColumnModal, setIsShowColumnModal] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false); // TODO добавить лоадер на загрузку формы
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const logout = () => {
     dispatch(changeAuthStatus(false));
@@ -160,7 +161,6 @@ const BoardPage: React.FC = () => {
       return;
     }
 
-    // перетаскивание таски между колонок
     const sourceColumn = source.droppableId;
     const sourceTasks = tasks[sourceColumn] ? tasks[sourceColumn] : [];
     const sourceTasksBeforeOrder = [...sourceTasks];
@@ -202,7 +202,6 @@ const BoardPage: React.FC = () => {
       logout();
     }
 
-    // clear previous data
     dispatch(setCurrentBoard(null));
     dispatch(setInitialColumns());
   }, []); //eslint-disable-line
@@ -212,7 +211,7 @@ const BoardPage: React.FC = () => {
       <Container>
         <ControlPanel>
           <HideXs>
-            <Button label={message('btnBack')} onClick={() => navigate('/boards')} />
+            <BtnBack onClick={() => navigate('/boards')}>{message('btnBack')}</BtnBack>
           </HideXs>
           <Button label={message('btnCreateNewColumn')} onClick={() => setIsShowColumnModal(true)} />
         </ControlPanel>
@@ -251,6 +250,32 @@ const BoardPage: React.FC = () => {
   );
 };
 
+const BtnBack = styled.button`
+  display: block;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: var(--btn-gutter);
+  padding-left: 40px;
+  line-height: var(--btn-h);
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--btn-br);
+  color: var(--light-font);
+  background: url(${iconBack}) var(--primary) no-repeat 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s;
+
+  &:hover {
+    background: url(${iconBack}) var(--btn-primary-hover) no-repeat 20px;
+  }
+
+  @media (max-width: 700px) {
+    font-size: 16px;
+  }
+`;
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -284,14 +309,13 @@ const Title = styled.h2`
   padding: 0 var(--page-gutter);
   color: var(--primary-dark);
   font-size: 26px;
-  font-weight: 800;
+  font-weight: 700;
+
+  @media (max-width: 700px) {
+    font-size: 22px;
+  }
 `;
 
-// TODO протестировать после реализации,
-/* возможно нужно будет убрать "резину", т. к. при перетаскивании иногда меняются размеры столбцов
- * рассмотреть вариант замены minmax(426px, 1fr) и 1fr на конктреные размеры в % или wv
- * условно 5 столбцов на больших экранах, 3/4 на средних, 1 на мобильных)
- */
 const ColumnsPanel = styled.div`
   padding: 0 var(--page-gutter) 0 0;
   height: 100%;

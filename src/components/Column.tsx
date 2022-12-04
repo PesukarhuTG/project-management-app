@@ -149,10 +149,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, order, dndIndex }) => {
 
     if (idBoard) {
       setIsLoading(true);
-
       try {
-        /*TODO тут должно быть удаление всех тасок в колонке борд idBoard колонка id*/
-
         const removedColumn = await deleteColumn(idBoard, id).then((res) => res.data);
         dispatch(deleteColumnById(removedColumn._id));
       } catch (e) {
@@ -279,6 +276,10 @@ const ChangeTitle = styled.div`
   align-items: center;
   gap: 8px;
   background-color: var(--primary-light);
+
+  @media (max-width: 700px) {
+    font-size: 22px;
+  }
 `;
 
 const Input = styled.input`
