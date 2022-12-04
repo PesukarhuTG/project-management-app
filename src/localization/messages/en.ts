@@ -24,13 +24,13 @@ const en: LocaleMessages = {
   personThirdTitle: 'Sergey | frontend-developer',
   personFourthTitle: 'Denis | mentor',
   personOneDescription:
-    'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum',
+    'Team leader. Created app design, base project structure and deployed the backend. Set up app localization, axios and authorization; created burger-menu. With all team was responsible for developing components and adaptive design',
   personSecondDescription:
-    'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum',
+    'Сreated sticky header and footer, implemented base page routing; developed from scratch column and tasks drag&drop; covered single board management (columns, their content and editing). She helped to deal with code bugs of team members!',
   personThirdDescription:
-    'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum',
+    'Create application pages and modal boxes with validation; implemented language switcher component and launched global boards search. He was responsible for boards page and tasks management. His miticulous mind always helped to achieve the best solution in the final! ',
   personFourthDescription:
-    'Our team mentor. The specialist in JS, React and other technologies. The person, who not only helped us solve problems, but also motivated and energized the entire team!',
+    'Our team mentor. He specializes not only in JS and React ;) The person, who helped us solve problems, motivated and also cheered up the whole team!',
   profilePageTitle: 'Profile editing fields',
   userNameLabel: 'User name',
   userLoginLabel: 'Login',
