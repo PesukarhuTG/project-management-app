@@ -17,13 +17,14 @@ interface ModalProps {
 export interface TaskModalProps extends ModalProps {
   onChange: (value: string) => void;
   options: OptionsProps[];
+  data?: {
+    title: string;
+    description: string;
+    userName: string;
+  };
 }
 
-export interface OpenModalProps {
-  title: string;
-  isVisible: boolean;
-  onCancel: () => void;
-  children?: React.ReactNode;
+export interface OpenModalProps extends ModalProps {
   data: {
     title: string;
     description: string;

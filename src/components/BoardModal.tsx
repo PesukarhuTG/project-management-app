@@ -6,6 +6,7 @@ import StyledInput from './StyledInput';
 import StyledModal from './StyledModal';
 import { useLocaleMessage } from '../hooks';
 import { ButtonProps } from 'antd';
+import { BoardTitle } from '../types/SingleBoardProps';
 
 interface BoardModalProps {
   modalTitle: string;
@@ -13,9 +14,10 @@ interface BoardModalProps {
   onOk: () => void;
   onCancel: () => void;
   okButtonProps?: ButtonProps;
+  data?: BoardTitle;
 }
 
-const BoardModal: FC<BoardModalProps> = ({ modalTitle, isVisible, onOk, onCancel, okButtonProps }) => {
+const BoardModal: FC<BoardModalProps> = ({ modalTitle, isVisible, onOk, onCancel, okButtonProps, data }) => {
   const { title, description } = useSelector((state: RootState) => state.boards);
   const dispatch = useDispatch<AppDispatch>();
   const message = useLocaleMessage();
@@ -26,13 +28,14 @@ const BoardModal: FC<BoardModalProps> = ({ modalTitle, isVisible, onOk, onCancel
         title={message('boardTitle')}
         onChange={(event) => dispatch(setBoardName(event.target.value))}
         value={title}
-        placeholder={message('boardTitlePlaceholder')}
+        // placeholder={message('boardTitlePlaceholder')}
+        placeholder={data?.title || message('boardTitlePlaceholder')}
       />
       <StyledInput
         title={message('boardDescription')}
         onChange={(event) => dispatch(setBoardDescription(event.target.value))}
         value={description}
-        placeholder={message('boardDescriptionPlaceholder')}
+        placeholder={data?.description || message('boardDescriptionPlaceholder')}
       />
     </StyledModal>
   );

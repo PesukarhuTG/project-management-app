@@ -114,6 +114,7 @@ const Task: React.FC<TaskProps> = ({ id, title, description, order, userId, colu
             okButtonProps={{
               disabled: !(taskTitle.trim() && taskDescription.trim() && responsibleUser),
             }}
+            data={{ title, description, userName }}
           />
 
           <OpenTaskModal
