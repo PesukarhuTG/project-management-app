@@ -17,9 +17,8 @@ const fetchBoardsData = () => async (dispatch: AppDispatch) => {
       return obj;
     });
     dispatch(setBoards(boards));
-  } catch {
+  } catch (e) {
     dispatch(setFetchLoading(false));
-    console.log('error');
   } finally {
     dispatch(setFetchLoading(false));
   }

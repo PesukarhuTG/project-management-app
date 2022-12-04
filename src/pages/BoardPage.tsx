@@ -33,7 +33,7 @@ const BoardPage: React.FC = () => {
 
   const message = useLocaleMessage();
   const [isShowColumnModal, setIsShowColumnModal] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false); // TODO добавить лоадер на загрузку формы
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const logout = () => {
     dispatch(changeAuthStatus(false));
@@ -160,7 +160,6 @@ const BoardPage: React.FC = () => {
       return;
     }
 
-    // перетаскивание таски между колонок
     const sourceColumn = source.droppableId;
     const sourceTasks = tasks[sourceColumn] ? tasks[sourceColumn] : [];
     const sourceTasksBeforeOrder = [...sourceTasks];
@@ -202,7 +201,6 @@ const BoardPage: React.FC = () => {
       logout();
     }
 
-    // clear previous data
     dispatch(setCurrentBoard(null));
     dispatch(setInitialColumns());
   }, []); //eslint-disable-line
@@ -291,11 +289,6 @@ const Title = styled.h2`
   }
 `;
 
-// TODO протестировать после реализации,
-/* возможно нужно будет убрать "резину", т. к. при перетаскивании иногда меняются размеры столбцов
- * рассмотреть вариант замены minmax(426px, 1fr) и 1fr на конктреные размеры в % или wv
- * условно 5 столбцов на больших экранах, 3/4 на средних, 1 на мобильных)
- */
 const ColumnsPanel = styled.div`
   padding: 0 var(--page-gutter) 0 0;
   height: 100%;

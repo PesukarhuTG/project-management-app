@@ -10,7 +10,6 @@ type ReorderData = {
 
 type ReorderRequest = ColumnReorderData | TaskReorderData;
 
-/** сортировка после перетаскивания в пределах одной зоны */
 export const reorderDroppableZone = <D extends ReorderData>(
   data: D[],
   start: number,
@@ -50,7 +49,6 @@ export const reorderDroppableZone = <D extends ReorderData>(
   };
 };
 
-/** сортировка после перетаскивания из одной зоны в другую */
 export const reorderDroppableBetweenZone = (
   sourceData: TaskResponse[],
   destinationData: TaskResponse[],

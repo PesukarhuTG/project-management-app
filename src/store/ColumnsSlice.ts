@@ -6,7 +6,7 @@ import ColumnModel from '../types/ColumnModel';
 const initialState: InitialColumnsState = {
   columns: [],
   newColumnTitle: '',
-  orderCounter: 0, // largest current order
+  orderCounter: 0,
 };
 
 const columnsSlice = createSlice({

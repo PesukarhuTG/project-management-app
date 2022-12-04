@@ -13,6 +13,7 @@ import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
 import { setCreateModalVisible } from '../../store/BoardsSlice';
 import { useLocaleMessage } from '../../hooks';
 import checkTokenExpired from '../../services/checkTokenExpired';
+import { showNotification } from '../../services/notification.service';
 
 interface HeaderProps {
   isSticky?: boolean;
@@ -30,9 +31,8 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
       dispatch(changeAuthStatus(false));
       dispatch(removeUserData());
       localStorage.clear();
-      console.log('выполнили signout');
     } catch (e) {
-      console.log(e);
+      showNotification('error', message('errorTitle'), (e as Error).message);
     }
   };
 
