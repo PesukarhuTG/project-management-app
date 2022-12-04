@@ -7,10 +7,6 @@ import messages from './localization/messages';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/Store';
 
-window.addEventListener('beforeunload', () => {
-  localStorage.clear();
-});
-
 const App: React.FC = () => {
   const { lang } = useSelector((state: RootState) => state.user);
 
