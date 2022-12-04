@@ -58,6 +58,7 @@ const ProfilePage: React.FC = () => {
 
         localStorage.setItem('idUser', id);
         localStorage.setItem('tokenUser', token);
+        localStorage.setItem('loginUser', login);
         localStorage.setItem('expToken', String(exp));
       } catch (e) {
         showNotification('error', message('errorTitle'), (e as Error).message);

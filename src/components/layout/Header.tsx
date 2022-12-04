@@ -12,6 +12,7 @@ import { RootState, AppDispatch } from '../../store/Store';
 import { removeUserData, changeAuthStatus } from '../../store/UserSlice';
 import { setCreateModalVisible } from '../../store/BoardsSlice';
 import { useLocaleMessage } from '../../hooks';
+import checkTokenExpired from '../../services/checkTokenExpired';
 
 interface HeaderProps {
   isSticky?: boolean;
@@ -54,15 +55,27 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
     }
   }, [visibleBurgerMenu]);
 
+  useEffect(() => {
+    const authStatus = checkTokenExpired();
+
+    if (!authStatus) {
+      dispatch(changeAuthStatus(false));
+      dispatch(removeUserData());
+      localStorage.clear();
+    } else {
+      dispatch(changeAuthStatus(true));
+    }
+  }, []); //eslint-disable-line
+
   const headerContent = useMemo(() => {
-    if (isAuth) {
+    if (localStorage.getItem('tokenUser')) {
       return (
         <>
           <UserData>
             <Avatar>
               <img src={iconAvatar} alt="user avatar" />
             </Avatar>
-            <Login>{login}</Login>
+            <Login>{login || localStorage.getItem('loginUser')}</Login>
           </UserData>
 
           <NavPanel $visibleBurgerMenu={visibleBurgerMenu}>
@@ -109,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
         </Title>
         {headerContent}
         <SettingPanel>
-          {isAuth && (
+          {localStorage.getItem('tokenUser') && (
             <StyledAuthButton to="/" onClick={logout}>
               {message('btnSignOut')}
             </StyledAuthButton>
