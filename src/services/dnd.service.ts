@@ -1,5 +1,5 @@
 import { ColumnReorderData } from '../types/ColumnModel';
-import { TaskReorderData } from '../types/TaskModel';
+import TaskResponse, { TaskReorderData } from '../types/TaskModel';
 
 type ReorderData = {
   _id?: string;
@@ -47,5 +47,44 @@ export const reorderDroppableZone = <D extends ReorderData>(
   return {
     data: resultData,
     request: resultRequest,
+  };
+};
+
+/** сортировка после перетаскивания из одной зоны в другую */
+export const reorderDroppableBetweenZone = (
+  sourceData: TaskResponse[],
+  destinationData: TaskResponse[],
+  destinationId: string,
+  start: number,
+  end: number
+): { source: TaskResponse[]; destination: TaskResponse[]; request: TaskReorderData[] } => {
+  const setOrderData = (tasks: TaskResponse[]): TaskResponse[] => {
+    return tasks.map((task, i) => ({
+      ...task,
+      order: i,
+    }));
+  };
+
+  const setOrderResult = (tasks: TaskResponse[]): TaskReorderData[] => {
+    return tasks.map((task) => ({
+      _id: task._id,
+      order: task.order,
+      columnId: task.columnId,
+    }));
+  };
+
+  let source = [...sourceData];
+  let destination = [...destinationData];
+
+  const [sourceRemoverItem] = source.splice(start, 1);
+
+  destination.splice(end, 0, { ...sourceRemoverItem, columnId: destinationId });
+  const sourceResult = setOrderData(source);
+  const destinationResult = setOrderData(destination);
+
+  return {
+    source: sourceResult,
+    destination: destinationResult,
+    request: [...setOrderResult(sourceResult), ...setOrderResult(destinationResult)],
   };
 };
