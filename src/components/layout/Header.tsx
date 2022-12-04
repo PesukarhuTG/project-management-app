@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
   const [visibleBurgerMenu, setVisibleBurgerMenu] = useState<boolean>(false);
   const navigate = useNavigate();
   const message = useLocaleMessage();
-  const { login, lang, isAuth } = useSelector((state: RootState) => state.user);
+  const { login, lang } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
 
   const logout = () => {
@@ -65,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
     } else {
       dispatch(changeAuthStatus(true));
     }
-  }, []); //eslint-disable-line
+  }, [dispatch]);
 
   const headerContent = useMemo(() => {
     if (localStorage.getItem('tokenUser')) {
