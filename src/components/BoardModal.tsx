@@ -28,7 +28,6 @@ const BoardModal: FC<BoardModalProps> = ({ modalTitle, isVisible, onOk, onCancel
         title={message('boardTitle')}
         onChange={(event) => dispatch(setBoardName(event.target.value))}
         value={title}
-        // placeholder={message('boardTitlePlaceholder')}
         placeholder={data?.title || message('boardTitlePlaceholder')}
       />
       <StyledInput

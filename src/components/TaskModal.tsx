@@ -38,6 +38,7 @@ const TaskModal: FC<TaskModalProps> = ({
         value={taskDescription}
         placeholder={data?.description || message('taskDescriptionPlaceholder')}
       />
+      <SelectTitle>{message('responsibleUserTitle')}</SelectTitle>
       <StyledSelect
         placeholder={data?.userName || message('defaultUser')}
         style={{ width: 120 }}
@@ -49,6 +50,14 @@ const TaskModal: FC<TaskModalProps> = ({
     </StyledModal>
   );
 };
+
+const SelectTitle = styled.label`
+  padding: 0 20px 3px;
+
+  @media (max-width: 610px) {
+    font-size: 16px;
+  }
+`;
 
 const StyledSelect = styled(Select)`
   width: 100% !important;
