@@ -46,7 +46,7 @@ const ru: LocaleMessages = {
   confirmNo: 'Нет',
   boardTitle: 'Заголовок доски',
   boardDescription: 'Описание доски',
-  columnName: 'Название колонки',
+  columnName: 'Название колонки *',
   boardModalTitle: 'Создать новую доску',
   saveModal: 'Сохранить',
   cancelModal: 'Отмена',
@@ -96,6 +96,7 @@ const ru: LocaleMessages = {
   taskDescriptionPlaceholder: 'Описание *',
   boardTitlePlaceholder: 'Заголовок *',
   boardDescriptionPlaceholder: 'Описание *',
+  columnPlaceholder: 'Название *',
 };
 
 export default ru;

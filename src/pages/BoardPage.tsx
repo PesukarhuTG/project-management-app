@@ -21,8 +21,6 @@ import { TaskResponse } from '../types';
 import { setTasks } from '../store/TasksSlice';
 import { TaskReorderData } from '../types/TaskModel';
 
-const DEFAULT_COLUMN_TITLE = 'Column';
-
 const BoardPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const title = useSelector((state: RootState) => state.boards.currentBoard?.title) ?? '';
@@ -89,7 +87,6 @@ const BoardPage: React.FC = () => {
 
   const addColumn = async () => {
     const authStatus = checkTokenExpired();
-    const titleColumn = newColumnTitle || DEFAULT_COLUMN_TITLE;
 
     if (authStatus) {
       if (idParam) {
@@ -97,7 +94,7 @@ const BoardPage: React.FC = () => {
         setIsLoading(true);
 
         try {
-          const newColumn = await createColumn(idParam, { title: titleColumn, order: newOrder }).then(
+          const newColumn = await createColumn(idParam, { title: newColumnTitle, order: newOrder }).then(
             (res) => res.data
           );
           dispatch(setNewColumn(mapperColumn(newColumn)));
@@ -226,6 +223,9 @@ const BoardPage: React.FC = () => {
         isVisible={isShowColumnModal}
         onOk={addColumn}
         onCancel={closeColumnModal}
+        okButtonProps={{
+          disabled: !newColumnTitle.trim(),
+        }}
       />
     </BasePage>
   );

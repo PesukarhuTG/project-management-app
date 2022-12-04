@@ -49,7 +49,7 @@ const en: LocaleMessages = {
   confirmNo: 'No',
   boardTitle: 'Board title',
   boardDescription: 'Board description',
-  columnName: 'Column name:',
+  columnName: 'Column name: *',
   boardModalTitle: 'Create new board',
   saveModal: 'Save',
   cancelModal: 'Cancel',
@@ -99,6 +99,7 @@ const en: LocaleMessages = {
   taskDescriptionPlaceholder: 'Description *',
   boardTitlePlaceholder: 'Title *',
   boardDescriptionPlaceholder: 'Description *',
+  columnPlaceholder: 'Name *',
 };
 
 export default en;
