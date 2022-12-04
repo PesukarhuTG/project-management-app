@@ -103,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 
   return (
     <>
-      <StyledHeader className={classNames({ 'header-sticky': isSticky })}>
+      <StyledHeader className={classNames({ 'header-sticky': isSticky })} $visibleBurgerMenu={visibleBurgerMenu}>
         <Title>
           <HomeLink to="/">RSS Kanban</HomeLink>
         </Title>
@@ -125,7 +125,7 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
 const Overlay = styled.div<{
   $visibleBurgerMenu: boolean;
 }>`
-  z-index: 10;
+  z-index: 4;
   ${({ $visibleBurgerMenu }) => {
     if ($visibleBurgerMenu) {
       return css`
@@ -154,6 +154,7 @@ const BurgerMenu = styled.button<{
   cursor: pointer;
   z-index: 20;
   order: 4;
+  pointer-events: all;
 
   & > .burger-menu-lines {
     display: flex;
@@ -202,7 +203,9 @@ const BurgerMenu = styled.button<{
   }
 `;
 
-const StyledHeader = styled.header`
+const StyledHeader = styled.header<{
+  $visibleBurgerMenu: boolean;
+}>`
   padding: 26px var(--page-gutter);
   height: var(--header-h);
   display: flex;
@@ -222,6 +225,24 @@ const StyledHeader = styled.header`
     margin-bottom: var(--header-animate-offset);
     background: linear-gradient(180deg, var(--primary-dark) 0%, var(--burgerBgr-02) 100%);
     z-index: 5;
+
+    ${({ $visibleBurgerMenu }) => {
+      if ($visibleBurgerMenu) {
+        return css`
+          pointer-events: none;
+
+          &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--burger-overlay);
+          }
+        `;
+      }
+    }}
   }
 
   @media (max-width: 700px) {
@@ -314,6 +335,7 @@ const NavPanel = styled(Panel)<{
 }>`
   align-items: center;
   order: 3;
+  pointer-events: all;
 
   @media (max-width: 1500px) {
     flex-direction: column;
