@@ -256,11 +256,21 @@ const StyledHeader = styled.header<{
         `;
       }
     }}
+
+    @media (max-width: 700px) {
+      font-size: 16px;
+      padding: 0 15px;
+    }
+
+    @media (max-width: 400px) {
+      font-size: 14px;
+      padding: 0 8px;
+    }
   }
 
   @media (max-width: 700px) {
     gap: 16px;
-    padding: 20px;
+    padding: 0 15px;
     font-size: 16px;
   }
 
@@ -281,6 +291,12 @@ const Panel = styled.div`
 
     .header-sticky & {
       gap: 16px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .header-sticky & {
+      gap: 5px;
     }
   }
 `;
@@ -466,6 +482,7 @@ const StyledAuthButton = styled(Link)`
   }
 
   @media (max-width: 400px) {
+    font-size: 14px;
     padding: 0 8px;
   }
 `;
