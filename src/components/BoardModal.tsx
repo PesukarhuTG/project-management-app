@@ -7,6 +7,7 @@ import StyledModal from './StyledModal';
 import { useLocaleMessage } from '../hooks';
 import { ButtonProps } from 'antd';
 import { BoardTitle } from '../types/SingleBoardProps';
+import StyledTextarea from './StyledTextarea';
 
 interface BoardModalProps {
   modalTitle: string;
@@ -30,7 +31,7 @@ const BoardModal: FC<BoardModalProps> = ({ modalTitle, isVisible, onOk, onCancel
         value={title}
         placeholder={data?.title || message('boardTitlePlaceholder')}
       />
-      <StyledInput
+      <StyledTextarea
         title={message('boardDescription')}
         onChange={(event) => dispatch(setBoardDescription(event.target.value))}
         value={description}

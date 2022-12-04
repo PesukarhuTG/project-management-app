@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from '../store/Store';
 import { setTaskDescription, setTaskTitle } from '../store/TasksSlice';
 import { useSelector } from 'react-redux';
 import { TaskModalProps } from '../types/ModalProps';
+import StyledTextarea from './StyledTextarea';
 
 const TaskModal: FC<TaskModalProps> = ({
   title,
@@ -32,11 +33,11 @@ const TaskModal: FC<TaskModalProps> = ({
         value={taskTitle}
         placeholder={data?.title || message('taskNamePlaceholder')}
       />
-      <StyledInput
+      <StyledTextarea
         title={message('addDescriptionTaskModal')}
         onChange={(event) => dispatch(setTaskDescription(event.target.value))}
-        value={taskDescription}
         placeholder={data?.description || message('taskDescriptionPlaceholder')}
+        value={taskDescription}
       />
       <SelectTitle>{message('responsibleUserTitle')}</SelectTitle>
       <StyledSelect

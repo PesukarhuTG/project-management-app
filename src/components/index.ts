@@ -18,3 +18,4 @@ export { default as BoardsList } from './BoardsList';
 export { default as Spinner } from './Spinner';
 export { default as Task } from './Task';
 export { default as InitialColumn } from './InitialColumn';
+export { default as StyledTextarea } from './StyledTextarea';
