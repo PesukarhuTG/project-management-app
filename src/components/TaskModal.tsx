@@ -9,8 +9,18 @@ import { AppDispatch, RootState } from '../store/Store';
 import { setTaskDescription, setTaskTitle } from '../store/TasksSlice';
 import { useSelector } from 'react-redux';
 import { TaskModalProps } from '../types/ModalProps';
+import StyledTextarea from './StyledTextarea';
 
-const TaskModal: FC<TaskModalProps> = ({ title, isVisible, onOk, onCancel, onChange, options = [], okButtonProps }) => {
+const TaskModal: FC<TaskModalProps> = ({
+  title,
+  isVisible,
+  onOk,
+  onCancel,
+  onChange,
+  options = [],
+  okButtonProps,
+  data,
+}) => {
   const message = useLocaleMessage();
   const dispatch = useDispatch<AppDispatch>();
   const { title: taskTitle, description: taskDescription } = useSelector((state: RootState) => state.tasks);
@@ -21,16 +31,17 @@ const TaskModal: FC<TaskModalProps> = ({ title, isVisible, onOk, onCancel, onCha
         title={message('addNameTaskModal')}
         onChange={(event) => dispatch(setTaskTitle(event.target.value))}
         value={taskTitle}
-        placeholder={message('taskNamePlaceholder')}
+        placeholder={data?.title || message('taskNamePlaceholder')}
       />
-      <StyledInput
+      <StyledTextarea
         title={message('addDescriptionTaskModal')}
         onChange={(event) => dispatch(setTaskDescription(event.target.value))}
+        placeholder={data?.description || message('taskDescriptionPlaceholder')}
         value={taskDescription}
-        placeholder={message('taskDescriptionPlaceholder')}
       />
+      <SelectTitle>{message('responsibleUserTitle')}</SelectTitle>
       <StyledSelect
-        defaultValue={message('defaultUser')}
+        placeholder={data?.userName || message('defaultUser')}
         style={{ width: 120 }}
         onChange={(value) => onChange(value as string)}
         options={options}
@@ -41,6 +52,14 @@ const TaskModal: FC<TaskModalProps> = ({ title, isVisible, onOk, onCancel, onCha
   );
 };
 
+const SelectTitle = styled.label`
+  padding: 0 20px 3px;
+
+  @media (max-width: 610px) {
+    font-size: 16px;
+  }
+`;
+
 const StyledSelect = styled(Select)`
   width: 100% !important;
   align-self: center;
@@ -48,9 +67,9 @@ const StyledSelect = styled(Select)`
   border: 1px solid var(--primary-dark);
   border-radius: 10px;
   padding: 12px 10px;
+  font-size: 18px;
 
   .ant-select-selection-item {
-    font-size: 18px;
     font-weight: 700;
   }
 `;

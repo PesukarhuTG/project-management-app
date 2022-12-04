@@ -70,6 +70,7 @@ const SingleBoard: FC<SingleBoardProps> = ({
         okButtonProps={{
           disabled: !(boardTitle.trim() && boardDescription.trim()),
         }}
+        data={{ title, description }}
       />
     </>
   );
