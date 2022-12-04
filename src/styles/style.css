@@ -57,6 +57,10 @@ a {
   z-index: 4;
 }
 
+.ant-modal-wrap {
+  overflow: hidden;
+}
+
 @media (max-width: 770px) {
   .ant-back-top {
     bottom: 160px;

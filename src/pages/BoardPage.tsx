@@ -284,7 +284,11 @@ const Title = styled.h2`
   padding: 0 var(--page-gutter);
   color: var(--primary-dark);
   font-size: 26px;
-  font-weight: 800;
+  font-weight: 700;
+
+  @media (max-width: 700px) {
+    font-size: 22px;
+  }
 `;
 
 // TODO протестировать после реализации,

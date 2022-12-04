@@ -279,6 +279,10 @@ const ChangeTitle = styled.div`
   align-items: center;
   gap: 8px;
   background-color: var(--primary-light);
+
+  @media (max-width: 700px) {
+    font-size: 22px;
+  }
 `;
 
 const Input = styled.input`

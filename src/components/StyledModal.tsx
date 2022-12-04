@@ -103,6 +103,10 @@ const StyledAntModal = styled(Modal)`
       background-color: var(--btn-second-hover);
     }
   }
+
+  @media (max-width: 700px) {
+    font-size: 16px;
+  }
 `;
 
 export default StyledModal;

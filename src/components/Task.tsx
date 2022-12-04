@@ -146,6 +146,10 @@ const TaskPanel = styled.div`
   background-color: var(--primary-light);
   border-radius: 10px;
   box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+
+  @media (max-width: 700px) {
+    font-size: 16px;
+  }
 `;
 
 const Title = styled.div`

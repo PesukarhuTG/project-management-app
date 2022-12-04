@@ -55,7 +55,7 @@ const TaskModal: FC<TaskModalProps> = ({
 const SelectTitle = styled.label`
   padding: 0 20px 3px;
 
-  @media (max-width: 610px) {
+  @media (max-width: 700px) {
     font-size: 16px;
   }
 `;
@@ -68,6 +68,10 @@ const StyledSelect = styled(Select)`
   border-radius: 10px;
   padding: 12px 10px;
   font-size: 18px;
+
+  @media (max-width: 700px) {
+    font-size: 16px;
+  }
 
   .ant-select-selection-item {
     font-weight: 700;

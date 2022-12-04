@@ -13,9 +13,9 @@ const OpenTaskModal: FC<OpenModalProps> = ({ title, isVisible, onCancel, data })
 
   return (
     <StyledOpenModal title={title} isVisible={isVisible} onCancel={onCancel}>
-      <InputTitle>{message('addNameTaskModal')}</InputTitle>
+      <InputTitle>{message('viewNameTaskModal')}</InputTitle>
       <StyledInput placeholder={inputTitle} value={inputTitle} disabled />
-      <InputTitle>{message('addDescriptionTaskModal')}</InputTitle>
+      <InputTitle>{message('viewDescriptionTaskModal')}</InputTitle>
       <StyledTextarea autoSize={true} placeholder={description} value={description} disabled />
       <InputTitle>{message('taskAuthor')}</InputTitle>
       <StyledInput placeholder={userName} value={userName} disabled />
