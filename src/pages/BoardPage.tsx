@@ -15,7 +15,7 @@ import { AppDispatch, RootState } from '../store/Store';
 import { setCurrentBoard } from '../store/BoardsSlice';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 import { setColumns, setInitialColumns, setNewColumn, setNewColumnTitle } from '../store/ColumnsSlice';
-import { reorderDroppableZone } from '../services/dnd.service';
+import { reorderDroppableBetweenZone, reorderDroppableZone } from '../services/dnd.service';
 import ColumnModel from '../types/ColumnModel';
 import { TaskResponse } from '../types';
 import { setTasks } from '../store/TasksSlice';
@@ -164,13 +164,33 @@ const BoardPage: React.FC = () => {
     }
 
     // перетаскивание таски между колонок
-    // TODO ждет реализации
+    const sourceColumn = source.droppableId;
+    const sourceTasks = tasks[sourceColumn] ? tasks[sourceColumn] : [];
+    const sourceTasksBeforeOrder = [...sourceTasks];
 
-    // result.draggableId = id таска, который перетаскивали
-    // source.droppableId = id колонки откуда таск забрали
-    // source.index = стартовая позиция элемента (атрибут у <Draggable> - сейчас передаю индекс массива)
-    // destination.droppableId = id колонки куда таск бросили
-    // destination.index = конечная позиция элемента (в новой колонке)
+    const destinationColumn = destination.droppableId;
+    const destinationTasks = tasks[destinationColumn] ? tasks[destinationColumn] : [];
+    const destinationTasksBeforeOrder = [...destinationTasks];
+
+    const reorder = reorderDroppableBetweenZone(
+      sourceTasks,
+      destinationTasks,
+      destinationColumn,
+      source.index,
+      destination.index
+    );
+
+    setIsLoading(true);
+    try {
+      dispatch(setTasks({ [sourceColumn]: reorder.source }));
+      dispatch(setTasks({ [destinationColumn]: reorder.destination }));
+      await reorderTasks(reorder.request).then((res) => res.data);
+    } catch (e) {
+      dispatch(setTasks({ [sourceColumn]: sourceTasksBeforeOrder }));
+      dispatch(setTasks({ [destinationColumn]: destinationTasksBeforeOrder }));
+      showNotification('error', message('errorTitle'), (e as Error).message);
+    }
+    setIsLoading(false);
     return;
   };
 
