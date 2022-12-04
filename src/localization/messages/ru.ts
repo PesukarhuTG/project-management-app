@@ -11,7 +11,7 @@ const ru: LocaleMessages = {
   btnSignOut: 'Выход',
   btnEng: 'АНГЛ',
   btnRus: 'РУС',
-  btnBack: '🡐 вернуться назад',
+  btnBack: 'Назад',
   btnCreateNewColumn: '+ Создать новую колонку',
   btnAddNewTask: '+ новая задача',
   btnPage404: 'Вернуться на Главную',

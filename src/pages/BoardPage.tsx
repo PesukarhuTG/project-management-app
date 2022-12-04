@@ -20,6 +20,7 @@ import ColumnModel from '../types/ColumnModel';
 import { TaskResponse } from '../types';
 import { setTasks } from '../store/TasksSlice';
 import { TaskReorderData } from '../types/TaskModel';
+import iconBack from '../assets/ico/icon-back.svg';
 
 const BoardPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -210,7 +211,7 @@ const BoardPage: React.FC = () => {
       <Container>
         <ControlPanel>
           <HideXs>
-            <Button label={message('btnBack')} onClick={() => navigate('/boards')} />
+            <BtnBack onClick={() => navigate('/boards')}>{message('btnBack')}</BtnBack>
           </HideXs>
           <Button label={message('btnCreateNewColumn')} onClick={() => setIsShowColumnModal(true)} />
         </ControlPanel>
@@ -248,6 +249,32 @@ const BoardPage: React.FC = () => {
     </BasePage>
   );
 };
+
+const BtnBack = styled.button`
+  display: block;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: var(--btn-gutter);
+  padding-left: 40px;
+  line-height: var(--btn-h);
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--btn-br);
+  color: var(--light-font);
+  background: url(${iconBack}) var(--primary) no-repeat 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.3s;
+
+  &:hover {
+    background: url(${iconBack}) var(--btn-primary-hover) no-repeat 20px;
+  }
+
+  @media (max-width: 700px) {
+    font-size: 16px;
+  }
+`;
 
 const Container = styled.div`
   width: 100%;

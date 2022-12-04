@@ -11,7 +11,7 @@ const en: LocaleMessages = {
   btnSignOut: 'Sign Out',
   btnEng: 'EN',
   btnRus: 'RU',
-  btnBack: '🡐 Back to Boards list',
+  btnBack: 'Back to Boards list',
   btnCreateNewColumn: '+ Create new column',
   btnAddNewTask: '+ add new task',
   btnPage404: 'Back to main page',
