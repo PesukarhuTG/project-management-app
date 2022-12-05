@@ -14,8 +14,8 @@ const en: LocaleMessages = {
   btnBack: 'Back to Boards list',
   btnCreateNewColumn: '+ Create new column',
   btnAddNewTask: '+ add new task',
-  btnPage404: 'Back to main page',
-  mainTitle: 'Task Manager',
+  btnPage404: 'Back to welcome page',
+  mainTitle: 'Welcome to RSS Kanban!',
   mainDescription:
     'It is a project management software that allows you to centrally manage tasks and their timely completion. Trackers are widely used in project management, because they allow you to easily monitor all work processes and control the work of the team.',
   sectionTeam: 'Project team',
