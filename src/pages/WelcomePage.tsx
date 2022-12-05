@@ -108,6 +108,7 @@ const SectionTitle = styled.h2`
 
   @media (max-width: 610px) {
     font-size: 26px;
+    line-height: 1.5;
   }
 `;
 
