@@ -1,0 +1,24 @@
+:root {
+  --main-background: #eaeef1;
+  --nav-background: #1e54a2;
+  --board-background: #d9d9d9;
+  --primary: #1890ff;
+  --primary-light: #fff;
+  --primary-dark: #1e54a2;
+
+  --main-font: #292929;
+  --light-font: #ffffff;
+  --disable-font: #d9d9d9;
+
+  --btn-primary: #1890ff;
+  --btn-primary-hover: #61b2fd;
+  --btn-second: #f53e94;
+  --btn-second-hover: #fc67ad;
+
+  --boardBgrColor-01: rgba(0, 151, 250, 0.2);
+  --boardBgrColor-02: rgba(0, 80, 245, 0.2);
+
+  --burgerBgr-01: #1e54a2;
+  --burgerBgr-02: rgba(10, 48, 102, 1);
+  --burger-overlay: rgba(0, 0, 0, 0.45);
+}
