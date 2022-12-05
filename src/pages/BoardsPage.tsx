@@ -23,7 +23,7 @@ const BoardsPage: React.FC = () => {
   const { createModalVisible, title, description, fetchLoading, boards, search, filteredBoards } = useSelector(
     (state: RootState) => state.boards
   );
-  const { id: userId } = useSelector((state: RootState) => state.user);
+  const { id: userId, lang } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const message = useLocaleMessage();
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ const BoardsPage: React.FC = () => {
     dispatch(changeAuthStatus(false));
     dispatch(removeUserData());
     localStorage.clear();
+    localStorage.setItem('currentLang', lang);
     navigate('/');
   };
 

@@ -8,13 +8,14 @@ import avatar3 from '../assets/ico/avatar-sergey.png';
 import avatar4 from '../assets/ico/avatar-denis.png';
 import { useLocaleMessage } from '../hooks';
 import checkTokenExpired from '../services/checkTokenExpired';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store/Store';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../store/Store';
 import { changeAuthStatus, removeUserData } from '../store/UserSlice';
 
 const WelcomePage: React.FC = () => {
   const message = useLocaleMessage();
   const dispatch = useDispatch<AppDispatch>();
+  const { lang } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const authStatus = checkTokenExpired();
@@ -23,8 +24,9 @@ const WelcomePage: React.FC = () => {
       dispatch(changeAuthStatus(false));
       dispatch(removeUserData());
       localStorage.clear();
+      localStorage.setItem('currentLang', lang);
     }
-  }, [dispatch]);
+  }, [dispatch, lang]);
 
   return (
     <BasePage>
