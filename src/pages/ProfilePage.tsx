@@ -22,7 +22,7 @@ interface EditFormValues {
 const ProfilePage: React.FC = () => {
   const [form] = Form.useForm();
   const [confirmFormVisible, setConfirmFormVisible] = useState<boolean>(false);
-  const { name, login, password } = useSelector((state: RootState) => state.user);
+  const { name, login, password, lang } = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const message = useLocaleMessage();
@@ -31,6 +31,7 @@ const ProfilePage: React.FC = () => {
     dispatch(changeAuthStatus(false));
     dispatch(removeUserData());
     localStorage.clear();
+    localStorage.setItem('currentLang', lang);
     navigate('/');
   };
 

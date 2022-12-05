@@ -28,6 +28,7 @@ const BoardPage: React.FC = () => {
   const newOrder = useSelector((state: RootState) => state.columns.orderCounter) + 1;
   const { columns, newColumnTitle } = useSelector((state: RootState) => state.columns);
   const { tasks } = useSelector((state: RootState) => state.tasks);
+  const { lang } = useSelector((state: RootState) => state.user);
 
   const { id: idParam } = useParams();
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const BoardPage: React.FC = () => {
     dispatch(changeAuthStatus(false));
     dispatch(removeUserData());
     localStorage.clear();
+    localStorage.setItem('currentLang', lang);
     navigate('/');
   };
 

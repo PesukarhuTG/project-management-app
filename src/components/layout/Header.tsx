@@ -62,10 +62,11 @@ const Header: React.FC<HeaderProps> = ({ isSticky = false }) => {
       dispatch(changeAuthStatus(false));
       dispatch(removeUserData());
       localStorage.clear();
+      localStorage.setItem('currentLang', lang);
     } else {
       dispatch(changeAuthStatus(true));
     }
-  }, [dispatch]);
+  }, [dispatch, lang]);
 
   const headerContent = useMemo(() => {
     if (localStorage.getItem('tokenUser')) {
