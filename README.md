@@ -14,8 +14,16 @@
 
 ## Description
 
-RSSKanban is an application where you can easily manage your project, be aware of all the tasks and control the progress of their implementation.<br/>
-The entire development process you can see in the [develop branch](https://github.com/PesukarhuTG/project-management-app/tree/develop).
+RSSKanban is an application where you can easily manage your project, be aware of all the tasks and control the progress of their implementation.<br/><br/>
+We have implemented:
+
+- Pages routing
+- Localization
+- User registration (SignIn / SignOut)
+- Adding boards with task
+- Drag-n-drop functionality for boards and tasks
+  The entire list of functionality you can see in [Pull Request](https://github.com/PesukarhuTG/project-management-app/pull/50)<br/><br/>
+  The entire development process you can see in the [develop branch](https://github.com/PesukarhuTG/project-management-app/tree/develop).
 
 ## Backend
 
