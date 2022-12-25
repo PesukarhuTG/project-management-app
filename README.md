@@ -1,4 +1,4 @@
-<h1 align="center">RSSKanban</h1>
+<h1 align="center">RSS Kanban</h1>
 
 <div align="center">
     <img src="https://user-images.githubusercontent.com/39487464/205696429-068384c5-d25a-40dd-992a-38cdc54930de.JPG" width="100%">
@@ -14,7 +14,17 @@
 
 ## Description
 
-RSSKanban is an application where you can easily manage your project, be aware of all the tasks and control the progress of their implementation.
+RSS Kanban is an application where you can easily manage your project, be aware of all the tasks and control the progress of their implementation.<br/>
+
+We have implemented:
+
+- Pages routing
+- Localization
+- User registration (SignIn / SignOut)
+- Adding boards with task
+- Drag-n-drop functionality for boards and tasks
+
+The entire list of functionality you can see in [PR](https://github.com/PesukarhuTG/project-management-app/pull/50)
 
 ## Backend
 
