@@ -22,8 +22,9 @@ We have implemented:
 - User registration (SignIn / SignOut)
 - Adding boards with task
 - Drag-n-drop functionality for boards and tasks
-  The entire list of functionality you can see in [Pull Request](https://github.com/PesukarhuTG/project-management-app/pull/50)<br/><br/>
-  The entire development process you can see in the [develop branch](https://github.com/PesukarhuTG/project-management-app/tree/develop).
+
+The entire list of functionality you can see in [Pull Request](https://github.com/PesukarhuTG/project-management-app/pull/50)<br/><br/>
+The entire development process you can see in the [develop branch](https://github.com/PesukarhuTG/project-management-app/tree/develop).
 
 ## Backend
 
